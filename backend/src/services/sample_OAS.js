@@ -1,4 +1,4 @@
-{
+export default {
   "openapi":"3.0.2",
   "info": {
     "title": "user_service_api",
@@ -49,7 +49,7 @@
                       "type": "integer"
                     },
                     "username": {
-                      "type": "integer"
+                      "type": "string"
                     },
                     "touchedBy": {
                       "type": "array",
@@ -66,4 +66,4 @@
       }
     }
   }
-}
+};

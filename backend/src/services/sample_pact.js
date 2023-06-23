@@ -1,4 +1,4 @@
-{
+export default {
   "consumer": {
     "name": "service_1"
   },
@@ -60,4 +60,4 @@
   "provider": {
     "name": "user_service"
   }
-}
+};
