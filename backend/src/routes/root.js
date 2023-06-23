@@ -16,35 +16,37 @@ route.get("/test", async (req, res) => {
   await Participant.query().delete();
 
   // adds a participant
-  const participant1 = await Participant.query().insert({
+  const participant = await Participant.query().insert({
     participant_name: "consumer1",
   });
 
-  // adds another participant
-  const participant2 = await Participant.query().insert({
-    participant_name: "consumer2",
-  });
-
   // queries for all participants
-  const participantRead = await Participant.query();
+  const participants = await Participant.query();
 
-  // should log 2 participants
-  console.log("participant : ", participantRead);
+  // should log 1 participant
+  console.log("participant : ", participants);
 
-  // adds a contract for participant1
-  const contract = await Participant.relatedQuery("contracts")
-    .for(participant1.participant_id)
+  // adds a contract for participant
+  const contract1 = await Participant.relatedQuery("contracts")
+    .for(participant.participant_id)
     .insert({ contract: {}, contract_type: "consumer" });
 
-  // queries for all contracts
-  const contractRead = await Contract.query();
+  // adds another contract for participant
+  const contract2 = await Participant.relatedQuery("contracts")
+    .for(participant.participant_id)
+    .insert({ contract: {}, contract_type: "provider" });
 
-  // should log 1 contract
-  console.log(contractRead);
+  // queries for all contract types of participant
+  const contractTypes = await Contract.query()
+    .select("contract_type")
+    .where("participant_id", "=", participant.participant_id);
+
+  // should log 2 contract types
+  console.log("contract types for participant : ", contractTypes);
 
   const result = {
-    participantRead,
-    contractRead,
+    participants,
+    contractTypes,
   };
   res.json(result);
 });
