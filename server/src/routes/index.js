@@ -1,16 +1,15 @@
 import { Router } from "express";
 
-import knex from "../db/db.js";
-import Contract from "../models/contract.js";
-import Participant from "../models/participant.js";
+import Contract from "../models/Contract.js";
+import Participant from "../models/Participant.js";
 
-const route = Router();
+const router = Router();
 
-route.get("", (req, res) => {
+router.get("", (req, res) => {
   res.send("Hello World");
 });
 
-route.get("/test", async (req, res) => {
+router.get("/test", async (req, res) => {
   // deletes all contracts and participants
   await Contract.query().delete();
   await Participant.query().delete();
@@ -51,4 +50,4 @@ route.get("/test", async (req, res) => {
   res.json(result);
 });
 
-export default route;
+export default router;
