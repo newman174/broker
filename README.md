@@ -1,17 +1,18 @@
+# README.md
 
-# Backend Setup
+## Backend Setup
+
 - `cd` into `backend` directory
 - `npm install`
 - create a `.env` file
 - add `PORT=3001` to `.env`
 
-## Postgres Setup
-- ensure postgres is running in the background
-- run `createdb broker`
-- `cd` into `backend` directory
-- connect to the database with `psql broker`
-- execute DDL statements with `\i src/db/db_schema.sql`
-- add the database connection URI to .env with your own postres auth info.
-  `POSTGRES_URI=postgresql://username:password@localhost:5432/broker`
-    note: the password might be optional depending on your postgres configuration.
+### PostgresQL Setup
 
+1. Ensure postgres is running
+2. Create `broker` database: run `createdb broker`
+3. Connect to database: run `psql -d broker`
+4. Execute SQL script: `\i db_schema.sql`
+5. `cd` into `./backend/src/db/`
+6. Setup `.env` variables for `DB_USER` and `DB_PASSWORD`.
+8. `npm run dev` to start express server
