@@ -40,9 +40,13 @@ route.get("/test", async (req, res) => {
   const contractRead = await Contract.query();
 
   // should log 1 contract
-  console.log("contract : ", contractRead);
+  console.log(contractRead);
 
-  res.status(200).end();
+  const result = {
+    participantRead,
+    contractRead,
+  };
+  res.json(result);
 });
 
 export default route;
