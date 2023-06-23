@@ -1,11 +1,12 @@
 /*
 a module which exposes a `verify` method.
 
-`verify` is called with two contracts as JS objects, runs swagger-mock-validator on them, and returns the result
+`verify` is called with two contracts as JS objects, runs swagger-mock-validator on them, 
+  and returns a promise which resolves or rejects to the result
 
 verify(pact, OAS)
-  if verification passes -> { pass: true }
-  if verification fails -> { pass: false, // the entire stdout for now}
+  if verification passes -> resolve { pass: true }
+  if verification fails -> reject { pass: false, // the entire stdout for now}
 */
 
 import fs from 'node:fs';
