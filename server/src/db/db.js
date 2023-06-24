@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, knexSnakeCaseMappers } from "objection";
 import Knex from "knex";
 import "dotenv/config";
 
@@ -11,6 +11,7 @@ const knex = Knex({
     password: process.env.DB_PASSWORD,
     database: "broker",
   },
+  ...knexSnakeCaseMappers(),
 });
 
 Model.knex(knex);

@@ -8,11 +8,11 @@ class Contract extends Model {
   }
 
   static get idColumn() {
-    return "contract_id";
+    return "contractId";
   }
 
   static get participantIdColumn() {
-    return "participant_id";
+    return "participantId";
   }
 
   static get contractColumn() {
@@ -20,7 +20,7 @@ class Contract extends Model {
   }
 
   static get publishDateColumn() {
-    return "publish_date";
+    return "publishDate";
   }
 
   static get relationMappings() {
@@ -29,40 +29,40 @@ class Contract extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Participant,
         join: {
-          from: "contracts.participant_id",
-          to: "participants.participant_id",
+          from: "contracts.participantId",
+          to: "participants.participantId",
         },
       },
       participantVersions: {
         relation: Model.HasManyRelation,
         modelClass: ParticipantVersion,
         join: {
-          from: "contracts.contract_id",
-          to: "participant_versions.contract_id",
+          from: "contracts.contractId",
+          to: "participant_versions.contractId",
         },
       },
       comparedProviderContracts: {
         relation: Model.ManyToManyRelation,
         modelClass: Contract,
         join: {
-          from: "contracts.contract_id",
+          from: "contracts.contractId",
           through: {
-            from: "comparisons.consumer_id",
-            to: "comparisons.provider_id",
+            from: "comparisons.consumerId",
+            to: "comparisons.providerId",
           },
-          to: "contracts.contract_id",
+          to: "contracts.contractId",
         },
       },
       comparedConsumerContracts: {
         relation: Model.ManyToManyRelation,
         modelClass: Contract,
         join: {
-          from: "contracts.contract_id",
+          from: "contracts.contractId",
           through: {
-            from: "comparisons.provider_id",
-            to: "comparisons.consumer_id",
+            from: "comparisons.providerId",
+            to: "comparisons.consumerId",
           },
-          to: "contracts.contract_id",
+          to: "contracts.contractId",
         },
       },
     };

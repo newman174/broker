@@ -16,6 +16,7 @@ CREATE TABLE contracts (
   participant_id INT NOT NULL,
   contract json NOT NULL,
   contract_type VARCHAR(20) NOT NULL,
+  contract_format VARCHAR(20) NOT NULL,
   publish_date TIMESTAMP NOT NULL DEFAULT now(),
   FOREIGN KEY (participant_id) REFERENCES participants(participant_id)
 );

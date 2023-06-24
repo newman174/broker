@@ -6,15 +6,15 @@ class Integration extends Model {
     return "integrations";
   }
   static get idColumn() {
-    return "integration_id";
+    return "integrationId";
   }
 
   static get consumerIdColumn() {
-    return "consumer_id";
+    return "consumerId";
   }
 
   static get providerIdColumn() {
-    return "provider_id";
+    return "providerId";
   }
 
   static get relationMappings() {
@@ -23,16 +23,16 @@ class Integration extends Model {
         relation: Model.BelongsToOne,
         modelClass: Participant,
         join: {
-          from: "integrations.consumer_id",
-          to: "participants.participant_id",
+          from: "integrations.consumerId",
+          to: "participants.participantId",
         },
       },
       providers: {
         relation: Model.BelongsToOne,
         modelClass: Participant,
         join: {
-          from: "integrations.provider_id",
-          to: "participants.participant_id",
+          from: "integrations.providerId",
+          to: "participants.participantId",
         },
       },
     };

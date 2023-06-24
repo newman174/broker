@@ -8,26 +8,26 @@ class Comparison extends Model {
   }
 
   static get idColumn() {
-    return "comparison_id";
+    return "comparisonId";
   }
 
   static get integrationIdColumn() {
-    return "integration_id";
+    return "integrationId";
   }
 
   static get consumerContractIdColumn() {
-    return "consumer_contract_id";
+    return "consumerContractId";
   }
   static get providerContractIdColumn() {
-    return "provider_contract_id";
+    return "providerContractId";
   }
 
   static get comparisonStatusColumn() {
-    return "comparison_status";
+    return "comparisonStatus";
   }
 
   static get comparisonDateColumn() {
-    return "comparison__date";
+    return "comparisonDate";
   }
 
   static get relationMappings() {
@@ -36,24 +36,24 @@ class Comparison extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Integration,
         join: {
-          from: "comparisons.integration_id",
-          to: "integrations.integration_id",
+          from: "comparisons.integrationId",
+          to: "integrations.integrationId",
         },
       },
       consumerContract: {
         relation: Model.BelongsToOneRelation,
         modelClass: Contract,
         join: {
-          from: "comparisons.consumer_contract_id",
-          to: "contracts.contract_id",
+          from: "comparisons.consumerContractId",
+          to: "contracts.contractId",
         },
       },
       providerContract: {
         relation: Model.BelongsToOneRelation,
         modelClass: Contract,
         join: {
-          from: "comparisons.provider_contract_id",
-          to: "contracts.contract_id",
+          from: "comparisons.providerContractId",
+          to: "contracts.contractId",
         },
       },
     };

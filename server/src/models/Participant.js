@@ -6,11 +6,11 @@ class Participant extends Model {
     return "participants";
   }
   static get idColumn() {
-    return "participant_id";
+    return "participantId";
   }
 
   static get participantNameColumn() {
-    return "participant_name";
+    return "participantName";
   }
 
   static get relationMappings() {
@@ -19,32 +19,32 @@ class Participant extends Model {
         relation: Model.HasManyRelation,
         modelClass: Contract,
         join: {
-          from: "participants.participant_id",
-          to: "contracts.participant_id",
+          from: "participants.participantId",
+          to: "contracts.participantId",
         },
       },
       comparedProviders: {
         relation: Model.ManyToManyRelation,
         modelClass: Contract,
         join: {
-          from: "participants.participant_id",
+          from: "participants.participantId",
           through: {
-            from: "integrations.consumer_id",
-            to: "integrations.provider_id",
+            from: "integrations.consumerId",
+            to: "integrations.providerId",
           },
-          to: "participants.participant_id",
+          to: "participants.participantId",
         },
       },
       comparedConsumers: {
         relation: Model.ManyToManyRelation,
         modelClass: Contract,
         join: {
-          from: "participants.participant_id",
+          from: "participants.participantId",
           through: {
-            from: "integrations.provider_id",
-            to: "integrations.consumer_id",
+            from: "integrations.providerId",
+            to: "integrations.consumerId",
           },
-          to: "participants.participant_id",
+          to: "participants.participantId",
         },
       },
     };

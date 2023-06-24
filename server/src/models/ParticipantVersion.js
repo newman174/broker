@@ -3,14 +3,14 @@ import Contract from "./Contract.js";
 
 class ParticipantVersion extends Model {
   static get tableName() {
-    return "participant_versions";
+    return "participantVersions";
   }
   static get idColumn() {
-    return "participant_version_id";
+    return "participantVersionId";
   }
 
   static get contractIdColumn() {
-    return "contract_id";
+    return "contractId";
   }
 
   static get relationMappings() {
@@ -19,8 +19,8 @@ class ParticipantVersion extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: Contract,
         join: {
-          from: "participant_versions.contract_id",
-          to: "contracts.contract_id",
+          from: "participantVersions.contractId",
+          to: "contracts.contractId",
         },
       },
     };
