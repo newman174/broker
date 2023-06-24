@@ -3,7 +3,8 @@ import "dotenv/config";
 import morgan from "morgan";
 import "./db/db.js";
 import indexRouter from "./routes/index.js";
-import contractRouter from "./routes/api/contracts.js";
+import contractsRouter from "./routes/api/contracts.js";
+import participantsRouter from "./routes/api/participants.js";
 
 const app = express();
 
@@ -11,7 +12,8 @@ app.use(morgan("tiny"));
 app.use(express.json());
 
 app.use("/", indexRouter);
-app.use("/api/contracts", contractRouter);
+app.use("/api/contracts", contractsRouter);
+app.use("/api/participants", participantsRouter);
 
 const PORT = process.env.PORT;
 
