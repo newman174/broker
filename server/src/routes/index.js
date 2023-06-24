@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import Contract from "../models/Contract.js";
 import Participant from "../models/Participant.js";
+import Integrations from "../models/Integration.js";
 
 const router = Router();
 
@@ -12,6 +13,7 @@ router.get("", (req, res) => {
 router.get("/test", async (req, res) => {
   // deletes all contracts and participants
   await Contract.query().delete();
+  await Integrations.query().delete();
   await Participant.query().delete();
 
   // adds a participant
@@ -27,18 +29,18 @@ router.get("/test", async (req, res) => {
 
   // adds a contract for participant
   const contract1 = await Participant.relatedQuery("contracts")
-    .for(participant.participant_id)
-    .insert({ contract: {}, contract_type: "consumer" });
+    .for(participant.participantId)
+    .insert({ contract: {}, contractType: "consumer" });
 
   // adds another contract for participant
   const contract2 = await Participant.relatedQuery("contracts")
-    .for(participant.participant_id)
-    .insert({ contract: {}, contract_type: "provider" });
+    .for(participant.participantId)
+    .insert({ contract: {}, contractType: "provider" });
 
   // queries for all contract types of participant
   const contractTypes = await Contract.query()
-    .select("contract_type")
-    .where("participant_id", "=", participant.participant_id);
+    .select("contractType")
+    .where("participantId", "=", participant.participantId);
 
   // should log 2 contract types
   console.log("contract types for participant : ", contractTypes);

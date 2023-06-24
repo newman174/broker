@@ -35,15 +35,13 @@ const App = () => {
       <h2>Participants</h2>
       <ul>
         {participants.map((participant) => (
-          <li key={participant.participant_id}>
-            {participant.participant_name}
-          </li>
+          <li key={participant.participantId}>{participant.participantName}</li>
         ))}
       </ul>
       <h2>Contracts</h2>
       <ul>
         {contracts.map((contract) => (
-          <li key={contract.contract_id}>
+          <li key={contract.contractId}>
             {JSON.stringify(contract.contract, null, 2)}
           </li>
         ))}
@@ -51,8 +49,8 @@ const App = () => {
       <h2>Integrations</h2>
       <ul>
         {integrations.map((integration) => (
-          <li key={integration.integration_id}>
-            {integration.consumer_id} {integration.provider_id}
+          <li key={integration.integrationId}>
+            {integration.consumerId} {integration.providerId}
           </li>
         ))}
       </ul>

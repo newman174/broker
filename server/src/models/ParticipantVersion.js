@@ -1,5 +1,6 @@
 import { Model } from "objection";
 import Contract from "./Contract.js";
+import Participant from "./Participant.js";
 
 class ParticipantVersion extends Model {
   static get tableName() {
@@ -13,6 +14,14 @@ class ParticipantVersion extends Model {
     return "contractId";
   }
 
+  static get participantBranchColumn() {
+    return "participantBranch";
+  }
+
+  static get participantVersionColumn() {
+    return "participantVersion";
+  }
+
   static get relationMappings() {
     return {
       contract: {
@@ -21,6 +30,14 @@ class ParticipantVersion extends Model {
         join: {
           from: "participantVersions.contractId",
           to: "contracts.contractId",
+        },
+      },
+      participant: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Participant,
+        join: {
+          from: "participantVersions.participantId",
+          to: "participants.participantId",
         },
       },
     };

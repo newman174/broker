@@ -23,6 +23,14 @@ class Contract extends Model {
     return "publishDate";
   }
 
+  static get contractTypeColumn() {
+    return "contractType";
+  }
+
+  static get contractFormatColumn() {
+    return "contractFormat";
+  }
+
   static get relationMappings() {
     return {
       owner: {

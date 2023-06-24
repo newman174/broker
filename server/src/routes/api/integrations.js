@@ -9,6 +9,9 @@ const router = express.Router();
  */
 router.get("/", async (_req, res) => {
   const integrations = await Integration.query();
+  // .withGraphJoined(
+  // "participants"
+  // );
   res.json(integrations);
 });
 

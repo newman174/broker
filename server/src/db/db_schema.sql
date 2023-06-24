@@ -24,8 +24,11 @@ CREATE TABLE contracts (
 CREATE TABLE participant_versions (
   participant_version_id serial PRIMARY KEY,
   contract_id INT NOT NULL,
-  branch_name VARCHAR(255),
-  FOREIGN KEY (contract_id) REFERENCES contracts(contract_id)
+  participant_id INT NOT NULL,
+  participant_branch VARCHAR(255),
+  participant_version VARCHAR(255),
+  FOREIGN KEY (contract_id) REFERENCES contracts(contract_id),
+  FOREIGN KEY (participant_id) REFERENCES participants(participant_id)
 );
 
 CREATE TABLE comparisons (

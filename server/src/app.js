@@ -3,7 +3,7 @@ import "dotenv/config";
 import morgan from "morgan";
 import "./db/db.js";
 import indexRouter from "./routes/index.js";
-import apiRouter from "./routes/api.js";
+import apiRouter from "./routes/api/api.js";
 
 const app = express();
 

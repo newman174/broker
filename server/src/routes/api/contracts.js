@@ -1,8 +1,20 @@
 import express from "express";
 import Contract from "../../models/Contract.js";
 import Participant from "../../models/Participant.js";
+import ParticipantVersion from "../../models/ParticipantVersion.js";
+import Integration from "../../models/Integration.js";
 
 const router = express.Router();
+
+const findOrCreate = async (model, queryObj, newObj = {}) => {
+  return (
+    (await model.query().findOne(queryObj)) ||
+    (await model
+      .query()
+      .insert({ ...queryObj, ...newObj })
+      .returning("*"))
+  );
+};
 
 /**
  * Gets all contracts
@@ -15,27 +27,67 @@ router.get("/", async (_req, res) => {
 
 /**
  * Creates a new contract
- * @param {string} contractType - The type of contract
+ * @param {'provider'|'consumer'} contractType - The type of contract
  * @param {string} contract - The contract
  * @param {string} participantName - The participant name
+ * @param {string} participantVersion - The participant version
+ * @param {string} participantBranch - The participant branch
+ * @param {'json'|'yml'} contractFormat - The contract format
  * @returns {object} The created contract
- * http post localhost:3000/api/contracts participant_name=hamachi contract="{}" contract_type="provider"
+ * http post localhost:3000/api/contracts participantName=hamachi contract="{}" contractType="provider"
+ * If the participant does not exist, it will be created
+ * If the participant exists, it will be used
+ * If this is a consumer contract, the provider will be used or created
+ * Need to match the consumer and provider
+ * May need to create the integration
  */
 router.post("/", async (req, res) => {
   const {
-    contractType: contract_type,
+    contractType,
     contract,
-    participantName: participant_name,
+    participantName,
+    participantVersion,
+    participantBranch,
+    contractFormat,
   } = req.body;
 
-  const participantId =
-    (await Participant.query().findOne({
-      participant_name,
-    })) || (await Participant.query().insert({ participant_name }));
+  const participant = await findOrCreate(Participant, { participantName });
+
+  if (contractType === "consumer") {
+    const provider = await findOrCreate(Participant, {
+      participantName: contract.provider.name,
+    });
+
+    await findOrCreate(Integration, {
+      consumerId: participant.participantId,
+      providerId: provider.participantId,
+    });
+  }
 
   const insertedContract = await Participant.relatedQuery("contracts")
-    .for(participantId)
-    .insert({ contract, contract_type });
+    .for(participant.participantId)
+    .insert({ contract, contractType, contractFormat })
+    .returning("*");
+
+  let participantVersionObj = await findOrCreate(
+    ParticipantVersion,
+    {
+      participantVersion,
+      participantId: participant.participantId,
+    },
+    {
+      participantBranch,
+      contractId: insertedContract.contractId,
+    }
+  );
+
+  if (participantVersionObj.contractId !== insertedContract.contractId) {
+    participantVersionObj = await ParticipantVersion.query({
+      participantVersionId: participantVersionObj.participantVersionId,
+    })
+      .patch({ contractId: insertedContract.contractId })
+      .returning("*");
+  }
 
   res.status(201).json(insertedContract);
 });
@@ -58,10 +110,10 @@ router.get("/:id", async (req, res) => {
  * @returns {object} The updated contract
  */
 router.put("/:id", async (req, res) => {
-  const { contract_type, contract } = req.body;
+  const { contractType, contract } = req.body;
   const id = Number(req.params.id);
   const updatedContract = await Contract.query().patchAndFetchById(id, {
-    contract_type,
+    contractType,
     contract,
   });
   res.json(updatedContract);

@@ -1,0 +1,34 @@
+POST http://localhost:3001/api/contracts HTTP/1.1
+content-type: application/json
+
+{
+  "participantName": "example-participant-foo",
+  "contractType": "consumer",
+  "contract": {
+    "consumer": {
+      "name": "example-participant-foo"
+    },
+    "provider" : {
+      "name": "example-participant-bar"
+    }
+  },
+  "contractFormat": "json",
+  "participantVersion": "1.0.0",
+  "participantBranch": "main"
+}
+
+###
+
+POST http://localhost:3001/api/contracts HTTP/1.1
+content-type: application/json
+
+{
+  "participantName": "example-participant-bar",
+  "contractType": "provider",
+  "contract": {
+    "hello": "world"
+  },
+  "contractFormat": "json",
+  "participantVersion": "2.0.0",
+  "participantBranch": "dev"
+}
