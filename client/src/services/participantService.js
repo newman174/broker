@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getAllParticipants = async () => {
+export const getAll = async () => {
   const { data } = await axios.get("/api/participants");
   return data;
 };

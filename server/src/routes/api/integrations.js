@@ -8,10 +8,23 @@ const router = express.Router();
  * @returns {array} All integrations
  */
 router.get("/", async (_req, res) => {
-  const integrations = await Integration.query();
-  // .withGraphJoined(
-  // "participants"
-  // );
+  const integrations = await Integration.query()
+    .select(
+      "integrations.*",
+      "consumers.participantName as consumerName",
+      "providers.participantName as providerName"
+    )
+    .join(
+      "participants as consumers",
+      "integrations.consumerId",
+      "consumers.participantId"
+    )
+    .join(
+      "participants as providers",
+      "integrations.providerId",
+      "providers.participantId"
+    );
+
   res.json(integrations);
 });
 
@@ -21,7 +34,24 @@ router.get("/", async (_req, res) => {
  * @returns {object} The integration
  */
 router.get("/:id", async (req, res) => {
-  const integration = await Integration.query().findById(Number(req.params.id));
+  const integration = await Integration.query()
+    .select(
+      "integrations.*",
+      "consumers.participantName as consumerName",
+      "providers.participantName as providerName"
+    )
+    .join(
+      "participants as consumers",
+      "integrations.consumerId",
+      "consumers.participantId"
+    )
+    .join(
+      "participants as providers",
+      "integrations.providerId",
+      "providers.participantId"
+    )
+    .findById(Number(req.params.id));
+
   res.json(integration);
 });
 

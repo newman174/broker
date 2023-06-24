@@ -2,14 +2,14 @@ POST http://localhost:3001/api/contracts HTTP/1.1
 content-type: application/json
 
 {
-  "participantName": "example-participant-foo",
+  "participantName": "example-participant-bar",
   "contractType": "consumer",
   "contract": {
     "consumer": {
-      "name": "example-participant-foo"
+      "name": "example-participant-bar"
     },
     "provider" : {
-      "name": "example-participant-bar"
+      "name": "example-participant-buzz"
     }
   },
   "contractFormat": "json",
