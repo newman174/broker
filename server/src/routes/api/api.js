@@ -1,7 +1,7 @@
 import express from "express";
-import contractsRouter from "./api/contracts.js";
-import participantsRouter from "./api/participants.js";
-import integrationsRouter from "./api/integrations.js";
+import contractsRouter from "./contracts.js";
+import participantsRouter from "./participants.js";
+import integrationsRouter from "./integrations.js";
 
 const router = express.Router();
 
