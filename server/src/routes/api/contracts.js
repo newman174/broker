@@ -35,11 +35,6 @@ router.get("/", async (_req, res) => {
  * @param {'json'|'yml'} contractFormat - The contract format
  * @returns {object} The created contract
  * http post localhost:3000/api/contracts participantName=hamachi contract="{}" contractType="provider"
- * If the participant does not exist, it will be created
- * If the participant exists, it will be used
- * If this is a consumer contract, the provider will be used or created
- * Need to match the consumer and provider
- * May need to create the integration
  */
 router.post("/", async (req, res) => {
   const {
@@ -69,24 +64,25 @@ router.post("/", async (req, res) => {
     .insert({ contract, contractType, contractFormat })
     .returning("*");
 
-  let participantVersionObj = await findOrCreate(
-    ParticipantVersion,
-    {
+  // look if there is already a participant version with this participant version and participant id
+  // if there is, return 409 with a message "Participant version already exists"
+  let participantVersionObj = await ParticipantVersion.query().findOne({
+    participantVersion,
+    participantId: participant.participantId,
+  });
+
+  if (participantVersionObj) {
+    return res
+      .status(409)
+      .json({ error: "Participant version already exists" });
+  } else {
+    // if there isn't, create a new participant version
+    participantVersionObj = await ParticipantVersion.query().insert({
       participantVersion,
       participantId: participant.participantId,
-    },
-    {
-      participantBranch,
       contractId: insertedContract.contractId,
-    }
-  );
-
-  if (participantVersionObj.contractId !== insertedContract.contractId) {
-    participantVersionObj = await ParticipantVersion.query({
-      participantVersionId: participantVersionObj.participantVersionId,
-    })
-      .patch({ contractId: insertedContract.contractId })
-      .returning("*");
+      participantBranch,
+    });
   }
 
   res.status(201).json(insertedContract);
