@@ -2,18 +2,18 @@ POST http://localhost:3001/api/contracts HTTP/1.1
 content-type: application/json
 
 {
-  "participantName": "example-participant-bar",
+  "participantName": "example-participant-foo",
   "contractType": "consumer",
   "contract": {
     "consumer": {
-      "name": "example-participant-bar"
+      "name": "example-participant-foo"
     },
     "provider" : {
       "name": "example-participant-buzz"
     }
   },
   "contractFormat": "json",
-  "participantVersion": "1.0.0",
+  "participantVersion": "1.1.2",
   "participantBranch": "main"
 }
 
@@ -23,12 +23,37 @@ POST http://localhost:3001/api/contracts HTTP/1.1
 content-type: application/json
 
 {
-  "participantName": "example-participant-bar",
+  "participantName": "example-participant-buzz",
   "contractType": "provider",
   "contract": {
     "hello": "world"
   },
   "contractFormat": "json",
-  "participantVersion": "2.0.0",
+  "participantVersion": "2.3.0",
   "participantBranch": "dev"
 }
+
+###
+GET http://localhost:3001/test8
+content-type: application/json
+
+{
+  "joinGraph": "[consumer.versions.contract, provider]",
+  "where": [
+    "integrationId",
+    "=",
+    2
+  ]
+}
+
+###
+GET http://localhost:3001/api/contracts/1
+content-type: application/json
+
+{
+  "joinGraph": ["owner.versions", "participantVersions"]
+}
+
+###
+GET http://localhost:3001/api/contracts/1
+content-type: application/json

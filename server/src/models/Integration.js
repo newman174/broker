@@ -9,26 +9,18 @@ class Integration extends Model {
     return "integrationId";
   }
 
-  static get consumerIdColumn() {
-    return "consumerId";
-  }
-
-  static get providerIdColumn() {
-    return "providerId";
-  }
-
   static get relationMappings() {
     return {
-      consumers: {
-        relation: Model.BelongsToOne,
+      consumer: {
+        relation: Model.BelongsToOneRelation,
         modelClass: Participant,
         join: {
           from: "integrations.consumerId",
           to: "participants.participantId",
         },
       },
-      providers: {
-        relation: Model.BelongsToOne,
+      provider: {
+        relation: Model.BelongsToOneRelation,
         modelClass: Participant,
         join: {
           from: "integrations.providerId",

@@ -37,7 +37,9 @@ export function up(knex) {
       table.jsonb("contract").notNullable();
       table.string("contract_type", 20).notNullable();
       table.string("contract_format", 20).notNullable();
+      table.string("contract_hash", 40).notNullable();
       table.timestamps(true, true);
+      table.unique(["participant_id", "contract_hash"]);
     })
 
     .createTable("participant_versions", (table) => {

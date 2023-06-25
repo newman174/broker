@@ -10,18 +10,6 @@ class ParticipantVersion extends Model {
     return "participantVersionId";
   }
 
-  static get contractIdColumn() {
-    return "contractId";
-  }
-
-  static get participantBranchColumn() {
-    return "participantBranch";
-  }
-
-  static get participantVersionColumn() {
-    return "participantVersion";
-  }
-
   static get relationMappings() {
     return {
       contract: {

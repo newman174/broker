@@ -11,26 +11,6 @@ class Contract extends Model {
     return "contractId";
   }
 
-  static get participantIdColumn() {
-    return "participantId";
-  }
-
-  static get contractColumn() {
-    return "contract";
-  }
-
-  static get publishDateColumn() {
-    return "publishDate";
-  }
-
-  static get contractTypeColumn() {
-    return "contractType";
-  }
-
-  static get contractFormatColumn() {
-    return "contractFormat";
-  }
-
   static get relationMappings() {
     return {
       owner: {
@@ -46,7 +26,7 @@ class Contract extends Model {
         modelClass: ParticipantVersion,
         join: {
           from: "contracts.contractId",
-          to: "participant_versions.contractId",
+          to: "participantVersions.contractId",
         },
       },
       comparedProviderContracts: {

@@ -1,5 +1,7 @@
 import { Model } from "objection";
 import Contract from "./Contract.js";
+import Integration from "./Integration.js";
+import ParticipantVersion from "./ParticipantVersion.js";
 
 class Participant extends Model {
   static get tableName() {
@@ -7,10 +9,6 @@ class Participant extends Model {
   }
   static get idColumn() {
     return "participantId";
-  }
-
-  static get participantNameColumn() {
-    return "participantName";
   }
 
   static get relationMappings() {
@@ -45,6 +43,30 @@ class Participant extends Model {
             to: "integrations.consumerId",
           },
           to: "participants.participantId",
+        },
+      },
+      integrationsAsConsumer: {
+        relation: Model.HasManyRelation,
+        modelClass: Integration,
+        join: {
+          from: "participants.participantId",
+          to: "integrations.consumerId",
+        },
+      },
+      integrationsAsProvider: {
+        relation: Model.HasManyRelation,
+        modelClass: Integration,
+        join: {
+          from: "participants.participantId",
+          to: "integrations.providerId",
+        },
+      },
+      versions: {
+        relation: Model.HasManyRelation,
+        modelClass: ParticipantVersion,
+        join: {
+          from: "participants.participantId",
+          to: "participantVersions.participantId",
         },
       },
     };

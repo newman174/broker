@@ -11,25 +11,6 @@ class Comparison extends Model {
     return "comparisonId";
   }
 
-  static get integrationIdColumn() {
-    return "integrationId";
-  }
-
-  static get consumerContractIdColumn() {
-    return "consumerContractId";
-  }
-  static get providerContractIdColumn() {
-    return "providerContractId";
-  }
-
-  static get comparisonStatusColumn() {
-    return "comparisonStatus";
-  }
-
-  static get comparisonDateColumn() {
-    return "comparisonDate";
-  }
-
   static get relationMappings() {
     return {
       integration: {
