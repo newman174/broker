@@ -23,6 +23,8 @@ export function up(knex) {
         .inTable("participants")
         .onDelete("CASCADE")
         .index();
+      table.timestamps(true, true);
+      table.unique(["consumer_id", "provider_id"]);
     })
     .createTable("contracts", (table) => {
       table.increments("contract_id").primary();
