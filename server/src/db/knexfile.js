@@ -12,6 +12,9 @@ export const development = {
     password: process.env.DB_PASSWORD,
     database: "broker",
   },
+  seeds: {
+    directory: "./seeds",
+  },
 };
 
 // export const production = {

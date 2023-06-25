@@ -11,7 +11,7 @@
 
 ### Server `.env` File contents
 
-```yml
+```yaml
 PORT=3001
 DB_USER=
 DB_PASSWORD=
@@ -26,6 +26,6 @@ DB_PASSWORD=
 
 ### Client `.env` File contents
 
-```yml
+```yaml
 PROXY_PORT=3001 # Should match the PORT variable in the server .env file
 ```
