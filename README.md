@@ -2,25 +2,30 @@
 
 ## Server Setup
 
-1. `cd` into `server` directory
+1. `cd` into `./server`
 2. `npm install`
-3. Create a `.env` file (*see* below)
+3. Create a `.env` file (*see* below for contents)
+4. Ensure postgres is running
+5. Setup or reset the database to the latest schema. **WARNING: This will delete any existing database named `broker` and its associated data.** => `npm run resetdb`
+6. `npm run dev` to start express server
 
-### PostgresQL Setup
-
-1. Ensure postgres is running
-2. Delete existing `broker` database if it exists: run `dropdb broker`
-3. Create `broker` database: run `createdb broker`
-4. Connect to database: run `psql -d broker`
-5. Execute SQL script: `\i db_schema.sql`
-6. `cd` into `./server/src/db/`
-7. Make sure `.env` variables are set
-8. `npm run dev` to start express server
-
-### .env
+### Server `.env` File contents
 
 ```yml
 PORT=3001
 DB_USER=
 DB_PASSWORD=
+```
+
+## Client Setup
+
+1. `cd` into `./client`
+2. `npm install`
+3. Create `.env` file (*see* below for contents)
+4. `npm run dev` to start the client dev server
+
+### Client `.env` File contents
+
+```yml
+PROXY_PORT=3001 # Should match the PORT variable in the server .env file
 ```

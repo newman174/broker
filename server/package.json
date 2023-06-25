@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "resetdb": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest"
   },
   "keywords": [],
   "author": "",
