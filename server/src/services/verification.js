@@ -1,7 +1,7 @@
 /*
 a module which exposes a `verify` method.
 
-`verify` is called with two contracts as JS objects, runs swagger-mock-validator on them, 
+`verify` is called with two contracts as JS objects, runs swagger-mock-validator on them,
   and returns a promise which resolves or rejects to the result
 
 verify(pact, OAS)
@@ -16,10 +16,10 @@ import { exec } from "child_process";
 import { SwaggerMockValidatorFactory } from "../../node_modules/swagger-mock-validator/dist/swagger-mock-validator-factory.js";
 
 // contracts for development only. DELETE THIS WHEN verify() is called externally
-import samplePact from "./sample_pact.js";
-import sampleOAS from "./sample_OAS.js";
+// import samplePact from "./sample_pact.js";
+// import sampleOAS from "./sample_OAS.js";
 
-class Verifier {
+export default class Verifier {
   // takes both contracts as plain JS objects
   verify(pact, openAPISpec) {
     const [pactPath, OASPath] = this.createFiles(pact, openAPISpec);
@@ -100,7 +100,7 @@ class Verifier {
   .then((result) => console.log(result))
   .catch((reason) => console.log(reason));*/
 
-new Verifier()
-  .verify2(samplePact, sampleOAS)
-  .then((result) => console.log(result))
-  .catch((reason) => console.log(reason));
+// new Verifier()
+//   .verify2(samplePact, sampleOAS)
+//   .then((result) => console.log(result))
+//   .catch((reason) => console.log(reason));

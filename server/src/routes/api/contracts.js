@@ -35,6 +35,7 @@ router.get("/", contractGraphMiddleware, async (_req, res) => {
  * @param {string} participantBranch - The participant branch
  * @param {'json'|'yaml'} contractFormat - The contract format
  * @returns {object} The created contract
+ * TODO: whenever a contract is added, it is compared to the contracts of its counterparties
  */
 router.post("/", async (req, res) => {
   const {
@@ -66,7 +67,7 @@ router.post("/", async (req, res) => {
 
     contractObj = await findOrCreate(
       Contract,
-      { contractHash },
+      { contractHash, participantId: participant.participantId },
       {
         contract: { contractText: contract },
         contractType,

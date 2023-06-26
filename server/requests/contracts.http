@@ -13,7 +13,7 @@ content-type: application/json
     }
   },
   "contractFormat": "json",
-  "participantVersion": "1.1.3",
+  "participantVersion": "1.1.4",
   "participantBranch": "main"
 }
 
@@ -26,10 +26,10 @@ content-type: application/json
   "participantName": "example-participant-buzz",
   "contractType": "provider",
   "contract": {
-    "hello": "world"
+    "hello": "bar"
   },
   "contractFormat": "json",
-  "participantVersion": "2.3.1",
+  "participantVersion": "2.3.2",
   "participantBranch": "dev"
 }
 
