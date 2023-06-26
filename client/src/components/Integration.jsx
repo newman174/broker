@@ -8,13 +8,15 @@ const Integration = ({ integrations }) => {
   const integration = integrations.find(
     (integration) => integration.integrationId === Number(integrationId)
   );
-  const comparisonsForIntegration = comparisons.filter(
-    (comparison) => comparison.integrationId === integration.integrationId
-  );
-  console.log(comparisons);
-  console.log("integration", integration);
 
   const [comparisons, setComparisons] = useState([]);
+
+  // const comparisonsForIntegration = comparisons.filter(
+  //   (comparison) => comparison.integrationId === integration.integrationId
+  // );
+
+  console.log(comparisons);
+  console.log("integration", integration);
 
   useEffect(() => {
     const fetchComparisons = async () => {

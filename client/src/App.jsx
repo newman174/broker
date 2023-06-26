@@ -19,13 +19,13 @@ const App = () => {
   const [participants, setParticipants] = useState([]);
   const [contracts, setContracts] = useState([]);
   const [integrations, setIntegrations] = useState([]);
-  const [comparisons, setComparisons] = useState([]);
+  // const [comparisons, setComparisons] = useState([]);
 
   useEffect(() => {
     fetchAndSet(participantService, setParticipants);
     fetchAndSet(contractService, setContracts);
     fetchAndSet(integrationService, setIntegrations);
-    fetchAndSet(comparisonService, setComparisons);
+    // fetchAndSet(comparisonService, setComparisons);
   }, []);
 
   return (
@@ -76,7 +76,7 @@ const App = () => {
             <Integration
               integrations={integrations}
               contracts={contracts}
-              comparisons={comparisons}
+              // comparisons={comparisons}
             />
           }
         />
