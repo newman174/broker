@@ -93,6 +93,7 @@ export function up(knex) {
         .onDelete("CASCADE")
         .index();
       table.string("comparison_status", 20).notNullable();
+      table.jsonb("result");
       table.timestamps(true, true);
     });
 }

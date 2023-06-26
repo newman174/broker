@@ -11,10 +11,6 @@ const Integration = ({ integrations }) => {
 
   const [comparisons, setComparisons] = useState([]);
 
-  // const comparisonsForIntegration = comparisons.filter(
-  //   (comparison) => comparison.integrationId === integration.integrationId
-  // );
-
   console.log(comparisons);
   console.log("integration", integration);
 
@@ -33,6 +29,20 @@ const Integration = ({ integrations }) => {
       setComparisons([]);
     };
   }, [integration.integrationId]);
+
+  const comparisonStatusDisplay = (comparison) => {
+    if (comparison.comparisonStatus === "false") {
+      return <span style={{ color: "red", fontWeight: "bold" }}>failed</span>;
+    } else if (comparison.comparisonStatus === "true") {
+      return <span style={{ color: "green", fontWeight: "bold" }}>passed</span>;
+    } else {
+      return (
+        <span style={{ color: "orange", fontWeight: "bold" }}>
+          {comparison.comparisonStatus}
+        </span>
+      );
+    }
+  };
 
   return (
     <>
@@ -61,16 +71,7 @@ const Integration = ({ integrations }) => {
             <p>Comparison ID: {comparison.comparisonId}</p>
             <p>Consumer Contract ID: {comparison.consumerContractId}</p>
             <p>Provider Contract ID: {comparison.providerContractId}</p>
-            <p>
-              Status:{" "}
-              {comparison.comparisonStatus === "false" ? (
-                <span style={{ color: "red", fontWeight: "bold" }}>failed</span>
-              ) : (
-                <span style={{ color: "green", fontWeight: "bold" }}>
-                  passed
-                </span>
-              )}
-            </p>
+            <p>Status: {comparisonStatusDisplay(comparison)}</p>
           </div>
         ))}
       </div>
