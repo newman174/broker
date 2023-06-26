@@ -59,7 +59,7 @@ const App = () => {
         <Route
           path="integrations/:integrationId"
           element={
-            path.match(/.*integrations.*/) ? (
+            path.match(/.*integrations.*/) && integrations.length > 0 ? (
               <Integration
                 integrations={integrations}
                 contracts={contracts}

@@ -31,9 +31,9 @@ const Integration = ({ integrations }) => {
   }, [integration.integrationId]);
 
   const comparisonStatusDisplay = (comparison) => {
-    if (comparison.comparisonStatus === "false") {
+    if (comparison.comparisonStatus === "Failed") {
       return <span style={{ color: "red", fontWeight: "bold" }}>failed</span>;
-    } else if (comparison.comparisonStatus === "true") {
+    } else if (comparison.comparisonStatus === "Success") {
       return <span style={{ color: "green", fontWeight: "bold" }}>passed</span>;
     } else {
       return (
