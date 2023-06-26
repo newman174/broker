@@ -1,0 +1,6 @@
+GET http://localhost:3001/api/graph/integrations
+content-type: application/json
+
+{
+  "joinGraph": ["consumer.contracts", "provider.contracts"]
+}

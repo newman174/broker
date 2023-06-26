@@ -4,33 +4,25 @@ import Participant from "../../models/Participant.js";
 import ParticipantVersion from "../../models/ParticipantVersion.js";
 import Integration from "../../models/Integration.js";
 import objectHash from "object-hash";
-import { findOrCreate } from "../../utils/queryHelpers.js";
+import { findOrCreate, newGraphMiddleware } from "../../utils/queryHelpers.js";
 const router = express.Router();
+
+const ALLOWED_GRAPH = [
+  "owner.versions",
+  "participantVersions",
+  "comparedProviderContracts",
+  "comparedConsumerContracts",
+];
+
+const contractGraphMiddleware = newGraphMiddleware(Contract, ALLOWED_GRAPH);
 
 /**
  * Gets all contracts
  * @param {string[]} joinGraph - The graph to join
  * @returns {object[]} All contracts
  */
-router.get("/", async (req, res) => {
-  const allowedGraph = [
-    "owner.versions",
-    "participantVersions",
-    "comparedProviderContracts",
-    "comparedConsumerContracts",
-  ].join(", ");
-
-  const { joinGraph: rawJoinGraph } = req.body;
-
-  let query = Contract.query().allowGraph(`[${allowedGraph}]`);
-
-  if (rawJoinGraph) {
-    const joinGraph = `[${rawJoinGraph.join(", ")}]`;
-    query = query.withGraphJoined(joinGraph);
-  }
-
-  const contracts = await query;
-
+router.get("/", contractGraphMiddleware, async (_req, res) => {
+  const contracts = await res.locals.query;
   res.json(contracts);
 });
 
@@ -41,7 +33,7 @@ router.get("/", async (req, res) => {
  * @param {string} participantName - The participant name
  * @param {string} participantVersion - The participant version
  * @param {string} participantBranch - The participant branch
- * @param {'json'|'yml'} contractFormat - The contract format
+ * @param {'json'|'yaml'} contractFormat - The contract format
  * @returns {object} The created contract
  */
 router.post("/", async (req, res) => {
@@ -76,7 +68,7 @@ router.post("/", async (req, res) => {
       Contract,
       { contractHash },
       {
-        contract,
+        contract: { contractText: contract },
         contractType,
         contractFormat,
         contractHash,
@@ -113,28 +105,16 @@ router.post("/", async (req, res) => {
  * @param {string[]} joinGraph - The graph to join
  * @returns {object} The contract
  */
-router.get("/:id", async (req, res) => {
-  const allowedGraph = [
-    "owner.versions",
-    "participantVersions",
-    "comparedProviderContracts",
-    "comparedConsumerContracts",
-  ].join(", ");
+router.get("/:id", contractGraphMiddleware, async (req, res) => {
+  const { query } = res.locals;
+  const id = Number(req.params.id);
+  const contract = await query.findById(id);
 
-  const { joinGraph: rawJoinGraph } = req.body;
-
-  let query = Contract.query()
-    .allowGraph(`[${allowedGraph}]`)
-    .findById(Number(req.params.id));
-
-  if (rawJoinGraph) {
-    const joinGraph = `[${rawJoinGraph.join(", ")}]`;
-    query = query.withGraphJoined(joinGraph);
+  if (!contract) {
+    res.status(404).send();
+  } else {
+    res.json(contract);
   }
-
-  const contract = await query;
-
-  res.json(contract);
 });
 
 /**

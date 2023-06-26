@@ -1,5 +1,6 @@
 import { Model } from "objection";
 import Participant from "./Participant.js";
+import Comparison from "./Comparison.js";
 
 class Integration extends Model {
   static get tableName() {
@@ -25,6 +26,14 @@ class Integration extends Model {
         join: {
           from: "integrations.providerId",
           to: "participants.participantId",
+        },
+      },
+      comparisons: {
+        relation: Model.HasManyRelation,
+        modelClass: Comparison,
+        join: {
+          from: "integrations.integrationId",
+          to: "comparisons.integrationId",
         },
       },
     };
