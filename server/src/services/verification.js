@@ -49,18 +49,22 @@ export default class Verifier {
   }
 
   async verify2(pact, openAPISpec) {
-    const [pactPath, OASPath] = await this.createFiles(pact, openAPISpec);
+    try {
+      const [pactPath, OASPath] = await this.createFiles(pact, openAPISpec);
 
-    const swaggerMockValidator = SwaggerMockValidatorFactory.create();
+      const swaggerMockValidator = SwaggerMockValidatorFactory.create();
 
-    const result = await swaggerMockValidator.validate({
-      mockPathOrUrl: pactPath,
-      specPathOrUrl: OASPath,
-    });
+      const result = await swaggerMockValidator.validate({
+        mockPathOrUrl: pactPath,
+        specPathOrUrl: OASPath,
+      });
 
-    this.cleanUpFiles(pactPath, OASPath);
+      this.cleanUpFiles(pactPath, OASPath);
 
-    return result;
+      return result;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async createFiles(pact, openAPISpec) {

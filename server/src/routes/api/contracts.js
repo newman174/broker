@@ -5,7 +5,9 @@ import ParticipantVersion from "../../models/ParticipantVersion.js";
 import Integration from "../../models/Integration.js";
 import Comparison from "../../models/Comparison.js";
 import objectHash from "object-hash";
+import { compare } from "../../services/comparisonService.js";
 import { findOrCreate, newGraphMiddleware } from "../../utils/queryHelpers.js";
+import YAML from "yaml";
 const router = express.Router();
 
 const ALLOWED_GRAPH = [
@@ -63,52 +65,49 @@ router.post("/", async (req, res) => {
     return res
       .status(409)
       .json({ error: "Participant version already exists" });
-  } else {
-    const contractHash = objectHash.MD5(contract);
+  }
+  const contractHash = objectHash.MD5(contract);
 
-    contractObj = await findOrCreate(
-      Contract,
-      { contractHash, participantId: participant.participantId },
-      {
-        contract: { contractText: contract },
-        contractType,
-        contractFormat,
-        contractHash,
-        participantId: participant.participantId,
-      }
-    );
-
-    // if the participant version does not already exist, create a new one
-    participantVersionObj = await ParticipantVersion.query().insert({
-      participantVersion,
+  contractObj = await findOrCreate(
+    Contract,
+    { contractHash, participantId: participant.participantId },
+    {
+      contract: {
+        contractText:
+          contractFormat === "json" ? contract : YAML.parse(contract),
+      },
+      contractType,
+      contractFormat,
+      contractHash,
       participantId: participant.participantId,
-      contractId: contractObj.contractId,
-      participantBranch,
+    }
+  );
+
+  // if the participant version does not already exist, create a new one
+  participantVersionObj = await ParticipantVersion.query().insert({
+    participantVersion,
+    participantId: participant.participantId,
+    contractId: contractObj.contractId,
+    participantBranch,
+  });
+
+  if (contractType === "consumer") {
+    const provider = await findOrCreate(Participant, {
+      participantName: contract.provider.name,
     });
 
-    if (contractType === "consumer") {
-      const provider = await findOrCreate(Participant, {
-        participantName: contract.provider.name,
-      });
+    const integration = await findOrCreate(Integration, {
+      consumerId: participant.participantId,
+      providerId: provider.participantId,
+    });
 
-      const integration = await findOrCreate(Integration, {
-        consumerId: participant.participantId,
-        providerId: provider.participantId,
-      });
+    const providerContracts = await Contract.query().where(
+      "participantId",
+      provider.participantId
+    );
 
-      const providerContracts = await Contract.query().where(
-        "participantId",
-        provider.participantId
-      );
-
-      for (let providerContract of providerContracts) {
-        await findOrCreate(Comparison, {
-          integrationId: integration.integrationId,
-          consumerContractId: contractObj.contractId,
-          providerContractId: providerContract.contractId,
-          comparisonStatus: "pending verification",
-        });
-      }
+    for (let providerContract of providerContracts) {
+      compare(contractObj, providerContract, integration);
     }
   }
 
