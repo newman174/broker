@@ -40,7 +40,8 @@ const App = () => {
               key={integration.integrationId}
               to={`/integrations/${integration.integrationId}`}
             >
-              {integration.consumerName} - {integration.providerName}
+              {integration.consumer.participantName} -{" "}
+              {integration.provider.participantName}
             </Link>
           </li>
         ))}

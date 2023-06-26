@@ -3,6 +3,8 @@ import "dotenv/config";
 import fs from "node:fs";
 import knex from "../db/db.js";
 import Verifier from "./verification.js";
+import Comparison from "../models/Comparison.js";
+import { findOrCreate } from "../utils/queryHelpers.js";
 
 // export const comparisonQueue = [];
 
@@ -18,43 +20,58 @@ const compare = async (integrationId) => {
   const consumerContracts = consumer.contracts;
   const providerContracts = provider.contracts;
 
-  const consumerContractTexts = consumerContracts.map(
-    (contract) => contract.contract.contractText
-  );
-  const providerContractTexts = providerContracts.map(
-    (contract) => contract.contract.contractText
-  );
-
-  // console.log(consumerContracts);
-  // console.log(providerContracts);
-
   const comparisons = [];
 
   const verifier = new Verifier();
 
-  for (const consumerContractText of consumerContractTexts) {
-    for (const providerContractText of providerContractTexts) {
+  for (const consumerContract of consumerContracts) {
+    for (const providerContract of providerContracts) {
       try {
         const comparison = await verifier.verify(
-          consumerContractText,
-          providerContractText
+          consumerContract.contract.contractText,
+          providerContract.contract.contractText
         );
-        comparisons.push(comparison);
+        comparisons.push({
+          ...comparison,
+          foo: "bar",
+          consumerContractId: consumerContract.contractId,
+          providerContractId: providerContract.contractId,
+        });
       } catch (err) {
-        comparisons.push(err);
+        comparisons.push({
+          ...err,
+          foo: "bar",
+          consumerContractId: consumerContract.contractId,
+          providerContractId: providerContract.contractId,
+        });
       }
     }
   }
+
+  let newComparisons = comparisons.map((comparison) =>
+    findOrCreate(
+      Comparison,
+      {
+        consumerContractId: comparison.consumerContractId,
+        providerContractId: comparison.providerContractId,
+        integrationId: integrationId,
+      },
+      {
+        consumerContractId: comparison.consumerContractId,
+        providerContractId: comparison.providerContractId,
+        integrationId: integrationId,
+        comparisonStatus: comparison.pass,
+      }
+    )
+  );
+
+  newComparisons = await Promise.all(newComparisons);
+
   console.log("\n\ncomparisons:");
-  console.log(comparisons);
+  console.log(newComparisons);
   console.log("\n\nend:");
 
-  fs.writeFile("comparisons.json", JSON.stringify(comparisons), (err) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-  });
+  fs.writeFileSync("comparisons.json", JSON.stringify(newComparisons, null, 2));
   await knex.destroy();
 };
 

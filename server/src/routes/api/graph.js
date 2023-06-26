@@ -18,9 +18,9 @@ const models = {};
   }
 );
 
-router.get("/:modelpath", async (req, res) => {
-  const { modelpath } = req.params;
-  const model = models[modelpath];
+router.use("/:modelPath", async (req, res) => {
+  const { modelPath } = req.params;
+  const model = models[modelPath];
 
   if (!model) {
     res.status(404).send();

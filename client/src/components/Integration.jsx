@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { comparisonService } from "../services/apiService.js";
 
-const Integration = ({ integrations, contracts, comparisons }) => {
+const Integration = ({ integrations }) => {
   const { integrationId } = useParams();
   const integration = integrations.find(
     (integration) => integration.integrationId === Number(integrationId)
@@ -12,45 +13,65 @@ const Integration = ({ integrations, contracts, comparisons }) => {
   );
   console.log(comparisons);
   console.log("integration", integration);
-  const { consumerName, consumerId, providerName, providerId } = integration;
+
+  const [comparisons, setComparisons] = useState([]);
+
+  useEffect(() => {
+    const fetchComparisons = async () => {
+      const data = await comparisonService.getAll();
+      setComparisons(
+        data.filter(
+          (comparison) => comparison.integrationId === integration.integrationId
+        )
+      );
+    };
+    fetchComparisons();
+
+    return () => {
+      setComparisons([]);
+    };
+  }, [integration.integrationId]);
 
   return (
     <>
       <h3>
-        {consumerName} - {providerName}
+        {integration.consumer.participantName} -{" "}
+        {integration.provider.participantName}
       </h3>
       <ul>
         <li>Integration ID: {integrationId}</li>
-        <li>Consumer ID: {consumerId}</li>
-        <li>Provider ID: {providerId}</li>
-        <li>
-          Comparisons:
-          {comparisonsForIntegration.map((comparison) => {
-            return (
-              <ul key={comparison.ComparisonId}>
-                <li>
-                  Consumer Contract:
-                  {JSON.stringify(
-                    contracts.find(
-                      (contract) =>
-                        contract.contractId === comparison.consumerContractId
-                    ).contract
-                  )}
-                </li>
-                <li>
-                  Provider Contract:{" "}
-                  {JSON.stringify(
-                    contracts.find(
-                      (contract) =>
-                        contract.contractId === comparison.providerContractId
-                    ).contract
-                  )}
-                </li>
-              </ul>
-            );
-          })}
-        </li>
+        <li>Consumer ID: {integration.consumer.participantId}</li>
+        <li>Provider ID: {integration.provider.participantId}</li>
       </ul>
+
+      <h4>Comparisons</h4>
+      <div>
+        {comparisons.map((comparison) => (
+          <div
+            style={{
+              border: "1px solid black",
+              marginBottom: "1rem",
+              borderRadius: "5px",
+              padding: "1rem",
+            }}
+            key={comparison.comparisonId}
+          >
+            <p>Comparison ID: {comparison.comparisonId}</p>
+            <p>Consumer Contract ID: {comparison.consumerContractId}</p>
+            <p>Provider Contract ID: {comparison.providerContractId}</p>
+            <p>
+              Status:{" "}
+              {comparison.comparisonStatus === "false" ? (
+                <span style={{ color: "red", fontWeight: "bold" }}>failed</span>
+              ) : (
+                <span style={{ color: "green", fontWeight: "bold" }}>
+                  passed
+                </span>
+              )}
+            </p>
+          </div>
+        ))}
+      </div>
     </>
   );
 };
