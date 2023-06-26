@@ -9,7 +9,7 @@ verify(pact, OAS)
   if verification fails -> reject { pass: false, // the entire stdout for now}
 */
 
-import fs from "node:fs";
+import { promises as fs } from "node:fs";
 import path from "node:path";
 import { exec } from "child_process";
 
@@ -21,8 +21,8 @@ import { SwaggerMockValidatorFactory } from "../../node_modules/swagger-mock-val
 
 export default class Verifier {
   // takes both contracts as plain JS objects
-  verify(pact, openAPISpec) {
-    const [pactPath, OASPath] = this.createFiles(pact, openAPISpec);
+  async verify(pact, openAPISpec) {
+    const [pactPath, OASPath] = await this.createFiles(pact, openAPISpec);
     const initCommand = `npx swagger-mock-validator ${OASPath} ${pactPath}`;
 
     return new Promise((resolve, reject) => {
@@ -49,7 +49,7 @@ export default class Verifier {
   }
 
   async verify2(pact, openAPISpec) {
-    const [pactPath, OASPath] = this.createFiles(pact, openAPISpec);
+    const [pactPath, OASPath] = await this.createFiles(pact, openAPISpec);
 
     const swaggerMockValidator = SwaggerMockValidatorFactory.create();
 
@@ -58,26 +58,19 @@ export default class Verifier {
       specPathOrUrl: OASPath,
     });
 
-    return [result.errors[0].mockDetails, result.errors[0].specDetails];
+    this.cleanUpFiles(pactPath, OASPath);
+
+    return result;
   }
 
-  createFiles(pact, openAPISpec) {
-    const pactPath = path.resolve(
-      process.cwd(),
-      "src/services/verification_pact.json"
-    );
-    const OASPath = path.resolve(
-      process.cwd(),
-      "src/services/verification_OAS.json"
-    );
+  async createFiles(pact, openAPISpec) {
+    const pactPath = path.resolve(process.cwd(), "./verification_pact.json");
+    const OASPath = path.resolve(process.cwd(), "./verification_OAS.json");
 
-    const pactStream = fs.createWriteStream(pactPath);
-    pactStream.write(JSON.stringify(pact));
-    pactStream.end();
-
-    const specStream = fs.createWriteStream(OASPath);
-    specStream.write(JSON.stringify(openAPISpec));
-    specStream.end();
+    await Promise.all([
+      fs.writeFile(pactPath, JSON.stringify(pact)),
+      fs.writeFile(OASPath, JSON.stringify(openAPISpec)),
+    ]);
 
     return [pactPath, OASPath];
   }
