@@ -3,6 +3,7 @@ import Contract from "../../models/Contract.js";
 import Participant from "../../models/Participant.js";
 import ParticipantVersion from "../../models/ParticipantVersion.js";
 import Integration from "../../models/Integration.js";
+import Comparison from "../../models/Comparison.js";
 import objectHash from "object-hash";
 import { findOrCreate, newGraphMiddleware } from "../../utils/queryHelpers.js";
 const router = express.Router();
@@ -90,10 +91,24 @@ router.post("/", async (req, res) => {
         participantName: contract.provider.name,
       });
 
-      await findOrCreate(Integration, {
+      const integration = await findOrCreate(Integration, {
         consumerId: participant.participantId,
         providerId: provider.participantId,
       });
+
+      const providerContracts = await Contract.query().where(
+        "participantId",
+        provider.participantId
+      );
+
+      for (let providerContract of providerContracts) {
+        await findOrCreate(Comparison, {
+          integrationId: integration.integrationId,
+          consumerContractId: contractObj.contractId,
+          providerContractId: providerContract.contractId,
+          comparisonStatus: "pending verification",
+        });
+      }
     }
   }
 

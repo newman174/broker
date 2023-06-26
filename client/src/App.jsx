@@ -5,6 +5,7 @@ import {
   participantService,
   contractService,
   integrationService,
+  comparisonService,
 } from "./services/apiService.js";
 
 import { Integration } from "./components/Integration.jsx";
@@ -18,11 +19,13 @@ const App = () => {
   const [participants, setParticipants] = useState([]);
   const [contracts, setContracts] = useState([]);
   const [integrations, setIntegrations] = useState([]);
+  const [comparisons, setComparisons] = useState([]);
 
   useEffect(() => {
     fetchAndSet(participantService, setParticipants);
     fetchAndSet(contractService, setContracts);
     fetchAndSet(integrationService, setIntegrations);
+    fetchAndSet(comparisonService, setComparisons);
   }, []);
 
   return (
@@ -69,7 +72,11 @@ const App = () => {
         <Route
           path="integrations/:integrationId"
           element={
-            <Integration integrations={integrations} contracts={contracts} />
+            <Integration
+              integrations={integrations}
+              contracts={contracts}
+              comparisons={comparisons}
+            />
           }
         />
         <Route path="*" element={<h1>Not Found</h1>} />
