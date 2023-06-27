@@ -2,8 +2,11 @@ import express from "express";
 import "dotenv/config";
 import morgan from "morgan";
 import "./db/db.js";
+
 import indexRouter from "./routes/index.js";
 import apiRouter from "./routes/api/api.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 
@@ -20,3 +23,5 @@ const server = app.listen(PORT, () => {
 });
 
 export default server;
+
+export const srcDir = dirname(fileURLToPath(import.meta.url));

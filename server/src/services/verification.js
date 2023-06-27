@@ -10,14 +10,13 @@ verify(pact, OAS)
 */
 
 import { promises as fs } from "node:fs";
-import path from "node:path";
 import { exec } from "child_process";
 
 import { SwaggerMockValidatorFactory } from "../../node_modules/swagger-mock-validator/dist/swagger-mock-validator-factory.js";
 
 // contracts for development only. DELETE THIS WHEN verify() is called externally
-// import samplePact from "./sample_pact.js";
-// import sampleOAS from "./sample_OAS.js";
+//import samplePact from "../data/sample/samplePact.js";
+//import sampleOAS from "../data/sample/sampleOAS.js";
 
 export default class Verifier {
   // takes both contracts as plain JS objects
@@ -48,18 +47,19 @@ export default class Verifier {
     });
   }
 
+  // pact and openAPISpec are objects
   async verify2(pact, openAPISpec) {
     try {
+      // create json files and write object content to the file
       const [pactPath, OASPath] = await this.createFiles(pact, openAPISpec);
 
       const swaggerMockValidator = SwaggerMockValidatorFactory.create();
 
+      // validate function expects paths (string) to files
       const result = await swaggerMockValidator.validate({
         mockPathOrUrl: pactPath,
         specPathOrUrl: OASPath,
       });
-
-      this.cleanUpFiles(pactPath, OASPath);
 
       return result;
     } catch (err) {
@@ -68,8 +68,13 @@ export default class Verifier {
   }
 
   async createFiles(pact, openAPISpec) {
-    const pactPath = path.resolve(process.cwd(), "./verification_pact.json");
-    const OASPath = path.resolve(process.cwd(), "./verification_OAS.json");
+    let { srcDir } = await import("../app.js");
+    const tempDataPath = srcDir + "/data/temp/";
+
+    const pactPath = tempDataPath + "verification_pact.json";
+    const OASPath = tempDataPath + "verification_OAS.json";
+
+    console.log(pactPath, OASPath);
 
     await Promise.all([
       fs.writeFile(pactPath, JSON.stringify(pact)),
@@ -97,7 +102,7 @@ export default class Verifier {
   .then((result) => console.log(result))
   .catch((reason) => console.log(reason));*/
 
-// new Verifier()
-//   .verify2(samplePact, sampleOAS)
-//   .then((result) => console.log(result))
-//   .catch((reason) => console.log(reason));
+//new Verifier()
+//.verify2(samplePact, sampleOAS)
+//.then((result) => console.log(result))
+//.catch((reason) => console.log(reason));
