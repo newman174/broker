@@ -6,6 +6,7 @@ import Integration from "../../models/Integration.js";
 import objectHash from "object-hash";
 import { compare } from "../../services/comparisonService.js";
 import { findOrCreate, newGraphMiddleware } from "../../utils/queryHelpers.js";
+import { validateSchema } from "../../services/contractSchema.js";
 import YAML from "yaml";
 const router = express.Router();
 
@@ -67,13 +68,19 @@ router.post("/", async (req, res) => {
   }
   const contractHash = objectHash.MD5(contract);
 
+  const formattedContract =
+    contractFormat === "json" ? contract : YAML.parse(contract);
+
+  if (!(await validateSchema(formattedContract, contractType))) {
+    return res.status(409).json({ error: "Contract schema is invalid" });
+  }
+
   contractObj = await findOrCreate(
     Contract,
     { contractHash, participantId: participant.participantId },
     {
       contract: {
-        contractText:
-          contractFormat === "json" ? contract : YAML.parse(contract),
+        contractText: formattedContract,
       },
       contractType,
       contractFormat,
