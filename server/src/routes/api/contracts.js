@@ -80,8 +80,7 @@ router.post("/", async (req, res) => {
     { contractHash, participantId: participant.participantId },
     {
       contract: {
-        contractText:
-          contractFormat === "json" ? contract : YAML.parse(contract),
+        contractText: formattedContract,
       },
       contractType,
       contractFormat,
