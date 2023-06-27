@@ -117,6 +117,24 @@ router.post("/", async (req, res) => {
     }
   }
 
+  if (contractType === "provider") {
+    const integrations = await Integration.query().where(
+      "providerId",
+      contractObj.participantId
+    );
+
+    for (let integration of integrations) {
+      const consumerContracts = await Contract.query().where(
+        "participantId",
+        integration.consumerId
+      );
+
+      for (let consumerContract of consumerContracts) {
+        compare(consumerContract, contractObj, integration);
+      }
+    }
+  }
+
   res.status(201).json(contractObj);
 });
 
