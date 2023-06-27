@@ -3,7 +3,6 @@ import Contract from "../../models/Contract.js";
 import Participant from "../../models/Participant.js";
 import ParticipantVersion from "../../models/ParticipantVersion.js";
 import Integration from "../../models/Integration.js";
-import Comparison from "../../models/Comparison.js";
 import objectHash from "object-hash";
 import { compare } from "../../services/comparisonService.js";
 import { findOrCreate, newGraphMiddleware } from "../../utils/queryHelpers.js";
