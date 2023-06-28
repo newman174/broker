@@ -11,16 +11,21 @@ import {
   MediaQuery,
   Burger,
   useMantineTheme,
+  Flex,
 } from "@mantine/core";
 import IntegrationNavLinks from "./IntegrationNavLinks.jsx";
-import { ActionIcon, useMantineColorScheme } from '@mantine/core';
-import { IconSun, IconMoonStars } from '@tabler/icons-react';
+import { ActionIcon, useMantineColorScheme } from "@mantine/core";
+import {
+  IconSun,
+  IconMoonStars,
+  IconTopologyStarRing2,
+} from "@tabler/icons-react";
 
 const MyAppShell = ({ children, integrations }) => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const dark = colorScheme === 'dark';
+  const dark = colorScheme === "dark";
 
   return (
     <AppShell
@@ -72,16 +77,25 @@ const MyAppShell = ({ children, integrations }) => {
               />
             </MediaQuery>
 
-            <Link to={"/"}>Signet Broker</Link>
+            <Link to={"/"}>
+              <Flex>
+                <IconTopologyStarRing2 style={{ marginRight: "0.4rem" }} />
+                Signet Broker
+              </Flex>
+            </Link>
             <div style={{ marginLeft: "auto" }}>
-            <ActionIcon
-              variant="outline"
-              color={dark ? 'yellow' : 'blue'}
-              onClick={() => toggleColorScheme()}
-              title="Toggle color scheme"
-            >
-             {dark ? <IconSun size="1.1rem" /> : <IconMoonStars size="1.1rem" />}
-           </ActionIcon>
+              <ActionIcon
+                variant="outline"
+                color={dark ? "yellow" : "blue"}
+                onClick={() => toggleColorScheme()}
+                title="Toggle color scheme"
+              >
+                {dark ? (
+                  <IconSun size="1.1rem" />
+                ) : (
+                  <IconMoonStars size="1.1rem" />
+                )}
+              </ActionIcon>
             </div>
           </div>
         </Header>
