@@ -66,6 +66,55 @@ class DatabaseClient {
       }
     );
   }
+
+  async fetchIntegrationData() {
+    const integrations = await Integration.query()
+      .select(
+        "integrations.*",
+        "consumers.participantName as consumerName",
+        "providers.participantName as providerName"
+      )
+      .join(
+        "participants as consumers",
+        "integrations.consumerId",
+        "consumers.participantId"
+      )
+      .join(
+        "participants as providers",
+        "integrations.providerId",
+        "providers.participantId"
+      );
+
+    return integrations
+  }
+
+  async fetchIntegrationById(id) {
+    let integrationById = await Integration.query()
+      .select(
+        "integrations.*",
+        "consumers.participantName as consumerName",
+        "providers.participantName as providerName"
+      )
+      .join(
+        "participants as consumers",
+        "integrations.consumerId",
+        "consumers.participantId"
+      )
+      .join(
+        "participants as providers",
+        "integrations.providerId",
+        "providers.participantId"
+      )
+      .findById(id);
+
+      return integrationById;
+  }
+
+  async deleteIntegration(id) {
+    const integration = await Integration.query().deleteById(Number(id));
+    
+    return integration;
+  }
 }
 
 export default new DatabaseClient();
