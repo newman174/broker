@@ -67,7 +67,7 @@ class DatabaseClient {
     );
   }
 
-  async fetchIntegrationData() {
+  async getIntegrationData() {
     const integrations = await Integration.query()
       .select(
         "integrations.*",
@@ -88,7 +88,7 @@ class DatabaseClient {
     return integrations
   }
 
-  async fetchIntegrationById(id) {
+  async getIntegrationById(id) {
     let integrationById = await Integration.query()
       .select(
         "integrations.*",
@@ -112,7 +112,7 @@ class DatabaseClient {
 
   async deleteIntegration(id) {
     const integration = await Integration.query().deleteById(Number(id));
-    
+
     return integration;
   }
 }

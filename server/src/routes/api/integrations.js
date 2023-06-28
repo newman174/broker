@@ -9,7 +9,7 @@ const router = express.Router();
  * @returns {array} All integrations
  */
 router.get("/", async (_req, res) => {
-  const integrations = await db.fetchIntegrationData()
+  const integrations = await db.getIntegrationData()
 
   res.json(integrations);
 });
@@ -21,7 +21,7 @@ router.get("/", async (_req, res) => {
  */
 router.get("/:id", async (req, res) => {
   const integrationId = Number(req.params.id);
-  const integration = await db.fetchIntegrationById(integrationId)
+  const integration = await db.getIntegrationById(integrationId)
 
   res.json(integration);
 });
@@ -31,7 +31,6 @@ router.get("/:id", async (req, res) => {
  * @param {number} id - The integration id
  */
 router.delete("/:id", async (req, res) => {
-
   try {
     const id = Number(req.params.id);
     const integration = await db.deleteIntegration(id);
