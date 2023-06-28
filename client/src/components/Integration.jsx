@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { comparisonService } from "../services/apiService.js";
 import { Prism } from "@mantine/prism";
 import { Table, Box, Card, Tabs } from "@mantine/core";
+import Matrix from "./Matrix.jsx";
 
 const Integration = ({ integrations }) => {
   const { integrationId } = useParams();
@@ -13,7 +14,7 @@ const Integration = ({ integrations }) => {
 
   const [comparisons, setComparisons] = useState([]);
 
-  console.log(comparisons);
+  //console.log(comparisons);
   console.log("integration", integration);
 
   useEffect(() => {
@@ -96,7 +97,9 @@ const Integration = ({ integrations }) => {
             ))}
           </div>
         </Tabs.Panel>
-        <Tabs.Panel value="matrix"></Tabs.Panel>
+        <Tabs.Panel value="matrix">
+          <Matrix comparisons={comparisons} />
+        </Tabs.Panel>
         <Tabs.Panel value="webhooks">
           <h4>Webhooks</h4>
         </Tabs.Panel>
