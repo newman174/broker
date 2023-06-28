@@ -1,6 +1,7 @@
-import { Flex, Paper, Grid, Card, Button } from "@mantine/core";
+import { Flex, Grid, Card, Button } from "@mantine/core";
 import ParticipantDetails from "./ParticipantDetails.jsx";
 import { XboxX, CircleCheck } from "tabler-icons-react";
+import PropTypes from "prop-types";
 
 const unique = function (array) {
   return array.filter((elem, index) => {
@@ -9,70 +10,61 @@ const unique = function (array) {
   });
 };
 
-const comparisonStatusIndicator = (status) => {
-  const statusIndicator = {
-    Success: {
-      color: "#4caf50",
-      icon: <CircleCheck size={48} />,
-    },
-    Failed: {
-      color: "#f44336",
-      icon: <XboxX size={48} />,
-    },
-  };
+const statusIndicator = {
+  Success: {
+    color: "#4caf50",
+    icon: <CircleCheck size={48} />,
+  },
+  Failed: {
+    color: "#f44336",
+    icon: <XboxX size={48} />,
+  },
+};
 
+const comparisonStatusIndicator = (status) => {
   return (
     <Flex
       direction={"column"}
       align="center"
       justify="center"
-      style={{ color: statusIndicator[status].color }}
+      style={
+        statusIndicator[status]
+          ? { color: statusIndicator[status].color }
+          : { color: "black" }
+      }
       size="xl"
     >
-      {statusIndicator[status].icon}
+      {statusIndicator[status]?.icon}
       {status}
     </Flex>
   );
 };
 
 const ComparisonContainer = ({ comparison }) => {
-  console.log(comparison);
+  const generateDetails = (participantType) => {
+    const participantVersions =
+      participantType === "Consumer"
+        ? comparison.consumerContract.participantVersions
+        : comparison.providerContract.participantVersions;
 
-  const consumerParticipantVersions =
-    comparison.consumerContract.participantVersions;
-
-  const consumerDetails = {
-    version: consumerParticipantVersions
-      .map((participantVersion) => participantVersion.participantVersion)
-      .sort()
-      .join(", "),
-    branch: unique(
-      consumerParticipantVersions
-        .filter((participantVersion) => participantVersion.participantBranch)
-        .map((participantVersion) => participantVersion.participantBranch)
-    ).join(", "),
-    environments: "dev, test, prod",
-    publishedDate: "2021-08-01",
-    participantType: "Consumer",
+    return {
+      participantType,
+      versions: participantVersions
+        .map((participantVersion) => participantVersion.participantVersion)
+        .sort()
+        .join(", "),
+      branches: unique(
+        participantVersions
+          .filter((participantVersion) => participantVersion.participantBranch)
+          .map((participantVersion) => participantVersion.participantBranch)
+      ).join(", "),
+      // environments: "dev, test, prod",
+      publishedDate: comparison.createdAt,
+    };
   };
 
-  const providerParticipantVersions =
-    comparison.consumerContract.participantVersions;
-
-  const providerDetails = {
-    version: providerParticipantVersions
-      .map((participantVersion) => participantVersion.participantVersion)
-      .sort()
-      .join(", "),
-    participantType: "Provider",
-    branch: unique(
-      providerParticipantVersions
-        .filter((participantVersion) => participantVersion.participantBranch)
-        .map((participantVersion) => participantVersion.participantBranch)
-    ).join(", "),
-    environments: "dev, test, prod",
-    publishedDate: "2021-08-01",
-  };
+  const consumerDetails = generateDetails("Consumer");
+  const providerDetails = generateDetails("Provider");
 
   return (
     <Card
@@ -81,13 +73,12 @@ const ComparisonContainer = ({ comparison }) => {
       style={{
         marginBottom: "1rem",
         border:
-          "1px solid " +
-          (comparison.comparisonStatus === "Failed" ? "red" : "green"),
+          "2px solid " + (statusIndicator[comparison.status]?.color || "black"),
       }}
     >
       <Grid align="center">
         <Grid.Col md={6} lg={3}>
-          {comparisonStatusIndicator(comparison.comparisonStatus)}
+          {comparisonStatusIndicator(comparison.status)}
         </Grid.Col>
         <Grid.Col md={6} lg={3}>
           <ParticipantDetails participantDetails={consumerDetails} />
@@ -96,14 +87,15 @@ const ComparisonContainer = ({ comparison }) => {
           <ParticipantDetails participantDetails={providerDetails} />
         </Grid.Col>
         <Grid.Col md={6} lg={3}>
-          <Button variant="outline" color="blue">
-            View Comparison
-          </Button>
+          <Button variant="outline">View Contracts</Button>
         </Grid.Col>
       </Grid>
-      {/* </Flex> */}
     </Card>
   );
+};
+
+ComparisonContainer.propTypes = {
+  comparison: PropTypes.object.isRequired,
 };
 
 export default ComparisonContainer;

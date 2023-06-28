@@ -1,14 +1,9 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import {
-  // participantService,
-  contractService,
-  integrationService,
-} from "./services/apiService.js";
+import { contractService, integrationService } from "./services/apiService.js";
 import AppShell from "./components/AppShell.jsx";
 import { Integration } from "./components/Integration.jsx";
-
 
 const fetchAndSet = async (service, setter) => {
   const data = await service.getAll();
@@ -16,16 +11,12 @@ const fetchAndSet = async (service, setter) => {
 };
 
 const App = () => {
-  // const [participants, setParticipants] = useState([]);
   const [contracts, setContracts] = useState([]);
   const [integrations, setIntegrations] = useState([]);
-  // const [comparisons, setComparisons] = useState([]);
 
   useEffect(() => {
-    // fetchAndSet(participantService, setParticipants);
     fetchAndSet(contractService, setContracts);
     fetchAndSet(integrationService, setIntegrations);
-    // fetchAndSet(comparisonService, setComparisons);
   }, []);
 
   const path = useLocation().pathname;
@@ -33,39 +24,12 @@ const App = () => {
   return (
     <AppShell integrations={integrations}>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <h1>Signet Contract Broker</h1>
-              {/* <h2>Participants</h2>
-                <ol>
-                  {participants.map((participant) => (
-                    <li key={participant.participantId}>
-                      {participant.participantName}
-                    </li>
-                  ))}
-                </ol> */}
-              {/* <h2>Contracts</h2>
-                <ol>
-                  {contracts.map((contract) => (
-                    <li key={contract.contractId}>
-                      {JSON.stringify(contract.contract, null, 2)}
-                    </li>
-                  ))}
-                </ol> */}
-            </>
-          }
-        />
+        <Route path="/" element={<h1>Signet Contract Broker</h1>} />
         <Route
           path="integrations/:integrationId"
           element={
-            path.match(/.*integrations.*/) && integrations.length > 0 ? (
-              <Integration
-                integrations={integrations}
-                contracts={contracts}
-                // comparisons={comparisons}
-              />
+            path.match(/.*integrations.*/i) && integrations.length > 0 ? (
+              <Integration integrations={integrations} contracts={contracts} />
             ) : null
           }
         />
