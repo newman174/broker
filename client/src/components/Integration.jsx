@@ -6,6 +6,7 @@ import { Prism } from "@mantine/prism";
 import { Card, Tabs } from "@mantine/core";
 import Comparison from "../models/Comparison.js";
 import IntegrationOverviewTab from "./IntegrationOverviewTab.jsx";
+import Matrix from "./Matrix.jsx";
 
 const Integration = ({ integrations }) => {
   const { integrationId } = useParams();
@@ -54,7 +55,9 @@ const Integration = ({ integrations }) => {
           <IntegrationOverviewTab comparisons={comparisons} />
         </Tabs.Panel>
 
-        <Tabs.Panel value="matrix"></Tabs.Panel>
+        <Tabs.Panel value="matrix">
+          <Matrix comparisons={comparisons} />
+        </Tabs.Panel>
 
         <Tabs.Panel value="webhooks">
           <h4>Webhooks</h4>
