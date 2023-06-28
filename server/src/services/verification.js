@@ -74,8 +74,6 @@ export default class Verifier {
     const pactPath = tempDataPath + "verification_pact.json";
     const OASPath = tempDataPath + "verification_OAS.json";
 
-    console.log(pactPath, OASPath);
-
     await Promise.all([
       fs.writeFile(pactPath, JSON.stringify(pact)),
       fs.writeFile(OASPath, JSON.stringify(openAPISpec)),
