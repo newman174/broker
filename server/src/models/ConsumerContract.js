@@ -40,8 +40,8 @@ class ConsumerContract extends Model {
         join: {
           from: "consumerContracts.consumerContractId",
           through: {
-            from: "comparisons.providerId",
-            to: "comparisons.consumerId",
+            from: "comparisons.consumerId",
+            to: "comparisons.providerId",
           },
           to: "providerSpecs.providerSpecId",
         },
