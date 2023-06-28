@@ -9,6 +9,7 @@ import {
 import AppShell from "./components/AppShell.jsx";
 import { Integration } from "./components/Integration.jsx";
 
+
 const fetchAndSet = async (service, setter) => {
   const data = await service.getAll();
   setter(data);
