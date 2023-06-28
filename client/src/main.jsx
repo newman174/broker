@@ -18,10 +18,10 @@ function Root() {
       setColorScheme(event.matches ? "dark" : "light");
     };
 
-    prefersDarkMode.addListener(updateColorScheme);
+    prefersDarkMode.addEventListener("change", updateColorScheme);
 
     return () => {
-      prefersDarkMode.removeListener(updateColorScheme);
+      prefersDarkMode.removeEventListener("change", updateColorScheme);
     };
   }, []);
 
