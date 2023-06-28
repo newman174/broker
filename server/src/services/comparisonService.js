@@ -33,13 +33,14 @@ export const compare = async (
 };
 
 export const compareWithProviderSpecs = async (consumerContractId) => {
-  const contractRecord = db.getConsumerContract(consumerContractId);
+  const contractRecord = await db.getConsumerContract(consumerContractId);
 
   const providerName = contractRecord.contract.contractText.provider.name;
-  const providerId = db.getProviderId(providerName);
+  const providerId = await db.getProviderId(providerName);
 
-  const integration = db.getIntegration(contractRecord.consumerId, providerId);
+  const integration = await db.getIntegration(contractRecord.consumerId, providerId);
 
+  // HAVE NOT TESTED the rest of this method when there are provider specs published in the db
   const specRecords = await db.getProviderSpecs(providerId);
 
   // iterate over all of this provider's specs, and compare them with this consumer contract
@@ -49,11 +50,11 @@ export const compareWithProviderSpecs = async (consumerContractId) => {
 };
 
 export const compareWithConsumerContracts = async (specId) => {
-  const specRecord = db.getProviderSpec(specId);
-  const integrations = db.getIntegrationsByProviderId(specRecord.providerId);
+  const specRecord = await db.getProviderSpec(specId);
+  const integrations = await db.getIntegrationsByProviderId(specRecord.providerId);
 
   for (let integration of integrations) {
-    const contractRecords = db.getConsumerContracts(integration.consumerId);
+    const contractRecords = await db.getConsumerContracts(integration.consumerId);
 
     for (let contractRecord of contractRecords) {
       compare(contractRecord, specRecord, integration);

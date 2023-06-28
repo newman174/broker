@@ -5,24 +5,24 @@ import { newGraphMiddleware } from "../../utils/queryHelpers.js";
 import { validateSchema } from "../../services/contractSchema.js";
 const router = express.Router();
 
-const ALLOWED_GRAPH = [
-  "owner.versions",
-  "participantVersions",
-  "comparedProviderContracts",
-  "comparedConsumerContracts",
-];
+// const ALLOWED_GRAPH = [
+//   "owner.versions",
+//   "participantVersions",
+//   "comparedProviderContracts",
+//   "comparedConsumerContracts",
+// ];
 
-const contractGraphMiddleware = newGraphMiddleware(Contract, ALLOWED_GRAPH);
+// const contractGraphMiddleware = newGraphMiddleware(Contract, ALLOWED_GRAPH);
 
 /**
  * Gets all contracts
  * @param {string[]} joinGraph - The graph to join
  * @returns {object[]} All contracts
  */
-router.get("/", contractGraphMiddleware, async (_req, res) => {
-  const contracts = await res.locals.query;
-  res.json(contracts);
-});
+// router.get("/", contractGraphMiddleware, async (_req, res) => {
+//   const contracts = await res.locals.query;
+//   res.json(contracts);
+// });
 
 /**
  * Creates a new consumer contract
@@ -48,13 +48,13 @@ router.post("/", async (req, res) => {
 
   const consumer = await db.getParticipant(consumerName);
   
-  if (await db.participantVersionExists(consumer.consumerId, consumerVersion)) {
+  if (await db.participantVersionExists(consumer.participantId, consumerVersion)) {
     return res
       .status(409)
       .json({ error: "Participant version already exists" });
   }
 
-  const contractRecord = await db.publishConsumerContract(contract, consumer.id, consumerVersion, consumerBranch);
+  const contractRecord = await db.publishConsumerContract(contract, consumer.participantId, consumerVersion, consumerBranch);
 
   res.status(201).json(contractRecord);
 
@@ -67,17 +67,17 @@ router.post("/", async (req, res) => {
  * @param {string[]} joinGraph - The graph to join
  * @returns {object} The contract
  */
-router.get("/:id", contractGraphMiddleware, async (req, res) => {
-  const { query } = res.locals;
-  const id = Number(req.params.id);
-  const contract = await query.findById(id);
+// router.get("/:id", contractGraphMiddleware, async (req, res) => {
+//   const { query } = res.locals;
+//   const id = Number(req.params.id);
+//   const contract = await query.findById(id);
 
-  if (!contract) {
-    res.status(404).send();
-  } else {
-    res.json(contract);
-  }
-});
+//   if (!contract) {
+//     res.status(404).send();
+//   } else {
+//     res.json(contract);
+//   }
+// });
 
 /**
  * Updates a contract by id

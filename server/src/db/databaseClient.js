@@ -3,6 +3,7 @@ import ProviderSpec from "../models/ProviderSpec.js";
 import Participant from "../models/Participant.js";
 import ParticipantVersion from "../models/ParticipantVersion.js";
 import Integration from "../models/Integration.js";
+import VersionContract from "../models/VersionContract.js";
 import objectHash from "object-hash";
 import { findOrCreate } from "../utils/queryHelpers.js";
 
@@ -12,14 +13,14 @@ class DatabaseClient {
   }
 
   async participantVersionExists(participantId, participantVersion) {
-    return !(await ParticipantVersion.query().findOne({
+    return !!(await ParticipantVersion.query().findOne({
       participantId,
       participantVersion,
     }));
   }
 
   async publishConsumerContract(contract, participantId, participantVersion, participantBranch) {
-    await findOrCreate(
+    const { participantVersionId } = await findOrCreate(
       ParticipantVersion,
       { participantId, participantVersion },
       { participantId, participantVersion, participantBranch },
@@ -40,9 +41,14 @@ class DatabaseClient {
       }
     );
 
-    const { providerId } = await findOrCreate(Participant, {
+    await VersionContract.query().insert({
+      consumerContractId: contractRecord.consumerContractId,
+      consumerVersionId: participantVersionId,
+    })
+
+    const providerId = (await findOrCreate(Participant, {
       participantName: contract.provider.name,
-    });
+    })).participantId;
 
     await findOrCreate(Integration, {
       consumerId: participantId,
@@ -76,7 +82,7 @@ class DatabaseClient {
   }
 
   async getProviderId(participantName) {
-    return await Participant.query().findOne({ participantName }).returning("participentId");
+    return (await Participant.query().findOne({ participantName })).participantId;
   }
 
   async getIntegration(consumerId, providerId) {
