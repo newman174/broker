@@ -2,15 +2,18 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { comparisonService } from "../services/apiService.js";
-import { Prism } from "@mantine/prism";
-import { Card, Tabs } from "@mantine/core";
-import Comparison from "../models/Comparison.js";
+// import { Prism } from "@mantine/prism";
+import {
+  // Card,
+  Tabs,
+} from "@mantine/core";
+// import Comparison from "../models/Comparison.js";
 import IntegrationOverviewTab from "./IntegrationOverviewTab.jsx";
 
 const Integration = ({ integrations }) => {
   const { integrationId } = useParams();
   const integration = integrations.find(
-    (integration) => integration.integrationId === Number(integrationId)
+    (integration) => integration.id === Number(integrationId)
   );
 
   const [comparisons, setComparisons] = useState([]);
@@ -20,11 +23,8 @@ const Integration = ({ integrations }) => {
       const data = await comparisonService.getAll();
       setComparisons(
         data
-          .filter(
-            (comparison) =>
-              comparison.integrationId === integration.integrationId
-          )
-          .map((comparison) => new Comparison(comparison))
+          .filter((comparison) => comparison.id === integration.id)
+          // .map((comparison) => new Comparison(comparison))
           .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))
       );
     };
@@ -33,13 +33,12 @@ const Integration = ({ integrations }) => {
     return () => {
       setComparisons([]);
     };
-  }, [integration.integrationId]);
+  }, [integration.id]);
 
   return (
     <>
       <h3>
-        {integration.consumer.participantName} ⇄{" "}
-        {integration.provider.participantName}
+        {integration.consumer.name} ⇄ {integration.provider.name}
       </h3>
       <Tabs defaultValue="overview">
         <Tabs.List>
@@ -61,7 +60,7 @@ const Integration = ({ integrations }) => {
         </Tabs.Panel>
 
         {/* debug json tab */}
-        <Tabs.Panel value="raw">
+        {/* <Tabs.Panel value="raw">
           <Card style={{ textAlign: "left" }}>
             <h4>Integration</h4>
             <Prism language="json">
@@ -75,7 +74,7 @@ const Integration = ({ integrations }) => {
               {JSON.stringify(comparisons, null, 2)}
             </Prism>
           </Card>
-        </Tabs.Panel>
+        </Tabs.Panel> */}
       </Tabs>
     </>
   );

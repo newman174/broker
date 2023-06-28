@@ -50,7 +50,7 @@ const ComparisonContainer = ({ comparison }) => {
     return {
       participantType,
       versions: participantVersions
-        .map((participantVersion) => participantVersion.participantVersion)
+        .map((participantVersion) => participantVersion.version)
         .sort()
         .join(", "),
       branches: unique(

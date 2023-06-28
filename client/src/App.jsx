@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { contractService, integrationService } from "./services/apiService.js";
+import { integrationService } from "./services/apiService.js";
 import AppShell from "./components/AppShell.jsx";
 import { Integration } from "./components/Integration.jsx";
 
@@ -11,11 +11,9 @@ const fetchAndSet = async (service, setter) => {
 };
 
 const App = () => {
-  const [contracts, setContracts] = useState([]);
   const [integrations, setIntegrations] = useState([]);
 
   useEffect(() => {
-    fetchAndSet(contractService, setContracts);
     fetchAndSet(integrationService, setIntegrations);
   }, []);
 
@@ -29,7 +27,7 @@ const App = () => {
           path="integrations/:integrationId"
           element={
             path.match(/.*integrations.*/i) && integrations.length > 0 ? (
-              <Integration integrations={integrations} contracts={contracts} />
+              <Integration integrations={integrations} />
             ) : null
           }
         />
