@@ -1,10 +1,8 @@
 import express from "express";
-// import Contract from "../../models/Contract.js";
 import db from "../../db/databaseClient.js";
-import { compare, compareWithProviderSpecs, compareWithConsumerContracts } from "../../services/comparisonService.js";
+import { compareWithProviderSpecs, compareWithConsumerContracts } from "../../services/comparisonService.js";
 import { newGraphMiddleware } from "../../utils/queryHelpers.js";
 import { validateSchema } from "../../services/contractSchema.js";
-import YAML from "yaml";
 const router = express.Router();
 
 const ALLOWED_GRAPH = [
@@ -14,7 +12,7 @@ const ALLOWED_GRAPH = [
   "comparedConsumerContracts",
 ];
 
-// const contractGraphMiddleware = newGraphMiddleware(Contract, ALLOWED_GRAPH);
+const contractGraphMiddleware = newGraphMiddleware(Contract, ALLOWED_GRAPH);
 
 /**
  * Gets all contracts
@@ -27,73 +25,41 @@ router.get("/", contractGraphMiddleware, async (_req, res) => {
 });
 
 /**
- * Creates a new contract
- * @param {'provider'|'consumer'} contractType - The type of contract
+ * Creates a new consumer contract
  * @param {string} contract - The contract
- * @param {string} participantName - The participant name
- * @param {string} participantVersion - The participant version
- * @param {string} participantBranch - The participant branch
- * @param {'json'|'yaml'} contractFormat - The contract format
+ * @param {string} consumerName - The consumer name
+ * @param {string} consumerVersion - The consumer version
+ * @param {string} consumerBranch - The consumer branch
  * @returns {object} The created contract
- * TODO: whenever a contract is added, it is compared to the contracts of its counterparties. make as middleware?
  */
 router.post("/", async (req, res) => {
-  const { contractType } = req.body;
+  const {
+    contract,
+    consumerName,
+    consumerVersion,
+    consumerBranch,
+  } = req.body;
 
-  if (contractType === "consumer") {
-    const {
-      contract,
-      consumerName: participantName,
-      consumerVersion: participantVersion,
-      consumerBranch: participantBranch,
-    } = req.body;
-
-    if (!(await validateSchema(contract, "consumer"))) {
-      return res
-        .status(400)
-        .json({ error: "Contract schema is invalid" });
-    }
-
-    const consumer = await db.getParticipant(consumerName);
-    
-    if (await db.participantVersionExists(consumer.consumerId, consumerVersion)) {
-      return res
-        .status(409)
-        .json({ error: "Participant version already exists" });
-    }
-
-    const contractId = await db.publishConsumerContract(contract, consumer.id, consumerVersion, consumerBranch);
-
-    res.status(201).json(contract);
-
-    compareWithProviderSpecs(contractId);
-  } else if (contractType === "provider") {
-    const {
-      contract,
-      providerName: participantName,
-      specFormat: contractFormat,
-    } = req.body;
-
-    const spec =
-    specFormat === "json" ? contract : YAML.parse(contract);
-
-    if (!(await validateSchema(spec, "provider"))) {
-      return res
-        .status(400)
-        .json({ error: "Contract schema is invalid" });
-    }
-
-    const provider = await db.getParticipant(providerName);
-
-    const specId = await db.publishProviderSpec(spec, provider.id, specFormat);
-
-    res.status(201).json(contract);
-
-    compareWithConsumerContracts(specId);
-  } else {
-    res.status(400).json({ error: "Invalid contractType" });
+  if (!(await validateSchema(contract, "consumer"))) {
+    return res
+      .status(400)
+      .json({ error: "Contract schema is invalid" });
   }
-})
+
+  const consumer = await db.getParticipant(consumerName);
+  
+  if (await db.participantVersionExists(consumer.consumerId, consumerVersion)) {
+    return res
+      .status(409)
+      .json({ error: "Participant version already exists" });
+  }
+
+  const contractRecord = await db.publishConsumerContract(contract, consumer.id, consumerVersion, consumerBranch);
+
+  res.status(201).json(contractRecord);
+
+  compareWithProviderSpecs(contractRecord.consumerContractId);
+});
 
 /**
  * Gets a contract by id

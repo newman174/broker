@@ -27,7 +27,7 @@ class DatabaseClient {
 
     const contractHash = objectHash.MD5(contract);
 
-    const { consumerContractId } = await findOrCreate(
+    const contractRecord = await findOrCreate(
       ConsumerContract,
       { contractHash, consumerId: participantId },
       {
@@ -49,13 +49,13 @@ class DatabaseClient {
       providerId,
     });
 
-    return consumerContractId;
+    return contractRecord;
   }
 
   async publishProviderSpec(spec, providerId, specFormat) {
     const specHash = objectHash.MD5(spec);
 
-    const { providerSpecId } = await findOrCreate(
+    const specRecord = await findOrCreate(
       ProviderSpec,
       { specHash, providerId },
       {
@@ -68,7 +68,7 @@ class DatabaseClient {
       }
     );
 
-    return providerSpecId;
+    return specRecord;
   }
 
   async getConsumerContract(consumerContractId) {
