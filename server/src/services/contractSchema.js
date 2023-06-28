@@ -1,6 +1,6 @@
 import { addSchema, validate } from "@hyperjump/json-schema/draft-04";
-import pactSchema from "./pactv3Schema.js";
-import openAPISchema from "./openAPIv3Schema.js";
+import pactSchema from "../data/schema/pactv3Schema.js";
+import openAPISchema from "../data/schema/openAPIv3Schema.js";
 
 const validatePact = async (pact) => {
   addSchema(
