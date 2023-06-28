@@ -18,6 +18,18 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+dl.participant-details dt {
+  font-weight: bold;
+  opacity: 0.4;
+  text-align: left;
+}
+
+dl.participant-details dd {
+  margin-inline-start: 0;
+  margin-bottom: 0.5em;
+  text-align: left;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
