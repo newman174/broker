@@ -27,7 +27,7 @@ class DatabaseClient {
 
     const contractHash = objectHash.MD5(contract);
 
-    await findOrCreate(
+    const { consumerContractId } = await findOrCreate(
       ConsumerContract,
       { contractHash, consumerId: participantId },
       {
@@ -48,12 +48,14 @@ class DatabaseClient {
       consumerId: participantId,
       providerId,
     });
+
+    return consumerContractId;
   }
 
   async publishProviderSpec(spec, providerId, specFormat) {
     const specHash = objectHash.MD5(spec);
 
-    await findOrCreate(
+    const { providerSpecId } = await findOrCreate(
       ProviderSpec,
       { specHash, providerId },
       {
@@ -65,6 +67,32 @@ class DatabaseClient {
         providerId,
       }
     );
+
+    return providerSpecId;
+  }
+
+  async getConsumerContract(consumerContractId) {
+    return await ConsumerContract.query().findById(consumerContractId);
+  }
+
+  async getProviderId(participantName) {
+    return await Participant.query().findOne({ participantName }).returning("participentId");
+  }
+
+  async getIntegration(consumerId, providerId) {
+    return await Integration.query().findOne({ consumerId, providerId });
+  }
+
+  async getProviderSpecs(providerId) {
+    return await ProviderSpec.query().where({ providerId });
+  }
+
+  async getProviderSpec(providerSpecId) {
+    return await ProviderSpec.query().findById(providerSpecId);
+  }
+
+  async getIntegrationsByProviderId(providerId) {
+    return await Integration.query().where({ providerId });
   }
 }
 
