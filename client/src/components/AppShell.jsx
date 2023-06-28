@@ -13,10 +13,14 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import IntegrationNavLinks from "./IntegrationNavLinks.jsx";
+import { ActionIcon, useMantineColorScheme } from '@mantine/core';
+import { IconSun, IconMoonStars } from '@tabler/icons-react';
 
 const MyAppShell = ({ children, integrations }) => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === 'dark';
 
   return (
     <AppShell
@@ -69,6 +73,16 @@ const MyAppShell = ({ children, integrations }) => {
             </MediaQuery>
 
             <Link to={"/"}>Signet Broker</Link>
+            <div style={{ marginLeft: "auto" }}>
+            <ActionIcon
+              variant="outline"
+              color={dark ? 'yellow' : 'blue'}
+              onClick={() => toggleColorScheme()}
+              title="Toggle color scheme"
+            >
+             {dark ? <IconSun size="1.1rem" /> : <IconMoonStars size="1.1rem" />}
+           </ActionIcon>
+            </div>
           </div>
         </Header>
       }
