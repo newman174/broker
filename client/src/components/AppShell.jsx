@@ -107,21 +107,21 @@ const MyAppShell = ({ children, integrations }) => {
   );
 };
 
-MyAppShell.propTypes = {
-  children: PropTypes.node.isRequired,
-  integrations: PropTypes.arrayOf(
-    PropTypes.shape({
-      integrationId: PropTypes.number.isRequired,
-      consumer: PropTypes.shape({
-        participantId: PropTypes.number.isRequired,
-        participantName: PropTypes.string.isRequired,
-      }).isRequired,
-      provider: PropTypes.shape({
-        participantId: PropTypes.number.isRequired,
-        participantName: PropTypes.string.isRequired,
-      }).isRequired,
-    })
-  ).isRequired,
-};
+// MyAppShell.propTypes = {
+//   children: PropTypes.node.isRequired,
+//   integrations: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       integrationId: PropTypes.number.isRequired,
+//       consumer: PropTypes.shape({
+//         participantId: PropTypes.number.isRequired,
+//         participantName: PropTypes.string.isRequired,
+//       }).isRequired,
+//       provider: PropTypes.shape({
+//         participantId: PropTypes.number.isRequired,
+//         participantName: PropTypes.string.isRequired,
+//       }).isRequired,
+//     })
+//   ).isRequired,
+// };
 
 export default MyAppShell;
