@@ -1,6 +1,6 @@
 import express from "express";
 import db from "../../db/databaseClient.js";
-import { compareWithConsumerContracts } from "../../services/comparisonService.js";
+// import { compareWithConsumerContracts } from "../../services/comparisonService.js";
 import { validateSchema } from "../../services/contractSchema.js";
 import YAML from "yaml";
 const router = express.Router();
@@ -27,11 +27,13 @@ router.post("/", async (req, res) => {
 
   const provider = await db.getParticipant(providerName);
 
-  const specRecord = await db.publishProviderSpec(spec, provider.id, specFormat);
+  const specRecord = await db.publishProviderSpec(spec, provider.participantId, specFormat);
 
   res.status(201).json(specRecord);
 
-  compareWithConsumerContracts(specRecord.providerSpecId);
+  // note sure how to do this without parsing every one of a consumer's contracts to see
+  // if that contract is for the integration with this provider.
+  // compareWithConsumerContracts(specRecord.providerSpecId);
 });
 
 export default router;

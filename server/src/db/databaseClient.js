@@ -100,6 +100,31 @@ class DatabaseClient {
   async getIntegrationsByProviderId(providerId) {
     return await Integration.query().where({ providerId });
   }
+
+  // async getConsumerContractsByIntegrationId(integrationId) {
+  //   return await ConsumerContract.query()
+  //     .select(
+  //       "consumerContracts.consumerContractId",
+  //       "consumerContracts.consumerId",
+  //       "consumerContracts.contract",
+  //       "consumerContracts.createdAt",
+  //       "consumerContracts.updatedAt",
+  //       "consumerContracts.contractHash"
+  //     )
+  //     .join(
+  //       "comparisons",
+  //       "consumerContracts.consumerContractId",
+  //       "comparisons.consumerContractId"
+  //     )
+  //     .join(
+  //       "integrations",
+  //       "comparisons.integrationId",
+  //       "integrations.integrationId"
+  //     )
+  //     .where(
+  //       "integrations.integrationId", Number(integrationId)
+  //     );
+  // }
 }
 
 export default new DatabaseClient();

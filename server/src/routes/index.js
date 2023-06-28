@@ -7,10 +7,6 @@ import { Router } from "express";
 
 const router = Router();
 
-router.get("", (req, res) => {
-  res.send("Hello World");
-});
-
 // router.get("/test", async (req, res) => {
 //   // deletes all contracts and participants
 //   await Contract.query().delete();

@@ -49,15 +49,16 @@ export const compareWithProviderSpecs = async (consumerContractId) => {
   }
 };
 
-export const compareWithConsumerContracts = async (specId) => {
-  const specRecord = await db.getProviderSpec(specId);
-  const integrations = await db.getIntegrationsByProviderId(specRecord.providerId);
+// export const compareWithConsumerContracts = async (specId) => {
+//   const specRecord = await db.getProviderSpec(specId);
+//   const integrations = await db.getIntegrationsByProviderId(specRecord.providerId);
 
-  for (let integration of integrations) {
-    const contractRecords = await db.getConsumerContracts(integration.consumerId);
+//   for (let integration of integrations) {
+//     // This line is where implementation is challenging
+//     const contractRecords = await db.getConsumerContractsByIntegrationId(integration.integrationId);
 
-    for (let contractRecord of contractRecords) {
-      compare(contractRecord, specRecord, integration);
-    }
-  }
-};
+//     for (let contractRecord of contractRecords) {
+//       compare(contractRecord, specRecord, integration);
+//     }
+//   }
+// };
