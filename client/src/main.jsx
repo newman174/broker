@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
 import App from "./App.jsx";
 import "./index.css";
@@ -9,8 +9,26 @@ import { BrowserRouter as Router } from "react-router-dom";
 function Root() {
   const [colorScheme, setColorScheme] = useState('light');
 
-  const toggleColorScheme = (value = null) => {
-    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+  useEffect(() => {
+    const prefersDarkMode = window.matchMedia("(prefers-color-scheme: dark)");
+
+    setColorScheme(prefersDarkMode.matches ? "dark" : "light");
+
+    const updateColorScheme = (event) => {
+      setColorScheme(event.matches ? "dark" : "light");
+    };
+
+    prefersDarkMode.addListener(updateColorScheme);
+
+    return () => {
+      prefersDarkMode.removeListener(updateColorScheme);
+    };
+  }, []);
+
+  const toggleColorScheme = () => {
+    setColorScheme((prevColorScheme) =>
+      prevColorScheme === "dark" ? "light" : "dark"
+    );
   };
 
   return (
