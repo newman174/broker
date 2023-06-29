@@ -1,6 +1,6 @@
 import express from "express";
 import db from "../../db/databaseClient.js";
-import { compareWithProviderSpecs } from "../../services/comparisonService.js";
+import comp from "../../services/comparisonService.js";
 // import { newGraphMiddleware } from "../../utils/queryHelpers.js";
 import { validateSchema } from "../../services/contractSchema.js";
 const router = express.Router();
@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
   if (!(await validateSchema(contract, "consumer"))) {
     return res
       .status(400)
-      .json({ error: "Contract schema is invalid" });
+      .json({error: "Contract schema is invalid"});
   }
 
   const consumer = await db.getParticipant(consumerName);
@@ -51,14 +51,14 @@ router.post("/", async (req, res) => {
   if (await db.participantVersionExists(consumer.participantId, consumerVersion)) {
     return res
       .status(409)
-      .json({ error: "Participant version already exists" });
+      .json({error: "Participant version already exists"});
   }
 
   const contractRecord = await db.publishConsumerContract(contract, consumer.participantId, consumerVersion, consumerBranch);
 
   res.status(201).json(contractRecord);
 
-  compareWithProviderSpecs(contractRecord.consumerContractId);
+  comp.compareWithProviderSpecs(contractRecord.consumerContractId);
 });
 
 /**

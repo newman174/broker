@@ -5,8 +5,12 @@ import { Router } from "express";
 // import Integration from "../models/Integration.js";
 // import ParticipantVersion from "../models/ParticipantVersion.js";
 
+
 const router = Router();
 
+router.get("/", (req, res) => {
+  res.send("hello world");
+})
 // router.get("/test", async (req, res) => {
 //   // deletes all contracts and participants
 //   await Contract.query().delete();
