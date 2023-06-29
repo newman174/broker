@@ -4,21 +4,17 @@ import Comparison from "../models/Comparison.js";
 import db from "../db/databaseClient.js";
 
 class ComparisonService {
-  async compare(
-    contractRecord,
-    specRecord,
-    integration
-  ) {
+  async compare(contractRecord, specRecord, integration) {
     const verifier = new Verifier();
-  
+
     try {
       const result = await verifier.verify2(
         contractRecord.contract.contractText,
         specRecord.spec.specText
       );
-  
+
       const comparisonStatus = result.success ? "Success" : "Failed";
-  
+
       const comparison = await Comparison.query().insert({
         integrationId: integration.integrationId,
         consumerContractId: contractRecord.consumerContractId,
@@ -26,7 +22,7 @@ class ComparisonService {
         result,
         comparisonStatus: comparisonStatus,
       });
-  
+
       return comparison;
     } catch (err) {
       console.log(err);
@@ -35,35 +31,41 @@ class ComparisonService {
 
   async compareWithProviderSpecs(consumerContractId) {
     const contractRecord = await db.getConsumerContract(consumerContractId);
-  
+
     const providerName = contractRecord.contract.contractText.provider.name;
     const providerId = await db.getProviderId(providerName);
-  
-    const integration = await db.getIntegration(contractRecord.consumerId, providerId);
-  
+
+    const integration = await db.getIntegration(
+      contractRecord.consumerId,
+      providerId
+    );
+
     // HAVE NOT TESTED the rest of this method when there are provider specs published in the db
     const specRecords = await db.getProviderSpecs(providerId);
-  
+
     // iterate over all of this provider's specs, and compare them with this consumer contract
     for (let specRecord of specRecords) {
       this.compare(contractRecord, specRecord, integration);
     }
-  }  
+  }
+
+  async compareWithConsumerContracts(specId) {
+    const specRecord = await db.getProviderSpec(specId);
+    const integrations = await db.getIntegrationsByProviderId(
+      specRecord.providerId
+    );
+
+    for (let integration of integrations) {
+      // This line is where implementation is challenging
+      const contractRecords = await db.getConsumerContractsByIntegrationId(
+        integration.integrationId
+      );
+
+      for (let contractRecord of contractRecords) {
+        this.compare(contractRecord, specRecord, integration);
+      }
+    }
+  }
 }
 
 export default new ComparisonService();
-
-
-// export const compareWithConsumerContracts = async (specId) => {
-//   const specRecord = await db.getProviderSpec(specId);
-//   const integrations = await db.getIntegrationsByProviderId(specRecord.providerId);
-
-//   for (let integration of integrations) {
-//     // This line is where implementation is challenging
-//     const contractRecords = await db.getConsumerContractsByIntegrationId(integration.integrationId);
-
-//     for (let contractRecord of contractRecords) {
-//       compare(contractRecord, specRecord, integration);
-//     }
-//   }
-// };

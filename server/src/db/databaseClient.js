@@ -19,12 +19,17 @@ class DatabaseClient {
     }));
   }
 
-  async publishConsumerContract(contract, participantId, participantVersion, participantBranch) {
+  async publishConsumerContract(
+    contract,
+    participantId,
+    participantVersion,
+    participantBranch
+  ) {
     const { participantVersionId } = await findOrCreate(
       ParticipantVersion,
       { participantId, participantVersion },
-      { participantId, participantVersion, participantBranch },
-    )
+      { participantId, participantVersion, participantBranch }
+    );
 
     const contractHash = objectHash.MD5(contract);
 
@@ -44,11 +49,13 @@ class DatabaseClient {
     await VersionContract.query().insert({
       consumerContractId: contractRecord.consumerContractId,
       consumerVersionId: participantVersionId,
-    })
+    });
 
-    const providerId = (await findOrCreate(Participant, {
-      participantName: contract.provider.name,
-    })).participantId;
+    const providerId = (
+      await findOrCreate(Participant, {
+        participantName: contract.provider.name,
+      })
+    ).participantId;
 
     await findOrCreate(Integration, {
       consumerId: participantId,
@@ -95,7 +102,7 @@ class DatabaseClient {
         "providers.participantId"
       );
 
-    return integrations
+    return integrations;
   }
 
   async getIntegrationById(id) {
@@ -117,7 +124,7 @@ class DatabaseClient {
       )
       .findById(id);
 
-      return integrationById;
+    return integrationById;
   }
 
   async deleteIntegration(id) {
@@ -131,7 +138,8 @@ class DatabaseClient {
   }
 
   async getProviderId(participantName) {
-    return (await Participant.query().findOne({ participantName })).participantId;
+    return (await Participant.query().findOne({ participantName }))
+      .participantId;
   }
 
   async getIntegration(consumerId, providerId) {
@@ -150,30 +158,9 @@ class DatabaseClient {
     return await Integration.query().where({ providerId });
   }
 
-  // async getConsumerContractsByIntegrationId(integrationId) {
-  //   return await ConsumerContract.query()
-  //     .select(
-  //       "consumerContracts.consumerContractId",
-  //       "consumerContracts.consumerId",
-  //       "consumerContracts.contract",
-  //       "consumerContracts.createdAt",
-  //       "consumerContracts.updatedAt",
-  //       "consumerContracts.contractHash"
-  //     )
-  //     .join(
-  //       "comparisons",
-  //       "consumerContracts.consumerContractId",
-  //       "comparisons.consumerContractId"
-  //     )
-  //     .join(
-  //       "integrations",
-  //       "comparisons.integrationId",
-  //       "integrations.integrationId"
-  //     )
-  //     .where(
-  //       "integrations.integrationId", Number(integrationId)
-  //     );
-  // }
+  async getConsumerContractsByIntegrationId(integrationId) {
+    return await ConsumerContract.query().where({ integrationId });
+  }
 }
 
 export default new DatabaseClient();

@@ -36,6 +36,14 @@ export function up(knex) {
         .inTable("participants")
         .onDelete("CASCADE")
         .index();
+      table
+        .integer("integration_id")
+        .unsigned()
+        .notNullable()
+        .references("integration_id")
+        .inTable("integrations")
+        .onDelete("CASCADE")
+        .index();
       table.jsonb("contract").notNullable();
       table.string("contract_format", 20).notNullable();
       table.string("contract_hash", 40).notNullable();

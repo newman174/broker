@@ -1,5 +1,6 @@
 import { Model } from "objection";
 import Participant from "./Participant.js";
+import Integration from "./Integration.js";
 import ParticipantVersion from "./ParticipantVersion.js";
 import ProviderSpec from "./ProviderSpec.js";
 
@@ -20,6 +21,14 @@ class ConsumerContract extends Model {
         join: {
           from: "consumerContracts.consumerId",
           to: "participants.participantId",
+        },
+      },
+      integration: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Integration,
+        join: {
+          from: "consumerContracts.integrationId",
+          to: "integrations.integrationId",
         },
       },
       consumerVersions: {
