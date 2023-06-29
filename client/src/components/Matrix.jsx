@@ -1,49 +1,104 @@
-import { DataTable } from "mantine-datatable";
+import { useMemo } from "react";
+import { CircleCheck, XboxX } from "tabler-icons-react";
+
+import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 const Matrix = ({ comparisons }) => {
-  const records = [];
-  for (const {
-    consumerContract,
-    providerContract,
-    comparisonStatus,
-  } of comparisons) {
-    records.push({
-      consumerVersion:
-        consumerContract.participantVersions[0].participantVersionId,
-      consumerBranch: consumerContract.participantVersions[0].participantBranch,
-      providerVersion:
-        providerContract.participantVersions[0].participantVersionId,
-      providerBranch: providerContract.participantVersions[0].providerBranch,
-      status: comparisonStatus,
-    });
-  }
-  return (
-    <DataTable
-      withBorder
-      withColumnBorders
-      records={records}
-      groups={[
-        {
-          id: "consumer",
-          columns: [
-            { accessor: "consumerVersion" },
-            {
-              accessor: "consumerBranch",
-            },
-          ],
-        },
-        {
-          id: "provider",
-          columns: [
-            { accessor: "providerVersion" },
-            { accessor: "providerBranch" },
-          ],
-        },
-        {
-          id: "comparison",
-          columns: [{ accessor: "status" }],
-        },
-      ]}
-    />
+  console.log("comparisons", comparisons);
+
+  const records = useMemo(() => {
+    const records = [];
+
+    for (const { status, consumerContract, providerContract } of comparisons) {
+      for (const {
+        version: consumerVersion,
+        participantBranch: consumerBranch,
+      } of consumerContract.participantVersions) {
+        for (const {
+          version: providerVersion,
+          participantBranch: providerBranch,
+        } of providerContract.participantVersions) {
+          records.push({
+            consumerVersion,
+            consumerBranch,
+            providerVersion,
+            providerBranch,
+            status,
+          });
+        }
+      }
+    }
+
+    return records;
+  }, [comparisons]);
+
+  const columns = useMemo(
+    () => [
+      {
+        id: "consumer",
+        header: "Consumer",
+        columns: [
+          {
+            accessorKey: "consumerVersion", //access nested data with dot notation
+            header: "Consumer Version",
+            filterVariant: "multi-select",
+            enableClickToCopy: true,
+          },
+
+          {
+            accessorKey: "consumerBranch",
+            header: "Consumer Branch",
+            filterVariant: "multi-select",
+          },
+        ],
+      },
+      {
+        id: "provider",
+        header: "Provider",
+        columns: [
+          {
+            accessorKey: "providerVersion", //normal accessorKey
+            header: "Provider Version",
+            filterVariant: "multi-select",
+            enableClickToCopy: true,
+          },
+
+          {
+            accessorKey: "providerBranch",
+            header: "Provider Branch",
+            filterVariant: "multi-select",
+          },
+        ],
+      },
+      {
+        id: "status",
+        header: "",
+        columns: [
+          {
+            accessorKey: "status",
+            header: "Status",
+            filterVariant: "multi-select",
+            Cell: ({ cell }) =>
+              cell.getValue() === "Success" ? (
+                <CircleCheck color={"#4caf50"} />
+              ) : (
+                <XboxX color={"#f44336"} />
+              ),
+          },
+        ],
+      },
+    ],
+
+    []
   );
+
+  const table = useMantineReactTable({
+    columns,
+    data: records,
+    enableFacetedValues: true,
+    enableFullScreenToggle: false,
+    enableDensityToggle: false,
+  });
+
+  return <MantineReactTable table={table} />;
 };
 export default Matrix;
