@@ -14,13 +14,13 @@ const IntegrationNavLinks = ({ integrations }) => {
   }, [path]);
 
   return integrations.map((integration, index) => {
-    const nameString = `${integration.consumer.participantName} ⇄
-    ${integration.provider.participantName}`;
+    const nameString = `${integration.consumer.name} ⇄
+    ${integration.provider.name}`;
 
     return (
       // <ArrowsLeftRight size={24} />
       <NavLink
-        to={`/integrations/${integration.integrationId}`}
+        to={`/integrations/${integration.id}`}
         label={nameString}
         key={nameString}
         active={index === active}

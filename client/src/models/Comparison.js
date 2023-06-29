@@ -1,4 +1,8 @@
-class Comparison {
+import BaseModel from "./BaseModel.js";
+import Contract from "./Contract.js";
+import Integration from "./Integration.js";
+
+class Comparison extends BaseModel {
   constructor({
     comparisonId,
     integrationId,
@@ -8,19 +12,20 @@ class Comparison {
     result,
     createdAt,
     updatedAt,
-    consumerContract,
-    providerContract,
+    consumerContract = {},
+    providerContract = {},
+    integration = {},
   }) {
+    super({ createdAt, updatedAt });
     this.id = comparisonId;
     this.integrationId = integrationId;
     this.consumerContractId = consumerContractId;
     this.providerSpecId = providerSpecId;
     this.status = comparisonStatus;
     this.result = result;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.consumerContract = consumerContract;
-    this.providerContract = providerContract;
+    this.integration = new Integration(integration);
+    this.consumerContract = new Contract(consumerContract);
+    this.providerContract = new Contract(providerContract);
   }
 }
 

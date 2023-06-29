@@ -4,7 +4,11 @@ import Comparison from "../../models/Comparison.js";
 import { newGraphMiddleware } from "../../utils/queryHelpers.js";
 const router = express.Router();
 
-const ALLOWED_GRAPH = ["integration", "consumerContract", "providerContract"];
+const ALLOWED_GRAPH = [
+  "integration",
+  "consumerContract.participantVersions",
+  "providerContract.participantVersions",
+];
 
 const comparisonGraphMiddleware = newGraphMiddleware(Comparison, ALLOWED_GRAPH);
 
