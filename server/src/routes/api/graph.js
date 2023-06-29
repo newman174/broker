@@ -1,6 +1,7 @@
 import express from "express";
 
-import Contract from "../../models/Contract.js";
+import ConsumerContract from "../../models/ConsumerContract.js";
+import ProviderSpec from "../../models/ProviderSpec.js";
 import Participant from "../../models/Participant.js";
 import ParticipantVersion from "../../models/ParticipantVersion.js";
 import Integration from "../../models/Integration.js";
@@ -12,7 +13,7 @@ const router = express.Router();
 
 const models = {};
 
-[Comparison, Contract, Participant, ParticipantVersion, Integration].forEach(
+[Comparison, ConsumerContract, ProviderSpec, Participant, ParticipantVersion, Integration].forEach(
   (model) => {
     models[model.tableName] = model;
   }

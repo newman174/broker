@@ -1,10 +1,10 @@
 import { Model } from "objection";
-import ParticipantVersion from "./ParticipantVersion";
-import ConsumerContract from "./ConsumerContract";
+import ParticipantVersion from "./ParticipantVersion.js";
+import ConsumerContract from "./ConsumerContract.js";
 
 class VersionContract extends Model {
   static get tableName() {
-    return "versionContracts";
+    return "versionsContracts";
   }
   static get idColumn() {
     return "versionContractId";
@@ -16,7 +16,7 @@ class VersionContract extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: ParticipantVersion,
         join: {
-          from: "versionContracts.consumerVersionId",
+          from: "versionsContracts.consumerVersionId",
           to: "participantVersions.participantVersionId",
         },
       },
@@ -24,7 +24,7 @@ class VersionContract extends Model {
         relation: Model.BelongsToOneRelation,
         modelClass: ConsumerContract,
         join: {
-          from: "versionContracts.consumerContractId",
+          from: "versionsContracts.consumerContractId",
           to: "consumerContracts.consumerContractId",
         },
       },
