@@ -77,6 +77,55 @@ class DatabaseClient {
     return specRecord;
   }
 
+  async getIntegrationData() {
+    const integrations = await Integration.query()
+      .select(
+        "integrations.*",
+        "consumers.participantName as consumerName",
+        "providers.participantName as providerName"
+      )
+      .join(
+        "participants as consumers",
+        "integrations.consumerId",
+        "consumers.participantId"
+      )
+      .join(
+        "participants as providers",
+        "integrations.providerId",
+        "providers.participantId"
+      );
+
+    return integrations
+  }
+
+  async getIntegrationById(id) {
+    let integrationById = await Integration.query()
+      .select(
+        "integrations.*",
+        "consumers.participantName as consumerName",
+        "providers.participantName as providerName"
+      )
+      .join(
+        "participants as consumers",
+        "integrations.consumerId",
+        "consumers.participantId"
+      )
+      .join(
+        "participants as providers",
+        "integrations.providerId",
+        "providers.participantId"
+      )
+      .findById(id);
+
+      return integrationById;
+  }
+
+  async deleteIntegration(id) {
+    const integration = await Integration.query().deleteById(Number(id));
+
+    return integration;
+  }
+
   async getConsumerContract(consumerContractId) {
     return await ConsumerContract.query().findById(consumerContractId);
   }
