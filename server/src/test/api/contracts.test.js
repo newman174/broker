@@ -32,7 +32,7 @@ describe('POST /api/contracts', () => {
       consumerName: "service_1",
       consumerVersion: "version1",
       consumerBranch: "main",
-      contract: { ...contract, consumer: undefined},
+      contract: { ...contract, consumer: undefined },
     };
 
     const res = await request(server)
