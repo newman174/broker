@@ -33,10 +33,22 @@ class DatabaseClient {
 
     const contractHash = objectHash.MD5(contract);
 
+    const providerId = (await findOrCreate(Participant, {
+        participantName: contract.provider.name,
+      })
+    ).participantId;
+
+    const integrationId =  await findOrCreate(Integration, {
+      consumerId: participantId,
+      providerId,
+    }).integrationId;
+
     const contractRecord = await findOrCreate(
       ConsumerContract,
       { contractHash, consumerId: participantId },
-      {
+      { 
+        consumerId: participantId,
+        integrationId,
         contract: {
           contractText: contract,
         },
@@ -49,17 +61,6 @@ class DatabaseClient {
     await VersionContract.query().insert({
       consumerContractId: contractRecord.consumerContractId,
       consumerVersionId: participantVersionId,
-    });
-
-    const providerId = (
-      await findOrCreate(Participant, {
-        participantName: contract.provider.name,
-      })
-    ).participantId;
-
-    await findOrCreate(Integration, {
-      consumerId: participantId,
-      providerId,
     });
 
     return contractRecord;
