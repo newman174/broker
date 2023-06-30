@@ -2,17 +2,37 @@ import { Model, knexSnakeCaseMappers } from "objection";
 import Knex from "knex";
 import "dotenv/config";
 
-const knex = Knex({
-  client: "postgresql",
-  connection: {
-    host: "localhost",
-    port: "5432",
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: "broker",
-  },
-  ...knexSnakeCaseMappers(),
-});
+const environment = process.env.NODE_ENV || "development";
+
+let knex;
+
+if (environment === "development") {
+  knex = Knex({
+    client: "postgresql",
+    connection: {
+      host:     process.env.DEV_DB_HOST,
+      port:     process.env.DEV_DB_PORT,
+      user:     process.env.DEV_DB_USER,
+      password: process.env.DEV_DB_PASSWORD,
+      database: process.env.DEV_DB_NAME,
+    },
+    ...knexSnakeCaseMappers(),
+  });
+} else if (environment === "test") {
+  knex = Knex({
+    client: "postgresql",
+    connection: {
+      host:     process.env.TEST_DB_HOST,
+      port:     process.env.TEST_DB_PORT,
+      user:     process.env.TEST_DB_USER,
+      password: process.env.TEST_DB_PASSWORD,
+      database: process.env.TEST_DB_NAME,
+    },
+    ...knexSnakeCaseMappers(),
+  });
+} else {
+  throw(new Error('Server Error: unable to connect to database - invalid RUNTIME_ENV'));
+}
 
 Model.knex(knex);
 

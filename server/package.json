@@ -4,12 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node src/app.js",
-    "dev": "nodemon --ignore ./src/data/temp src/app.js",
+    "dev": "NODE_ENV=development nodemon --ignore ./src/data/temp src/app.js",
     "nomon": "node src/app.js",
     "resetdb": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest",
-    "resetdb:seed": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest && NODE_ENV=development knex seed:run"
+    "resetdb:seed": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest && NODE_ENV=development knex seed:run",
+    "resetdb:test": "cd src/db/ && dropdb test_broker --if-exists && createdb test_broker && NODE_ENV=test knex migrate:latest && NODE_ENV=test knex seed:run"
   },
   "keywords": [],
   "author": "",
