@@ -1,10 +1,10 @@
 import { Model } from "objection";
-import ParticipantVersion from "./ParticipantVersion";
-import ProviderSpec from "./ProviderSpec";
+import ParticipantVersion from "./ParticipantVersion.js";
+import ProviderSpec from "./ProviderSpec.js";
 
 class VersionSpec extends Model {
   static get tableName() {
-    return "versionSpecs";
+    return "versionsSpecs";
   }
   static get idColumn() {
     return "versionSpecId";

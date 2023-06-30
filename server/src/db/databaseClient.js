@@ -1,11 +1,12 @@
 import ConsumerContract from "../models/ConsumerContract.js";
 import ProviderSpec from "../models/ProviderSpec.js";
+import VersionSpec from "../models/VersionSpec.js";
 import Participant from "../models/Participant.js";
 import ParticipantVersion from "../models/ParticipantVersion.js";
 import Integration from "../models/Integration.js";
 import VersionContract from "../models/VersionContract.js";
 import objectHash from "object-hash";
-import { findOrCreate } from "../utils/queryHelpers.js";
+import { findOrCreate, findAndUpdateOrCreate } from "../utils/queryHelpers.js";
 
 class DatabaseClient {
   async getParticipant(participantName) {
@@ -54,7 +55,6 @@ class DatabaseClient {
         },
         contractFormat: "json",
         contractHash,
-        consumerId: participantId,
       }
     );
 
@@ -66,7 +66,7 @@ class DatabaseClient {
     return contractRecord;
   }
 
-  async publishProviderSpec(spec, providerId, specFormat) {
+  async publishProviderSpec(spec, providerId, specFormat, providerVersion, providerBranch) {
     const specHash = objectHash.MD5(spec);
 
     const specRecord = await findOrCreate(
@@ -81,6 +81,31 @@ class DatabaseClient {
         providerId,
       }
     );
+
+    if (providerVersion) {
+      const { participantVersionId } = await findAndUpdateOrCreate(
+        ParticipantVersion,
+        { 
+          participantId: providerId,
+          participantVersion: providerVersion
+        },
+        {
+          participantId: providerId,
+          participantVersion: providerVersion,
+          participantBranch: providerBranch,
+        }
+      );
+
+      console.log("participantVersionId: ", participantVersionId);
+
+      await findOrCreate(
+        VersionSpec,
+        {
+          providerSpecId: specRecord.providerSpecId,
+          providerVersionId: participantVersionId,
+        }
+      );
+    }
 
     return specRecord;
   }

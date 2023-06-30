@@ -10,11 +10,13 @@ const router = express.Router();
  * @param {string} spec - The spec
  * @param {string} providerName - The provider name
  * @param {'json'|'yaml'} specFormat - The spec format
+ * @param {string} providerVersion
+ * @param {string} providerBranch
  * @returns {object} The created spec
  */
 
 router.post("/", async (req, res) => {
-  let { spec, providerName, specFormat } = req.body;
+  let { spec, providerName, specFormat, providerVersion, providerBranch } = req.body;
 
   if (specFormat === "yaml") {
     spec = YAML.parse(spec);
@@ -29,7 +31,9 @@ router.post("/", async (req, res) => {
   const specRecord = await db.publishProviderSpec(
     spec,
     provider.participantId,
-    specFormat
+    specFormat,
+    providerVersion,
+    providerBranch
   );
 
   res.status(201).json(specRecord);
