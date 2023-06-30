@@ -1,0 +1,81 @@
+{
+  "providerSpecId": 1,
+  "providerId": 2,
+  "spec": {
+      "specText": {
+          "info": {
+              "title": "user_service_api",
+              "version": "1"
+          },
+          "paths": {
+              "/": {
+                  "get": {
+                      "responses": {
+                          "200": {
+                              "content": {
+                                  "text/html; charset=utf-8": {
+                                      "schema": {
+                                          "type": "string"
+                                      }
+                                  }
+                              },
+                              "description": "Successful request"
+                          }
+                      }
+                  }
+              },
+              "/users/{id}": {
+                  "get": {
+                      "responses": {
+                          "200": {
+                              "content": {
+                                  "application/json; charset=utf-8": {
+                                      "schema": {
+                                          "type": "object",
+                                          "properties": {
+                                              "userId": {
+                                                  "type": "integer"
+                                              },
+                                              "username": {
+                                                  "type": "string"
+                                              },
+                                              "touchedBy": {
+                                                  "type": "array",
+                                                  "items": {
+                                                      "type": "string"
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  }
+                              },
+                              "description": "Successful request"
+                          }
+                      },
+                      "parameters": [
+                          {
+                              "in": "path",
+                              "name": "id",
+                              "schema": {
+                                  "type": "integer"
+                              },
+                              "example": 1,
+                              "required": true
+                          }
+                      ]
+                  }
+              }
+          },
+          "openapi": "3.0.2",
+          "servers": [
+              {
+                  "url": "https://api.server.test/v1"
+              }
+          ]
+      }
+  },
+  "specFormat": "json",
+  "specHash": "3949e77fed1af3d8b4fd8c19cab6cf60",
+  "createdAt": "2023-06-28T19:35:18.661Z",
+  "updatedAt": "2023-06-28T19:35:18.661Z"
+}

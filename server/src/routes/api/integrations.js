@@ -1,5 +1,5 @@
 import express from "express";
-import Integration from "../../models/Integration.js";
+import db from "../../db/databaseClient.js";
 
 const router = express.Router();
 
@@ -8,22 +8,7 @@ const router = express.Router();
  * @returns {array} All integrations
  */
 router.get("/", async (_req, res) => {
-  const integrations = await Integration.query()
-    .select(
-      "integrations.*",
-      "consumers.participantName as consumerName",
-      "providers.participantName as providerName"
-    )
-    .join(
-      "participants as consumers",
-      "integrations.consumerId",
-      "consumers.participantId"
-    )
-    .join(
-      "participants as providers",
-      "integrations.providerId",
-      "providers.participantId"
-    );
+  const integrations = await db.getIntegrationData();
 
   res.json(integrations);
 });
@@ -34,23 +19,8 @@ router.get("/", async (_req, res) => {
  * @returns {object} The integration
  */
 router.get("/:id", async (req, res) => {
-  const integration = await Integration.query()
-    .select(
-      "integrations.*",
-      "consumers.participantName as consumerName",
-      "providers.participantName as providerName"
-    )
-    .join(
-      "participants as consumers",
-      "integrations.consumerId",
-      "consumers.participantId"
-    )
-    .join(
-      "participants as providers",
-      "integrations.providerId",
-      "providers.participantId"
-    )
-    .findById(Number(req.params.id));
+  const integrationId = Number(req.params.id);
+  const integration = await db.getIntegrationById(integrationId);
 
   res.json(integration);
 });
@@ -62,12 +32,8 @@ router.get("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const integration = await Integration.query().deleteById(Number(id));
-    if (!integration) {
-      res.status(404).send();
-    } else {
-      res.status(204).send();
-    }
+    const integration = await db.deleteIntegration(id);
+    res.status(integration ? 204 : 404).send();
   } catch (err) {
     res.status(500).send();
   }

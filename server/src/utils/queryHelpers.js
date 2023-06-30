@@ -8,6 +8,20 @@ export const findOrCreate = async (model, queryObj, newObj) => {
   );
 };
 
+export const findAndUpdateOrCreate = async (model, queryObj, newObj) => {
+  return (
+    (await model
+      .query()
+      .findOne(queryObj)
+      .patch(newObj || queryObj)
+      .returning("*")) ||
+    (await model
+      .query()
+      .insert(newObj || queryObj)
+      .returning("*"))
+  );
+}
+
 export const fmtJG = (jg) => `[${jg.join(", ")}]`;
 
 export const newGraphMiddleware = (model, allowedGraph) => {

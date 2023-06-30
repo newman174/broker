@@ -1,5 +1,6 @@
 import { Model } from "objection";
-import Contract from "./Contract.js";
+import ConsumerContract from "./ConsumerContract.js";
+import ProviderSpec from "./ProviderSpec.js";
 import Participant from "./Participant.js";
 
 class ParticipantVersion extends Model {
@@ -12,13 +13,25 @@ class ParticipantVersion extends Model {
 
   static get relationMappings() {
     return {
-      contract: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: Contract,
+      consumerContracts: {
+        relation: Model.ManyToManyRelation,
+        modelClass: ConsumerContract,
         join: {
           from: "participantVersions.contractId",
-          to: "contracts.contractId",
+          to: "versionsContracts.consumerContractId",
         },
+
+        to: "consumerContracts.consumerContractId",
+      },
+      providerSpecs: {
+        relation: Model.ManyToManyRelation,
+        modelClass: ProviderSpec,
+        join: {
+          from: "participantVersions.contractId",
+          to: "versionsSpecs.providerSpecId",
+        },
+
+        to: "providerSpecs.providerSpecId",
       },
       participant: {
         relation: Model.BelongsToOneRelation,

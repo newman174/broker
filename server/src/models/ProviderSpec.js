@@ -1,60 +1,53 @@
 import { Model } from "objection";
 import Participant from "./Participant.js";
 import ParticipantVersion from "./ParticipantVersion.js";
+import ConsumerContract from "./ConsumerContract.js";
 
-class Contract extends Model {
+class ProviderSpec extends Model {
   static get tableName() {
-    return "contracts";
+    return "providerSpecs";
   }
 
   static get idColumn() {
-    return "contractId";
+    return "providerSpecId";
   }
 
   static get relationMappings() {
     return {
-      owner: {
+      provider: {
         relation: Model.BelongsToOneRelation,
         modelClass: Participant,
         join: {
-          from: "contracts.participantId",
+          from: "providerSpecs.providerId",
           to: "participants.participantId",
         },
       },
-      participantVersions: {
-        relation: Model.HasManyRelation,
+      providerVersions: {
+        relation: Model.ManyToManyRelation,
         modelClass: ParticipantVersion,
         join: {
-          from: "contracts.contractId",
-          to: "participantVersions.contractId",
-        },
-      },
-      comparedProviderContracts: {
-        relation: Model.ManyToManyRelation,
-        modelClass: Contract,
-        join: {
-          from: "contracts.contractId",
+          from: "providerSpecs.providerSpecId",
           through: {
-            from: "comparisons.consumerId",
-            to: "comparisons.providerId",
+            from: "versionsSpecs.providerSpecId",
+            to: "versionsSpecs.providerVersionId",
           },
-          to: "contracts.contractId",
         },
+        to: "participantVersions.participantVersionId",
       },
       comparedConsumerContracts: {
         relation: Model.ManyToManyRelation,
-        modelClass: Contract,
+        modelClass: ConsumerContract,
         join: {
-          from: "contracts.contractId",
+          from: "providerSpecs.providerSpecId",
           through: {
             from: "comparisons.providerId",
             to: "comparisons.consumerId",
           },
-          to: "contracts.contractId",
+          to: "consumerContracts.consumerContractId",
         },
       },
     };
   }
 }
 
-export default Contract;
+export default ProviderSpec;

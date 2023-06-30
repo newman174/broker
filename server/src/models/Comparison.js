@@ -1,6 +1,7 @@
 import { Model } from "objection";
 import Integration from "./Integration.js";
-import Contract from "./Contract.js";
+import ConsumerContract from "./ConsumerContract.js";
+import ProviderSpec from "./ProviderSpec.js";
 
 class Comparison extends Model {
   static get tableName() {
@@ -23,18 +24,18 @@ class Comparison extends Model {
       },
       consumerContract: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Contract,
+        modelClass: ConsumerContract,
         join: {
           from: "comparisons.consumerContractId",
-          to: "contracts.contractId",
+          to: "consumerContracts.consumerContractId",
         },
       },
-      providerContract: {
+      providerSpec: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Contract,
+        modelClass: ProviderSpec,
         join: {
-          from: "comparisons.providerContractId",
-          to: "contracts.contractId",
+          from: "comparisons.providerSpecId",
+          to: "providerSpecs.providerSpecId",
         },
       },
     };
