@@ -35,6 +35,9 @@
     "supertest": "^6.3.3"
   },
   "jest": {
-    "transform": {}
+    "transform": {},
+    "setupFilesAfterEnv": [
+      "./src/test/setup.js"
+  ]
   }
 }

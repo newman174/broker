@@ -14,7 +14,7 @@ if (environment === "development") {
       port:     process.env.DEV_DB_PORT,
       user:     process.env.DEV_DB_USER,
       password: process.env.DEV_DB_PASSWORD,
-      database: process.env.DEV_DB_NAME,
+      database: "broker",
     },
     ...knexSnakeCaseMappers(),
   });
@@ -26,7 +26,7 @@ if (environment === "development") {
       port:     process.env.TEST_DB_PORT,
       user:     process.env.TEST_DB_USER,
       password: process.env.TEST_DB_PASSWORD,
-      database: process.env.TEST_DB_NAME,
+      database: "test_broker",
     },
     ...knexSnakeCaseMappers(),
   });

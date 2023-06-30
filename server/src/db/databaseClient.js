@@ -39,10 +39,10 @@ class DatabaseClient {
       })
     ).participantId;
 
-    const integrationId =  await findOrCreate(Integration, {
+    const integrationId =  (await findOrCreate(Integration, {
       consumerId: participantId,
       providerId,
-    }).integrationId;
+    })).integrationId;
 
     const contractRecord = await findOrCreate(
       ConsumerContract,

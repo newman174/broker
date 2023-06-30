@@ -56,7 +56,6 @@ class ComparisonService {
     );
 
     for (let integration of integrations) {
-      // This line is where implementation is challenging
       const contractRecords = await db.getConsumerContractsByIntegrationId(
         integration.integrationId
       );

@@ -1,6 +1,7 @@
 {
   "consumerContractId": 1,
-  "consumerId": 1,
+  "consumerId": 2,
+  "integrationId": 1,
   "contract": {
       "contractText": {
           "consumer": {
@@ -68,6 +69,6 @@
   },
   "contractFormat": "json",
   "contractHash": "ecc96bacd41786636f65499fbb8c44c0",
-  "createdAt": "2023-06-28T18:42:49.489Z",
-  "updatedAt": "2023-06-28T18:42:49.489Z"
+  "createdAt": "",
+  "updatedAt": ""
 }

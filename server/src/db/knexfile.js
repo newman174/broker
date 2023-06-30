@@ -6,11 +6,11 @@
 export const development = {
   client: "postgresql",
   connection: {
-    host:     process.env.DEV_DB_HOST,
-    port:     process.env.DEV_DB_PORT,
-    user:     process.env.DEV_DB_USER,
+    host: process.env.DEV_DB_HOST,
+    port: process.env.DEV_DB_PORT,
+    user: process.env.DEV_DB_USER,
     password: process.env.DEV_DB_PASSWORD,
-    database: process.env.DEV_DB_NAME,
+    database: "broker",
   },
   seeds: {
     directory: "./dev_seeds",
@@ -20,11 +20,11 @@ export const development = {
 export const test = {
   client: "postgresql",
   connection: {
-    host:     process.env.TEST_DB_HOST,
-    port:     process.env.TEST_DB_PORT,
-    user:     process.env.TEST_DB_USER,
+    host: process.env.TEST_DB_HOST,
+    port: process.env.TEST_DB_PORT,
+    user: process.env.TEST_DB_USER,
     password: process.env.TEST_DB_PASSWORD,
-    database: process.env.TEST_DB_NAME,
+    database: "test_broker",
   },
   seeds: {
     directory: "./test_seeds",
