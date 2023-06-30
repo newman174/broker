@@ -1,14 +1,16 @@
-import Participant from "./Participant";
-import Comparison from "./Comparison";
 import BaseModel from "./BaseModel";
+import Comparison from "./Comparison";
+import Contract from "./Contract";
+import Participant from "./Participant";
 
 class Integration extends BaseModel {
   constructor({
     integrationId,
     consumerId,
     providerId,
-    consumer = {},
     provider = {},
+    consumer = {},
+    consumerContracts = [],
     comparisons = [],
     createdAt,
     updatedAt,
@@ -19,6 +21,9 @@ class Integration extends BaseModel {
     this.providerId = providerId;
     this.provider = new Participant(provider);
     this.consumer = new Participant(consumer);
+    this.consumerContracts = consumerContracts.map(
+      (contract) => new Contract(contract)
+    );
     this.comparisons = comparisons.map(
       (comparison) => new Comparison(comparison)
     );

@@ -1,7 +1,7 @@
 import { Flex, Grid, Card, Button } from "@mantine/core";
 import ParticipantDetails from "./ParticipantDetails.jsx";
 import { XboxX, CircleCheck } from "tabler-icons-react";
-import PropTypes from "prop-types";
+import Comparison from "../models/Comparison.js";
 
 const unique = function (array) {
   return array.filter((elem, index) => {
@@ -44,8 +44,8 @@ const ComparisonContainer = ({ comparison }) => {
   const generateDetails = (participantType) => {
     const participantVersions =
       participantType === "Consumer"
-        ? comparison.consumerContract.participantVersions
-        : comparison.providerContract.participantVersions;
+        ? comparison.consumerContract.consumerVersions
+        : comparison.providerSpec.providerVersions;
 
     return {
       participantType,
@@ -94,8 +94,8 @@ const ComparisonContainer = ({ comparison }) => {
   );
 };
 
-ComparisonContainer.propTypes = {
-  comparison: PropTypes.object.isRequired,
-};
+// ComparisonContainer.PropTypes = {
+//   comparison: Comparison.isRequired,
+// };
 
 export default ComparisonContainer;

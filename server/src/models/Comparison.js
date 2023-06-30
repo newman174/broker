@@ -1,9 +1,9 @@
-import { Model } from "objection";
+import BaseModel from "./BaseModel.js";
 import Integration from "./Integration.js";
 import ConsumerContract from "./ConsumerContract.js";
 import ProviderSpec from "./ProviderSpec.js";
 
-class Comparison extends Model {
+class Comparison extends BaseModel {
   static get tableName() {
     return "comparisons";
   }
@@ -15,7 +15,7 @@ class Comparison extends Model {
   static get relationMappings() {
     return {
       integration: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: Integration,
         join: {
           from: "comparisons.integrationId",
@@ -23,7 +23,7 @@ class Comparison extends Model {
         },
       },
       consumerContract: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: ConsumerContract,
         join: {
           from: "comparisons.consumerContractId",
@@ -31,7 +31,7 @@ class Comparison extends Model {
         },
       },
       providerSpec: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: ProviderSpec,
         join: {
           from: "comparisons.providerSpecId",

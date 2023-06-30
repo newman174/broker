@@ -1,10 +1,10 @@
-import { Model } from "objection";
+import BaseModel from "./BaseModel.js";
 import ConsumerContract from "./ConsumerContract.js";
 import ProviderSpec from "./ProviderSpec.js";
 import Integration from "./Integration.js";
 import ParticipantVersion from "./ParticipantVersion.js";
 
-class Participant extends Model {
+class Participant extends BaseModel {
   static get tableName() {
     return "participants";
   }
@@ -15,7 +15,7 @@ class Participant extends Model {
   static get relationMappings() {
     return {
       consumerContracts: {
-        relation: Model.HasManyRelation,
+        relation: BaseModel.HasManyRelation,
         modelClass: ConsumerContract,
         join: {
           from: "participants.participantId",
@@ -23,7 +23,7 @@ class Participant extends Model {
         },
       },
       providerSpecs: {
-        relation: Model.HasManyRelation,
+        relation: BaseModel.HasManyRelation,
         modelClass: ProviderSpec,
         join: {
           from: "participants.participantId",
@@ -31,7 +31,7 @@ class Participant extends Model {
         },
       },
       comparedProviders: {
-        relation: Model.ManyToManyRelation,
+        relation: BaseModel.ManyToManyRelation,
         modelClass: Participant,
         join: {
           from: "participants.participantId",
@@ -43,7 +43,7 @@ class Participant extends Model {
         },
       },
       comparedConsumers: {
-        relation: Model.ManyToManyRelation,
+        relation: BaseModel.ManyToManyRelation,
         modelClass: Participant,
         join: {
           from: "participants.participantId",
@@ -55,7 +55,7 @@ class Participant extends Model {
         },
       },
       integrationsAsConsumer: {
-        relation: Model.HasManyRelation,
+        relation: BaseModel.HasManyRelation,
         modelClass: Integration,
         join: {
           from: "participants.participantId",
@@ -63,7 +63,7 @@ class Participant extends Model {
         },
       },
       integrationsAsProvider: {
-        relation: Model.HasManyRelation,
+        relation: BaseModel.HasManyRelation,
         modelClass: Integration,
         join: {
           from: "participants.participantId",
@@ -71,7 +71,7 @@ class Participant extends Model {
         },
       },
       versions: {
-        relation: Model.HasManyRelation,
+        relation: BaseModel.HasManyRelation,
         modelClass: ParticipantVersion,
         join: {
           from: "participants.participantId",

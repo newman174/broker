@@ -33,32 +33,34 @@ const router = express.Router();
  * @returns {object} The created contract
  */
 router.post("/", async (req, res) => {
-  const {
-    contract,
-    consumerName,
-    consumerVersion,
-    consumerBranch,
-  } = req.body;
+  console.log(req.body);
+  const { contract, consumerName, consumerVersion, consumerBranch } = req.body;
 
   if (!(await validateSchema(contract, "consumer"))) {
-    return res
-      .status(400)
-      .json({error: "Contract schema is invalid"});
+    return res.status(400).json({ error: "Contract schema is invalid" });
   }
 
   const consumer = await db.getParticipant(consumerName);
-  
-  if (await db.participantVersionExists(consumer.participantId, consumerVersion)) {
+
+  if (
+    await db.participantVersionExists(consumer.participantId, consumerVersion)
+  ) {
     return res
       .status(409)
-      .json({error: "Participant version already exists"});
+      .json({ error: "Participant version already exists" });
   }
 
-  const contractRecord = await db.publishConsumerContract(contract, consumer.participantId, consumerVersion, consumerBranch);
-
-  res.status(201).json(contractRecord);
+  const contractRecord = await db.publishConsumerContract(
+    contract,
+    consumer.participantId,
+    consumerVersion,
+    consumerBranch
+  );
 
   comp.compareWithProviderSpecs(contractRecord.consumerContractId);
+
+  console.log(contractRecord);
+  res.status(201).json(contractRecord);
 });
 
 /**

@@ -1,10 +1,10 @@
-import { Model } from "objection";
+import BaseModel from "./BaseModel.js";
 import Participant from "./Participant.js";
 import Integration from "./Integration.js";
 import ParticipantVersion from "./ParticipantVersion.js";
 import ProviderSpec from "./ProviderSpec.js";
 
-class ConsumerContract extends Model {
+class ConsumerContract extends BaseModel {
   static get tableName() {
     return "consumerContracts";
   }
@@ -16,7 +16,7 @@ class ConsumerContract extends Model {
   static get relationMappings() {
     return {
       consumer: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: Participant,
         join: {
           from: "consumerContracts.consumerId",
@@ -24,7 +24,7 @@ class ConsumerContract extends Model {
         },
       },
       integration: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: Integration,
         join: {
           from: "consumerContracts.integrationId",
@@ -32,7 +32,7 @@ class ConsumerContract extends Model {
         },
       },
       consumerVersions: {
-        relation: Model.ManyToManyRelation,
+        relation: BaseModel.ManyToManyRelation,
         modelClass: ParticipantVersion,
         join: {
           from: "consumerContracts.consumerContractId",
@@ -40,11 +40,11 @@ class ConsumerContract extends Model {
             from: "versionsContracts.consumerContractId",
             to: "versionsContracts.consumerVersionId",
           },
+          to: "participantVersions.participantVersionId",
         },
-        to: "participantVersions.participantVersionId",
       },
       comparedProviderSpecs: {
-        relation: Model.ManyToManyRelation,
+        relation: BaseModel.ManyToManyRelation,
         modelClass: ProviderSpec,
         join: {
           from: "consumerContracts.consumerContractId",

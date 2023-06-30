@@ -9,7 +9,6 @@ const router = express.Router();
  */
 router.get("/", async (_req, res) => {
   const integrations = await db.getIntegrationData();
-
   res.json(integrations);
 });
 
