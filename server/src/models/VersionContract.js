@@ -1,8 +1,8 @@
-import { Model } from "objection";
+import BaseModel from "./BaseModel.js";
 import ParticipantVersion from "./ParticipantVersion.js";
 import ConsumerContract from "./ConsumerContract.js";
 
-class VersionContract extends Model {
+class VersionContract extends BaseModel {
   static get tableName() {
     return "versionsContracts";
   }
@@ -13,7 +13,7 @@ class VersionContract extends Model {
   static get relationMappings() {
     return {
       consumerVersion: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: ParticipantVersion,
         join: {
           from: "versionsContracts.consumerVersionId",
@@ -21,7 +21,7 @@ class VersionContract extends Model {
         },
       },
       consumerContract: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: ConsumerContract,
         join: {
           from: "versionsContracts.consumerContractId",

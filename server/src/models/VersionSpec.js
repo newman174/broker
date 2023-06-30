@@ -1,8 +1,8 @@
-import { Model } from "objection";
+import BaseModel from "./BaseModel.js";
 import ParticipantVersion from "./ParticipantVersion.js";
 import ProviderSpec from "./ProviderSpec.js";
 
-class VersionSpec extends Model {
+class VersionSpec extends BaseModel {
   static get tableName() {
     return "versionsSpecs";
   }
@@ -13,7 +13,7 @@ class VersionSpec extends Model {
   static get relationMappings() {
     return {
       providerVersion: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: ParticipantVersion,
         join: {
           from: "versionSpecs.providerVersionId",
@@ -21,7 +21,7 @@ class VersionSpec extends Model {
         },
       },
       providerSpec: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: ProviderSpec,
         join: {
           from: "versionSpecs.providerSpecId",

@@ -8,15 +8,15 @@ const Matrix = ({ comparisons }) => {
   const records = useMemo(() => {
     const records = [];
 
-    for (const { status, consumerContract, providerContract } of comparisons) {
+    for (const { status, consumerContract, providerSpec } of comparisons) {
       for (const {
         version: consumerVersion,
         participantBranch: consumerBranch,
-      } of consumerContract.participantVersions) {
+      } of consumerContract.consumerVersions) {
         for (const {
           version: providerVersion,
           participantBranch: providerBranch,
-        } of providerContract.participantVersions) {
+        } of providerSpec.providerVersions) {
           records.push({
             consumerVersion,
             consumerBranch,
