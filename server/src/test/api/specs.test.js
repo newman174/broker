@@ -9,8 +9,8 @@ import comp from "../../services/comparisonService.js";
 const REQ_BODY = {
   providerName: "user_service",
   specFormat: "json",
-  // providerVersion: "version1",
-  // providerBranch: "main",
+  providerVersion: "",
+  providerBranch: "",
   spec: spec,
 };
 
@@ -26,8 +26,8 @@ describe('POST /api/specs', () => {
     const malformedBody = {
       providerName: "user_service",
       specFormat: "json",
-      // providerVersion: "version1",
-      // providerBranch: "main",
+      providerVersion: "",
+      providerBranch: "",
       spec: { ...spec, info: undefined },
     };
 
@@ -57,7 +57,7 @@ describe('POST /api/specs', () => {
 
     expect(res.status).toEqual(201);
     expect(db.getParticipant.mock.calls[0]).toEqual(["user_service"]);
-    expect(db.publishProviderSpec.mock.calls[0]).toEqual([spec, 1, "json"]);
+    expect(db.publishProviderSpec.mock.calls[0]).toEqual([spec, 1, "json", "", ""]);
     expect(comp.compareWithConsumerContracts.mock.calls[0]).toEqual([1]);
   });
 });
