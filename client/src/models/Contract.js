@@ -1,38 +1,38 @@
+import BaseModel from "./BaseModel";
+import Integration from "./Integration";
 import ParticipantVersion from "./ParticipantVersion";
 import Participant from "./Participant.js";
-import BaseModel from "./BaseModel";
+import Spec from "./Spec";
 
 class Contract extends BaseModel {
   constructor({
-    contractId,
-    participantId,
+    consumerContractId,
+    consumerId,
+    integrationId,
     contract = {},
-    contractType,
     contractFormat,
     contractHash,
     createdAt,
     updatedAt,
-    owner = {},
-    participantVersions = [],
-    comparedProviderContracts = [],
-    comparedConsumerContracts = [],
+    consumer = {},
+    integration = {},
+    consumerVersions = [],
+    comparedProviderSpecs = [],
   }) {
     super({ createdAt, updatedAt });
-    this.id = contractId;
-    this.participantId = participantId;
+    this.id = consumerContractId;
+    this.consumerId = consumerId;
+    this.integrationId = integrationId;
     this.contract = contract;
-    this.type = contractType;
     this.format = contractFormat;
     this.hash = contractHash;
-    this.owner = new Participant(owner);
-    this.participantVersions = participantVersions.map(
+    this.consumer = new Participant(consumer);
+    this.integration = new Integration(integration);
+    this.consumerVersions = consumerVersions.map(
       (version) => new ParticipantVersion(version)
     );
-    this.comparedProviderContracts = comparedProviderContracts.map(
-      (contract) => new Contract(contract)
-    );
-    this.comparedConsumerContracts = comparedConsumerContracts.map(
-      (contract) => new Contract(contract)
+    this.comparedProviderSpecs = comparedProviderSpecs.map(
+      (spec) => new Spec(spec)
     );
   }
 }

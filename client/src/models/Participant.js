@@ -2,6 +2,7 @@ import BaseModel from "./BaseModel.js";
 import Contract from "./Contract.js";
 import Integration from "./Integration.js";
 import ParticipantVersion from "./ParticipantVersion.js";
+import Spec from "./Spec.js";
 
 class Participant extends BaseModel {
   constructor({
@@ -9,7 +10,8 @@ class Participant extends BaseModel {
     participantName,
     createdAt,
     updatedAt,
-    contracts = [],
+    consumerContracts = [],
+    providerSpecs = [],
     integrationsAsConsumer = [],
     integrationsAsProvider = [],
     versions = [],
@@ -19,7 +21,10 @@ class Participant extends BaseModel {
     super({ createdAt, updatedAt });
     this.id = participantId;
     this.name = participantName;
-    this.contracts = contracts.map((contract) => new Contract(contract));
+    this.consumerContracts = consumerContracts.map(
+      (contract) => new Contract(contract)
+    );
+    this.providerSpecs = providerSpecs.map((spec) => new Spec(spec));
     this.integrationsAsConsumer = integrationsAsConsumer.map(
       (int) => new Integration(int)
     );

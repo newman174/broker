@@ -2,8 +2,7 @@ POST http://localhost:3001/api/contracts HTTP/1.1
 content-type: application/json
 
 {
-  "participantName": "service_1",
-  "contractType": "consumer",
+  "consumerName": "service_1",
   "contract": {
     "consumer": {
       "name": "service_1"
@@ -67,7 +66,6 @@ content-type: application/json
     "name": "user_service"
   }
   },
-  "contractFormat": "json",
   "participantVersion": "1.1.2",
   "participantBranch": "main"
 }
@@ -180,3 +178,77 @@ content-type: application/json
 ###
 GET http://localhost:3001/api/contracts/1
 content-type: application/json
+
+###
+
+POST http://localhost:3001/api/contracts HTTP/1.1
+content-type: application/json
+
+{
+    "contract": {
+      "consumer": {
+        "name": "service_1"
+      },
+    "interactions": [
+      {
+        "description": "a request for the user with a userId of 1",
+        "providerStates": [
+          {
+            "name": "a user with userId = 1 exists"
+          }
+        ],
+        "request": {
+          "headers": {
+            "Accept": "application/json"
+          },
+          "method": "GET",
+          "path": "/users/1"
+        },
+        "response": {
+          "body": {
+            "touchedBy": [
+              "user_service"
+            ],
+            "userId": 1,
+            "username": "mimmy"
+          },
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "matchingRules": {
+            "body": {
+              "$": {
+                "combine": "AND",
+                "matchers": [
+                  {
+                    "match": "type"
+                  }
+                ]
+              }
+            },
+            "header": {}
+          },
+          "status": 200
+        }
+      }
+    ],
+    "metadata": {
+      "pact-js": {
+        "version": "11.0.2"
+      },
+      "pactRust": {
+        "ffi": "0.4.0",
+        "models": "1.0.4"
+      },
+      "pactSpecification": {
+        "version": "3.0.0"
+      }
+    },
+    "provider": {
+      "name": "user_service"
+    }
+    },
+    "consumerName": "service_1",
+    "consumerVersion": "1",
+    "consumerBranch": "main"
+}

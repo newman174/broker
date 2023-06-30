@@ -1,6 +1,7 @@
 import BaseModel from "./BaseModel.js";
 import Contract from "./Contract.js";
 import Integration from "./Integration.js";
+import Spec from "./Spec.js";
 
 class Comparison extends BaseModel {
   constructor({
@@ -13,7 +14,7 @@ class Comparison extends BaseModel {
     createdAt,
     updatedAt,
     consumerContract = {},
-    providerContract = {},
+    providerSpec = {},
     integration = {},
   }) {
     super({ createdAt, updatedAt });
@@ -25,7 +26,7 @@ class Comparison extends BaseModel {
     this.result = result;
     this.integration = new Integration(integration);
     this.consumerContract = new Contract(consumerContract);
-    this.providerContract = new Contract(providerContract);
+    this.providerSpec = new Spec(providerSpec);
   }
 }
 

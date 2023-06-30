@@ -6,7 +6,11 @@ import ParticipantVersion from "../models/ParticipantVersion.js";
 import Integration from "../models/Integration.js";
 import VersionContract from "../models/VersionContract.js";
 import objectHash from "object-hash";
-import { findOrCreate, findAndUpdateOrCreate } from "../utils/queryHelpers.js";
+import {
+  findOrCreate,
+  findAndUpdateOrCreate,
+  fmtJG,
+} from "../utils/queryHelpers.js";
 
 class DatabaseClient {
   async getParticipant(participantName) {
@@ -34,20 +38,23 @@ class DatabaseClient {
 
     const contractHash = objectHash.MD5(contract);
 
-    const providerId = (await findOrCreate(Participant, {
+    const providerId = (
+      await findOrCreate(Participant, {
         participantName: contract.provider.name,
       })
     ).participantId;
 
-    const integrationId =  (await findOrCreate(Integration, {
-      consumerId: participantId,
-      providerId,
-    })).integrationId;
+    const integrationId = (
+      await findOrCreate(Integration, {
+        consumerId: participantId,
+        providerId,
+      })
+    ).integrationId;
 
     const contractRecord = await findOrCreate(
       ConsumerContract,
       { contractHash, consumerId: participantId },
-      { 
+      {
         consumerId: participantId,
         integrationId,
         contract: {
@@ -66,7 +73,13 @@ class DatabaseClient {
     return contractRecord;
   }
 
-  async publishProviderSpec(spec, providerId, specFormat, providerVersion, providerBranch) {
+  async publishProviderSpec(
+    spec,
+    providerId,
+    specFormat,
+    providerVersion,
+    providerBranch
+  ) {
     const specHash = objectHash.MD5(spec);
 
     const specRecord = await findOrCreate(
@@ -85,9 +98,9 @@ class DatabaseClient {
     if (providerVersion) {
       const { participantVersionId } = await findAndUpdateOrCreate(
         ParticipantVersion,
-        { 
+        {
           participantId: providerId,
-          participantVersion: providerVersion
+          participantVersion: providerVersion,
         },
         {
           participantId: providerId,
@@ -98,57 +111,34 @@ class DatabaseClient {
 
       console.log("participantVersionId: ", participantVersionId);
 
-      await findOrCreate(
-        VersionSpec,
-        {
-          providerSpecId: specRecord.providerSpecId,
-          providerVersionId: participantVersionId,
-        }
-      );
+      await findOrCreate(VersionSpec, {
+        providerSpecId: specRecord.providerSpecId,
+        providerVersionId: participantVersionId,
+      });
     }
 
     return specRecord;
   }
 
   async getIntegrationData() {
-    const integrations = await Integration.query()
-      .select(
-        "integrations.*",
-        "consumers.participantName as consumerName",
-        "providers.participantName as providerName"
-      )
-      .join(
-        "participants as consumers",
-        "integrations.consumerId",
-        "consumers.participantId"
-      )
-      .join(
-        "participants as providers",
-        "integrations.providerId",
-        "providers.participantId"
-      );
+    const joinGraph = ["consumer", "provider"];
+
+    const integrations = await Integration.query().withGraphJoined(
+      fmtJG(joinGraph)
+    );
 
     return integrations;
   }
 
   async getIntegrationById(id) {
-    let integrationById = await Integration.query()
-      .select(
-        "integrations.*",
-        "consumers.participantName as consumerName",
-        "providers.participantName as providerName"
-      )
-      .join(
-        "participants as consumers",
-        "integrations.consumerId",
-        "consumers.participantId"
-      )
-      .join(
-        "participants as providers",
-        "integrations.providerId",
-        "providers.participantId"
-      )
-      .findById(id);
+    const joinGraph = [
+      "consumer",
+      "provider",
+      "comparisons.[consumerContract.consumerVersions, providerSpec.providerVersions]",
+    ];
+    const integrationById = await Integration.query()
+      .findById(Number(id))
+      .withGraphJoined(fmtJG(joinGraph));
 
     return integrationById;
   }

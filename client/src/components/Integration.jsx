@@ -1,42 +1,23 @@
-/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { comparisonService } from "../services/apiService.js";
-// import { Prism } from "@mantine/prism";
-import {
-  // Card,
-  Tabs,
-} from "@mantine/core";
-// import Comparison from "../models/Comparison.js";
+import { integrationService } from "../services/apiService.js";
+import { Tabs } from "@mantine/core";
 import IntegrationOverviewTab from "./IntegrationOverviewTab.jsx";
 import Matrix from "./Matrix.jsx";
 
-const Integration = ({ integrations }) => {
+const Integration = () => {
   const { integrationId } = useParams();
-  const integration = integrations.find(
-    (integration) => integration.id === Number(integrationId)
-  );
-
-  const [comparisons, setComparisons] = useState([]);
+  const [integration, setIntegration] = useState(null);
 
   useEffect(() => {
-    const fetchComparisons = async () => {
-      const data = await comparisonService.getAll();
-      setComparisons(
-        data
-          .filter((comparison) => comparison.id === integration.id)
-          // .map((comparison) => new Comparison(comparison))
-          .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))
-      );
+    const fetchAndSet = async () => {
+      const data = await integrationService.getById(integrationId);
+      setIntegration(data);
     };
-    fetchComparisons();
+    fetchAndSet();
+  }, [integrationId]);
 
-    return () => {
-      setComparisons([]);
-    };
-  }, [integration.id]);
-
-  return (
+  return integration ? (
     <>
       <h3>
         {integration.consumer.name} ⇄ {integration.provider.name}
@@ -46,41 +27,23 @@ const Integration = ({ integrations }) => {
           <Tabs.Tab value="overview">Overview</Tabs.Tab>
           <Tabs.Tab value="matrix">Matrix</Tabs.Tab>
           <Tabs.Tab value="webhooks">Webhooks</Tabs.Tab>
-          <Tabs.Tab value="raw">Raw</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="overview">
           <h4>Comparisons</h4>
-          <IntegrationOverviewTab comparisons={comparisons} />
+          <IntegrationOverviewTab comparisons={integration.comparisons} />
         </Tabs.Panel>
 
         <Tabs.Panel value="matrix">
-          <Matrix comparisons={comparisons} />
+          <Matrix comparisons={integration.comparisons} />
         </Tabs.Panel>
 
         <Tabs.Panel value="webhooks">
           <h4>Webhooks</h4>
         </Tabs.Panel>
-
-        {/* debug json tab */}
-        {/* <Tabs.Panel value="raw">
-          <Card style={{ textAlign: "left" }}>
-            <h4>Integration</h4>
-            <Prism language="json">
-              {JSON.stringify(integration, null, 2)}
-            </Prism>
-          </Card>
-
-          <Card style={{ textAlign: "left" }}>
-            <h4>Comparisons</h4>
-            <Prism language="json">
-              {JSON.stringify(comparisons, null, 2)}
-            </Prism>
-          </Card>
-        </Tabs.Panel> */}
       </Tabs>
     </>
-  );
+  ) : null;
 };
 
 export { Integration };
