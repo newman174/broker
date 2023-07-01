@@ -16,8 +16,6 @@ class ComparisonService {
 
       const comparisonStatus = result.success ? "Success" : "Failed";
 
-      console.log('COMPARISON STATUS', comparisonStatus);
-
       const comparison = await findAndUpdateOrCreate(
         Comparison,
         {
@@ -33,8 +31,6 @@ class ComparisonService {
           comparisonStatus: comparisonStatus,
         }
       );
-
-      console.log('COMPARISON: ', comparison.result.errors);
 
       return comparison;
     } catch (err) {
@@ -55,7 +51,6 @@ class ComparisonService {
 
     const specRecords = await db.getProviderSpecs(providerId);
 
-    // iterate over all of this provider's specs, and compare them with this consumer contract
     for (let specRecord of specRecords) {
       this.compare(contractRecord, specRecord, integration);
     }
