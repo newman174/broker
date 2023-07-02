@@ -61,7 +61,3 @@ describe('POST /api/specs', () => {
     expect(comp.compareWithConsumerContracts.mock.calls[0]).toEqual([1]);
   });
 });
-
-afterAll(() => {
-  server.close();
-});

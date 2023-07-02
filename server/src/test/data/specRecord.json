@@ -1,6 +1,6 @@
 {
   "providerSpecId": 1,
-  "providerId": 2,
+  "providerId": 10,
   "spec": {
       "specText": {
           "info": {
@@ -76,6 +76,6 @@
   },
   "specFormat": "json",
   "specHash": "3949e77fed1af3d8b4fd8c19cab6cf60",
-  "createdAt": "2023-06-28T19:35:18.661Z",
-  "updatedAt": "2023-06-28T19:35:18.661Z"
+  "createdAt": "",
+  "updatedAt": ""
 }

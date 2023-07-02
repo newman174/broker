@@ -77,7 +77,3 @@ describe('POST /api/contracts', () => {
     expect(comp.compareWithProviderSpecs.mock.calls[0]).toEqual([1]);
   });
 });
-
-afterAll(() => {
-  server.close();
-});
