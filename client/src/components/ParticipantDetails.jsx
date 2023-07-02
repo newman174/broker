@@ -19,7 +19,7 @@ const ParticipantDetails = ({ participantDetails }) => {
       <dt>{participantType} Versions</dt>
       <dd>{versions}</dd>
       <dt>Branches</dt>
-      <dd>{branches}</dd>
+      <dd>{branches || "(none)"}</dd>
       {/* <dt>Environments</dt> */}
       {/* <dd>{environments}</dd> */}
       <dt>Published</dt>

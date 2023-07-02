@@ -3,8 +3,6 @@ import { CircleCheck, XboxX } from "tabler-icons-react";
 
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 const Matrix = ({ comparisons }) => {
-  console.log("comparisons", comparisons);
-
   const records = useMemo(() => {
     const records = [];
 
