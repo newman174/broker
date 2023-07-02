@@ -27,7 +27,7 @@ const App = () => {
           path="integrations/:integrationId"
           element={
             path.match(/.*integrations.*/i) && integrations.length > 0 ? (
-              <Integration integrations={integrations} />
+              <Integration />
             ) : null
           }
         />

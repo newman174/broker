@@ -1,5 +1,5 @@
 import { Flex, Grid, Card, Button } from "@mantine/core";
-import ParticipantDetails from "./ParticipantDetails.jsx";
+import ComparisonParticipantDetails from "./ComparisonParticipantDetails.jsx";
 import { XboxX, CircleCheck } from "tabler-icons-react";
 import Comparison from "../models/Comparison.js";
 import PropTypes from "prop-types";
@@ -67,6 +67,10 @@ const ComparisonContainer = ({ comparison }) => {
         ? comparison.consumerContract.consumerVersions
         : comparison.providerSpec.providerVersions;
 
+    const mostRecentVersionPublished = participantVersions.sort(
+      (a, b) => b.createdAt - a.createdAt
+    )[0].createdAt;
+
     return {
       participantType,
       versions: participantVersions
@@ -79,7 +83,7 @@ const ComparisonContainer = ({ comparison }) => {
           .map((participantVersion) => participantVersion.participantBranch)
       ).join(", "),
       // environments: "dev, test, prod",
-      publishedDate: comparison.createdAt,
+      mostRecentVersionPublished,
     };
   };
 
@@ -100,12 +104,13 @@ const ComparisonContainer = ({ comparison }) => {
         <Grid.Col md={6} lg={3}>
           {comparisonStatusIndicator(comparison.status)}
         </Grid.Col>
-        <Grid.Col md={6} lg={3}>
-          <ParticipantDetails participantDetails={consumerDetails} />
-        </Grid.Col>
-        <Grid.Col md={6} lg={3}>
-          <ParticipantDetails participantDetails={providerDetails} />
-        </Grid.Col>
+        {[consumerDetails, providerDetails].map((participantDetails) => (
+          <Grid.Col md={6} lg={3} key={participantDetails.participantType}>
+            <ComparisonParticipantDetails
+              participantDetails={participantDetails}
+            />
+          </Grid.Col>
+        ))}
         <Grid.Col md={6} lg={3}>
           <Button variant="outline">View Contracts</Button>
         </Grid.Col>
