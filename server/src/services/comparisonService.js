@@ -2,6 +2,7 @@ import "dotenv/config";
 import Verifier from "./verification.js";
 import Comparison from "../models/Comparison.js";
 import db from "../db/databaseClient.js";
+import { findAndUpdateOrCreate } from "../utils/queryHelpers.js";
 
 class ComparisonService {
   async compare(contractRecord, specRecord, integration) {
@@ -15,13 +16,25 @@ class ComparisonService {
 
       const comparisonStatus = result.success ? "Success" : "Failed";
 
-      const comparison = await Comparison.query().insert({
-        integrationId: integration.integrationId,
-        consumerContractId: contractRecord.consumerContractId,
-        providerSpecId: specRecord.providerSpecId,
-        result,
-        comparisonStatus: comparisonStatus,
-      });
+      console.log('COMPARISON STATUS', comparisonStatus);
+
+      const comparison = await findAndUpdateOrCreate(
+        Comparison,
+        {
+          integrationId: integration.integrationId,
+          consumerContractId: contractRecord.consumerContractId,
+          providerSpecId: specRecord.providerSpecId,
+        },
+        {
+          integrationId: integration.integrationId,
+          consumerContractId: contractRecord.consumerContractId,
+          providerSpecId: specRecord.providerSpecId,
+          result,
+          comparisonStatus: comparisonStatus,
+        }
+      );
+
+      console.log('COMPARISON: ', comparison.result.errors);
 
       return comparison;
     } catch (err) {
@@ -40,7 +53,6 @@ class ComparisonService {
       providerId
     );
 
-    // HAVE NOT TESTED the rest of this method when there are provider specs published in the db
     const specRecords = await db.getProviderSpecs(providerId);
 
     // iterate over all of this provider's specs, and compare them with this consumer contract
@@ -56,7 +68,6 @@ class ComparisonService {
     );
 
     for (let integration of integrations) {
-      // This line is where implementation is challenging
       const contractRecords = await db.getConsumerContractsByIntegrationId(
         integration.integrationId
       );

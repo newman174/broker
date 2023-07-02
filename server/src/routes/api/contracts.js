@@ -57,10 +57,9 @@ router.post("/", async (req, res) => {
     consumerBranch
   );
 
-  comp.compareWithProviderSpecs(contractRecord.consumerContractId);
-
-  console.log(contractRecord);
   res.status(201).json(contractRecord);
+
+  comp.compareWithProviderSpecs(contractRecord.consumerContractId);
 });
 
 /**
