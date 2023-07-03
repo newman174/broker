@@ -19,7 +19,7 @@ class Spec extends BaseModel {
     super({ createdAt, updatedAt });
     this.id = providerSpecId;
     this.providerId = providerId;
-    this.spec = spec;
+    this.spec = spec.specText;
     this.format = specFormat;
     this.hash = specHash;
     this.provider = new Participant(provider);

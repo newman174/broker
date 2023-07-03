@@ -1,7 +1,8 @@
 import { Flex, Grid, Card, Button } from "@mantine/core";
-import ParticipantDetails from "./ParticipantDetails.jsx";
+import ComparisonParticipantDetails from "./ComparisonParticipantDetails.jsx";
 import { XboxX, CircleCheck } from "tabler-icons-react";
 import Comparison from "../models/Comparison.js";
+import PropTypes from "prop-types";
 
 const unique = function (array) {
   return array.filter((elem, index) => {
@@ -21,6 +22,19 @@ const statusIndicator = {
   },
 };
 
+/**
+ * @function comparisonStatusIndicator
+ * @description Renders a Flex component with a status icon and text.
+ * @param {string} status
+ * @returns {React.ReactHTMLElement}
+ * @example
+ * comparisonStatusIndicator("Success");
+ *  Returns:
+ *  <Flex direction="column" align="center" justify="center" size="xl" style="color: #4caf50;">
+ *    <CircleCheck size="48" />
+ *    Success
+ *  </Flex>
+ */
 const comparisonStatusIndicator = (status) => {
   return (
     <Flex
@@ -40,12 +54,22 @@ const comparisonStatusIndicator = (status) => {
   );
 };
 
+/**
+ * @function ComparisonContainer
+ * @description Renders a Card component with a Flex component containing a status indicator, ParticipantDetails components, and a Button component.
+ * @param {{comparison: Comparison}} props
+ * @returns {React.ReactHTMLElement}
+ */
 const ComparisonContainer = ({ comparison }) => {
   const generateDetails = (participantType) => {
     const participantVersions =
       participantType === "Consumer"
         ? comparison.consumerContract.consumerVersions
         : comparison.providerSpec.providerVersions;
+
+    const mostRecentVersionPublished = participantVersions.sort(
+      (a, b) => b.createdAt - a.createdAt
+    )[0].createdAt;
 
     return {
       participantType,
@@ -59,7 +83,7 @@ const ComparisonContainer = ({ comparison }) => {
           .map((participantVersion) => participantVersion.participantBranch)
       ).join(", "),
       // environments: "dev, test, prod",
-      publishedDate: comparison.createdAt,
+      mostRecentVersionPublished,
     };
   };
 
@@ -80,12 +104,13 @@ const ComparisonContainer = ({ comparison }) => {
         <Grid.Col md={6} lg={3}>
           {comparisonStatusIndicator(comparison.status)}
         </Grid.Col>
-        <Grid.Col md={6} lg={3}>
-          <ParticipantDetails participantDetails={consumerDetails} />
-        </Grid.Col>
-        <Grid.Col md={6} lg={3}>
-          <ParticipantDetails participantDetails={providerDetails} />
-        </Grid.Col>
+        {[consumerDetails, providerDetails].map((participantDetails) => (
+          <Grid.Col md={6} lg={3} key={participantDetails.participantType}>
+            <ComparisonParticipantDetails
+              participantDetails={participantDetails}
+            />
+          </Grid.Col>
+        ))}
         <Grid.Col md={6} lg={3}>
           <Button variant="outline">View Contracts</Button>
         </Grid.Col>
@@ -94,8 +119,8 @@ const ComparisonContainer = ({ comparison }) => {
   );
 };
 
-// ComparisonContainer.PropTypes = {
-//   comparison: Comparison.isRequired,
-// };
+ComparisonContainer.propTypes = {
+  comparison: PropTypes.instanceOf(Comparison).isRequired,
+};
 
 export default ComparisonContainer;
