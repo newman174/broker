@@ -151,6 +151,34 @@ export function up(knex) {
         .index();
       table.timestamps(true, true);
       table.unique(["provider_version_id", "provider_spec_id"]);
+    })
+    .createTable("webhook_subscriptions", (table) => {
+      table.increments("webhook_subscription_id").primary();
+      table
+        .integer("integration_id")
+        .unsigned()
+        .notNullable()
+        .references("integration_id")
+        .inTable("integrations")
+        .onDelete("CASCADE")
+        .index();
+      table
+        .boolean("spec_publish_events")
+        .notNullable()
+        .defaultTo(false);
+      table
+        .boolean("provider_verification_events")
+        .notNullable()
+        .defaultTo(false);
+      table
+        .boolean("comparison_events")
+        .notNullable()
+        .defaultTo(false);
+      table.string("url").notNullable();
+      table.boolean("enabled").notNullable().defaultTo(true);
+      table.string("description");
+      table.text("headers");
+      table.text("body");
     });
 }
 
