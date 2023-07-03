@@ -1,0 +1,133 @@
+{
+  "consumer": {
+    "name": "sieveService"
+  },
+  "interactions": [
+    {
+      "description": "a request to get the sieve result",
+      "providerStates": [
+        {
+          "name": "a number n"
+        }
+      ],
+      "request": {
+        "body": {
+          "n": 10
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/sieve"
+      },
+      "response": {
+        "body": [
+          3,
+          5,
+          7
+        ],
+        "headers": {
+          "content-type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {}
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get the sieve result",
+      "providerStates": [
+        {
+          "name": "a number ns"
+        }
+      ],
+      "request": {
+        "body": {
+          "n": 10
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/sieve"
+      },
+      "response": {
+        "body": [
+          3,
+          5,
+          7
+        ],
+        "headers": {
+          "content-type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          },
+          "header": {}
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get the sieve result",
+      "providerStates": [
+        {
+          "name": "an invalid input, a negative number"
+        }
+      ],
+      "request": {
+        "body": {
+          "n": -1
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/api/sieve"
+      },
+      "response": {
+        "body": {
+          "error": "Input must be an integer greater than 1"
+        },
+        "headers": {
+          "content-type": "application/json"
+        },
+        "status": 400
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "11.0.2"
+    },
+    "pactRust": {
+      "ffi": "0.4.0",
+      "models": "1.0.4"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "sieveProvider"
+  }
+}

@@ -52,7 +52,7 @@ class ComparisonService {
     const specRecords = await db.getProviderSpecs(providerId);
 
     for (let specRecord of specRecords) {
-      this.compare(contractRecord, specRecord, integration);
+      await this.compare(contractRecord, specRecord, integration);
     }
   }
 
@@ -68,7 +68,7 @@ class ComparisonService {
       );
 
       for (let contractRecord of contractRecords) {
-        this.compare(contractRecord, specRecord, integration);
+        await this.compare(contractRecord, specRecord, integration);
       }
     }
   }
