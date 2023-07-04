@@ -5,6 +5,7 @@ import Participant from "../models/Participant.js";
 import ParticipantVersion from "../models/ParticipantVersion.js";
 import Integration from "../models/Integration.js";
 import VersionContract from "../models/VersionContract.js";
+import WebhookSubscription from "../models/WebhookSubscription.js";
 import objectHash from "object-hash";
 import {
   findOrCreate,
@@ -176,6 +177,42 @@ class DatabaseClient {
 
   async getConsumerContractsByIntegrationId(integrationId) {
     return await ConsumerContract.query().where({ integrationId });
+  }
+
+  async integrationExists(integrationId) {
+    return !!(await Integration.query().findById(integrationId));
+  }
+
+  async createWebhookSubscription(details) {
+    const {
+      integrationId,
+      events,
+      url,
+      enabled,
+      description,
+      headers,
+      payload,
+    } = details;
+
+    const specPublishEvents          = events.specPublish          || false;
+    const providerVerificationEvents = events.providerVerification || false;
+    const comparisonEvents           = events.comparison           || false;
+
+    return await findAndUpdateOrCreate(
+      WebhookSubscription,
+      {integrationId, url},
+      {
+        integrationId,
+        specPublishEvents,
+        providerVerificationEvents,
+        comparisonEvents,
+        url,
+        enabled,
+        description,
+        headers,
+        payload,
+      },
+    );
   }
 }
 

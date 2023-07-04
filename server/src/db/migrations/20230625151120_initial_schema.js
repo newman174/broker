@@ -178,7 +178,8 @@ export function up(knex) {
       table.boolean("enabled").notNullable().defaultTo(true);
       table.string("description");
       table.text("headers");
-      table.text("body");
+      table.text("payload");
+      table.timestamps(true, true);
     });
 }
 

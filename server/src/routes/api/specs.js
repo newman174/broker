@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
   }
 
   if (!(await validateSchema(spec, "provider"))) {
-    return res.status(400).json({ error: "Spec schema is invalid" });
+    return res.status(400).json({error: "Spec schema is invalid"});
   }
 
   const provider = await db.getParticipant(providerName);
