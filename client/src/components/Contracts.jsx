@@ -23,7 +23,7 @@ const Contracts = ({ comparison }) => {
         <h3 style={{ marginBottom: "-10px" }}>Consumer Details</h3>
         <Group spacing="10rem">
           <dl className="comparison-details">
-            <dt>Consumer Versions</dt>
+            <dt>Versions</dt>
             <dd>{consumerDetails.versions}</dd>
           </dl>
 
@@ -42,7 +42,7 @@ const Contracts = ({ comparison }) => {
         <h3 style={{ marginBottom: "-10px" }}>Provider Details</h3>
         <Group spacing="10rem">
           <dl className="comparison-details">
-            <dt>Provider Versions</dt>
+            <dt>Versions</dt>
             <dd>{providerDetails.versions}</dd>
           </dl>
 
