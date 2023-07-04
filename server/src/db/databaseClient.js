@@ -221,10 +221,20 @@ class DatabaseClient {
     return await Participant.query().findById(participantId);
   }
 
-  async getURLsForEvent(event) {
-    return await WebhookSubscription
-      .query()
-      .select()
+  async getURLsForEvent(event, integrationIds) {
+    const records = await WebhookSubscription
+    .query()
+    .select('url')
+    .innerJoin(
+      'integrations',
+      'webhookSubscriptions.integrationId',
+      'integrations.integrationId'
+    )
+    .where('enabled', true)
+    .where(event, true)
+    .whereIn('webhookSubscriptions.integrationId', integrationIds);
+
+    return records.map(record => record.url);
   }
 }
 
