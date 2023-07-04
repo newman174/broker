@@ -6,6 +6,7 @@ import ParticipantVersion from "../models/ParticipantVersion.js";
 import Integration from "../models/Integration.js";
 import VersionContract from "../models/VersionContract.js";
 import WebhookSubscription from "../models/WebhookSubscription.js";
+import Comparison from "../models/Comparison.js";
 import objectHash from "object-hash";
 import {
   findOrCreate,

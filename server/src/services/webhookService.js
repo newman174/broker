@@ -20,15 +20,24 @@ class WebhookService {
       this.sendWebhook(url, payload);
     }
   }
-
+  
   sendWebhook(url, body) {
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body,
+      body: JSON.stringify(payload),
     };
 
     fetch(url, options); // don't await, fire and forget
+  }
+
+  async newComparisonEvent(comparison) {
+    const integrationId = comparison.integrationId;
+    const urls = await db.getURLsForEvent("comparisonEvents", [integrationId]);
+
+    for (let url of urls) {
+      this.sendWebhook(url, comparison)
+    }
   }
 }
 
