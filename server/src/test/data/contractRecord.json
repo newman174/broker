@@ -1,6 +1,6 @@
 {
   "consumerContractId": 1,
-  "consumerId": 2,
+  "consumerId": 10,
   "integrationId": 1,
   "contract": {
       "contractText": {
