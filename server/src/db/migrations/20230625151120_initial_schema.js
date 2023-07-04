@@ -151,6 +151,32 @@ export function up(knex) {
         .index();
       table.timestamps(true, true);
       table.unique(["provider_version_id", "provider_spec_id"]);
+    })
+    .createTable("environments", (table) => {
+      table.increments("environment_id").primary();
+      table.string("environment_name").unique().notNullable();
+      table.timestamps(true, true);
+    })
+    .createTable("versions_environments", (table) => {
+      table.increments("version_environment_id").primary();
+      table
+        .integer("participant_version_id")
+        .unsigned()
+        .notNullable()
+        .references("participant_version_id")
+        .inTable("participant_versions")
+        .onDelete("CASCADE")
+        .index();
+      table
+        .integer("environment_id")
+        .unsigned()
+        .notNullable()
+        .references("environment_id")
+        .inTable("environments")
+        .onDelete("CASCADE")
+        .index();
+      table.timestamps(true, true);
+      table.unique(["participant_version_id", "environment_id"]);
     });
 }
 
