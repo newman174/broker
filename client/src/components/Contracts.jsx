@@ -1,6 +1,6 @@
 import Comparison from "../models/Comparison.js";
 import PropTypes from "prop-types";
-import { Tabs, Box, Group, Divider } from "@mantine/core";
+import { Tabs, Box, Group, Divider, Card } from "@mantine/core";
 import ComparisonTab from "./ComparisonTab.jsx";
 import ConsumerContractTab from "./ConsumerContractTab.jsx";
 import ProviderSpecTab from "./ProviderSpecTab.jsx";
@@ -12,63 +12,79 @@ const Contracts = ({ comparison }) => {
   const providerDetails = generateDetails(comparison, "Provider");
 
   return (
-    <Box style={{ textAlign: "left" }}>
-      <h3 style={{ marginBottom: "-10px" }}>Consumer Details</h3>
-      <Group spacing="10rem">
-        <dl className="comparison-details">
-          <dt>Consumer Versions</dt>
-          <dd>{consumerDetails.versions}</dd>
-        </dl>
+    <Box>
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        style={{ textAlign: "left" }}
+      >
+        <h3 style={{ marginBottom: "-10px" }}>Consumer Details</h3>
+        <Group spacing="10rem">
+          <dl className="comparison-details">
+            <dt>Consumer Versions</dt>
+            <dd>{consumerDetails.versions}</dd>
+          </dl>
 
-        <dl className="comparison-details">
-          <dt>Published At</dt>
-          <dd>
-            <ReactTimeAgo date={consumerDetails.mostRecentVersionPublished} />
-          </dd>
-        </dl>
-        <dl className="comparison-details">
-          <dt>Branches</dt>
-          <dd>{consumerDetails.branches || "(none)"}</dd>
-        </dl>
-      </Group>
+          <dl className="comparison-details">
+            <dt>Published At</dt>
+            <dd>
+              <ReactTimeAgo date={consumerDetails.mostRecentVersionPublished} />
+            </dd>
+          </dl>
+          <dl className="comparison-details">
+            <dt>Branches</dt>
+            <dd>{consumerDetails.branches || "(none)"}</dd>
+          </dl>
+        </Group>
+        <Divider my="sm" />
+        <h3 style={{ marginBottom: "-10px" }}>Provider Details</h3>
+        <Group spacing="10rem">
+          <dl className="comparison-details">
+            <dt>Provider Versions</dt>
+            <dd>{providerDetails.versions}</dd>
+          </dl>
+
+          <dl className="comparison-details">
+            <dt>Published At</dt>
+            <dd>
+              <ReactTimeAgo date={providerDetails.mostRecentVersionPublished} />
+            </dd>
+          </dl>
+          <dl className="comparison-details">
+            <dt>Branches</dt>
+            <dd>{providerDetails.branches || "(none)"}</dd>
+          </dl>
+        </Group>
+      </Card>
       <Divider my="sm" />
-      <h3 style={{ marginBottom: "-10px" }}>Provider Details</h3>
-      <Group spacing="10rem">
-        <dl className="comparison-details">
-          <dt>Provider Versions</dt>
-          <dd>{providerDetails.versions}</dd>
-        </dl>
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        style={{ textAlign: "left" }}
+      >
+        <Tabs defaultValue="comparison">
+          <Tabs.List grow>
+            <Tabs.Tab value="comparison">Comparison</Tabs.Tab>
+            <Tabs.Tab value="consumerContract">Consumer Contract</Tabs.Tab>
+            <Tabs.Tab value="providerSpec">Provider Spec</Tabs.Tab>
+          </Tabs.List>
 
-        <dl className="comparison-details">
-          <dt>Published At</dt>
-          <dd>
-            <ReactTimeAgo date={providerDetails.mostRecentVersionPublished} />
-          </dd>
-        </dl>
-        <dl className="comparison-details">
-          <dt>Branches</dt>
-          <dd>{providerDetails.branches || "(none)"}</dd>
-        </dl>
-      </Group>
-      <Divider my="sm" />
-      <Tabs defaultValue="comparison">
-        <Tabs.List grow>
-          <Tabs.Tab value="comparison">Comparison</Tabs.Tab>
-          <Tabs.Tab value="consumerContract">Consumer Contract</Tabs.Tab>
-          <Tabs.Tab value="providerSpec">Provider Spec</Tabs.Tab>
-        </Tabs.List>
+          <Tabs.Panel value="comparison">
+            <ComparisonTab comparison={comparison} />
+          </Tabs.Panel>
+          <Tabs.Panel value="consumerContract">
+            <ConsumerContractTab comparison={comparison} />
+          </Tabs.Panel>
 
-        <Tabs.Panel value="comparison">
-          <ComparisonTab comparison={comparison} />
-        </Tabs.Panel>
-        <Tabs.Panel value="consumerContract">
-          <ConsumerContractTab comparison={comparison} />
-        </Tabs.Panel>
-
-        <Tabs.Panel value="providerSpec">
-          <ProviderSpecTab comparison={comparison} />
-        </Tabs.Panel>
-      </Tabs>
+          <Tabs.Panel value="providerSpec">
+            <ProviderSpecTab comparison={comparison} />
+          </Tabs.Panel>
+        </Tabs>
+      </Card>
     </Box>
   );
 };
