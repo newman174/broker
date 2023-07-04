@@ -4,6 +4,7 @@ import server from '../../app.js';
 import spec from '../../test/data/api_spec.json';
 import specRecord from '../../test/data/specRecord.json';
 import db from "../../db/databaseClient.js";
+import webhook from '../../services/webhookService.js';
 import comp from "../../services/comparisonService.js";
 
 const REQ_BODY = {
@@ -49,6 +50,7 @@ describe('POST /api/specs', () => {
     db.publishProviderSpec = jest.fn();
     db.publishProviderSpec.mockResolvedValue(specRecord);
 
+    webhook.newSpecEvent = jest.fn();
     comp.compareWithConsumerContracts = jest.fn();
 
     const res = await request(server)

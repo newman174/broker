@@ -17,11 +17,11 @@ class WebhookService {
 
     for (let url of urls) {
       // and pass them in to this method
-      await this.sendWebhook(url, payload);
+      this.sendWebhook(url, payload);
     }
   }
 
-  async sendWebhook(url, body) {
+  sendWebhook(url, body) {
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
