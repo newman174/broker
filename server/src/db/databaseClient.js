@@ -194,6 +194,8 @@ class DatabaseClient {
       payload,
     } = details;
 
+    console.log(details);
+
     const specPublishEvents          = events.specPublish          || false;
     const providerVerificationEvents = events.providerVerification || false;
     const comparisonEvents           = events.comparison           || false;

@@ -1,4 +1,3 @@
-import { jest } from '@jest/globals';
 import request from 'supertest';
 import server from '../../app.js';
 import db from "../../db/databaseClient.js";
@@ -23,4 +22,3 @@ describe('POST /api/webhooks', () => {
     expect(res.body).toEqual({error: 'There is no integration with that integrationId'});
   });
 });
-

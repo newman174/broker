@@ -1,0 +1,14 @@
+{
+  "webhookSubscriptionId": 1,
+  "integrationId": 20,
+  "specPublishEvents": true,
+  "providerVerificationEvents": false,
+  "comparisonEvents": true,
+  "url": "https://requestbinder.com/webhook-endpoint",
+  "enabled": true,
+  "description": "my sevice wants to know these things...",
+  "headers": null,
+  "payload": null,
+  "createdAt": "",
+  "updatedAt": ""
+}
