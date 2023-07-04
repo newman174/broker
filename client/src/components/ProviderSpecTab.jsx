@@ -8,7 +8,7 @@ const ProviderSpecTab = ({ comparison }) => {
   const { providerSpec } = comparison;
   return (
     <>
-      <h3 style={{ textAlign: "left" }}>Consumer Contract</h3>
+      <h3 style={{ textAlign: "left" }}>Provider Spec</h3>
       <Group spacing="10rem">
         <dl className="comparison-details">
           <dt>OpenAPI Spec Version</dt>
