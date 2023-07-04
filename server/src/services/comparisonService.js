@@ -3,6 +3,7 @@ import Verifier from "./verification.js";
 import Comparison from "../models/Comparison.js";
 import db from "../db/databaseClient.js";
 import { findAndUpdateOrCreate } from "../utils/queryHelpers.js";
+import webhook from "./webhookService.js";
 
 class ComparisonService {
   async compare(contractRecord, specRecord, integration) {
@@ -31,7 +32,9 @@ class ComparisonService {
           comparisonStatus: comparisonStatus,
         }
       );
-
+      
+      webhook.newComparisonEvent(comparison);
+      
       return comparison;
     } catch (err) {
       console.log(err);

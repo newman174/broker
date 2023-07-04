@@ -30,6 +30,15 @@ class WebhookService {
 
     fetch(url, options); // don't await, fire and forget
   }
+
+  async newComparisonEvent(comparison) {
+    const integrationId = comparison.integrationId;
+    const urls = await db.getURLsForEvent("comparisonEvents", [integrationId]);
+
+    for (let url of urls) {
+      this.sendWebhook(url, comparison)
+    }
+  }
 }
 
 export default new WebhookService();
