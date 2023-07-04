@@ -40,7 +40,10 @@ const App = () => {
             ) : null
           }
         />
-        <Route path="/settings/*" element={<SettingsMenu />} />
+        <Route
+          path="/settings/*"
+          element={<SettingsMenu integrations={integrations} />}
+        />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
     </AppShell>

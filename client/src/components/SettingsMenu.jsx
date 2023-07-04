@@ -13,21 +13,22 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { IconX } from "@tabler/icons-react";
 import WebhooksSubmenu from "./WebhooksSubmenu.jsx";
 
-const subMenus = {
-  General: <Title order={3}>General</Title>,
-  Webhooks: <WebhooksSubmenu />,
-};
-
-const SettingsMenu = () => {
+const SettingsMenu = ({ integrations }) => {
   const [active, setActive] = useState(0);
-  const path = useLocation().pathname;
+  // const path = useLocation().pathname;
   const navigate = useNavigate();
+
+  const subMenus = {
+    // General: <Title order={3}>General</Title>,
+    Webhooks: <WebhooksSubmenu integrations={integrations} />,
+  };
 
   return (
     <Card>
       <ActionIcon
         variant="outline"
-        onClick={() => navigate(-1)}
+        // onClick={() => navigate(-1)}
+        onClick={() => navigate("../")}
         title="Close"
         style={{ marginLeft: "auto", marginRight: 0, display: "block" }}
       >

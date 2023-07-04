@@ -8,9 +8,12 @@ import {
   Textarea,
   JsonInput,
   Button,
+  Select,
 } from "@mantine/core";
+import PropTypes from "prop-types";
+import Integration from "../models/Integration.js";
 
-const NewWebhookForm = () => {
+const NewWebhookForm = ({ integrations }) => {
   const form = useForm({
     initialValues: {
       description: "",
@@ -28,14 +31,17 @@ const NewWebhookForm = () => {
         label="Description"
         placeholder="Description"
       />
-      <Autocomplete
+      <Select
         {...form.getInputProps("provider")}
         label="Provider"
-        placeholder="Provider"
-        data={[
-          { label: "Provider 1", value: "provider1" },
-          { label: "Provider 2", value: "provider2" },
-        ]}
+        data={[{ label: "All", value: "All" }].concat(
+          integrations.map((integration) => {
+            return {
+              label: integration.provider.name,
+              value: integration.provider.name,
+            };
+          })
+        )}
       />
 
       <Group>
@@ -64,8 +70,8 @@ const NewWebhookForm = () => {
 
       <JsonInput
         {...form.getInputProps("body")}
-        label="Body"
-        placeholder="Body"
+        label="Body (JSON)"
+        placeholder={'{\n  "key": "value"\n}'}
         validationError="Invalid JSON"
         formatOnBlur
         autosize
@@ -95,6 +101,10 @@ const NewWebhookForm = () => {
       </Group>
     </Stack>
   );
+};
+
+NewWebhookForm.propTypes = {
+  integrations: PropTypes.arrayOf(PropTypes.instanceOf(Integration)).isRequired,
 };
 
 export default NewWebhookForm;

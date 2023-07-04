@@ -1,12 +1,9 @@
 import { Modal, Group, Title, Button } from "@mantine/core";
-// import { useNavigate } from "react-router-dom";
 import { useDisclosure } from "@mantine/hooks";
 import NewWebhookForm from "./NewWebhookForm";
 
-const WebhooksSubmenu = () => {
+const WebhooksSubmenu = ({ integrations }) => {
   const [opened, { open, close }] = useDisclosure(false);
-
-  // const navigate = useNavigate();
 
   return (
     <>
@@ -17,7 +14,7 @@ const WebhooksSubmenu = () => {
         title="New Webhook"
         centered
       >
-        <NewWebhookForm />
+        <NewWebhookForm integrations={integrations} />
       </Modal>
       <Title order={3} style={{ marginBottom: "2rem" }}>
         Webhooks
@@ -30,13 +27,3 @@ const WebhooksSubmenu = () => {
 };
 
 export default WebhooksSubmenu;
-
-function Demo() {
-  return (
-    <>
-      <Group position="center">
-        <Button>Open centered Modal</Button>
-      </Group>
-    </>
-  );
-}

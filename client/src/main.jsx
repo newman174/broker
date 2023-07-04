@@ -51,4 +51,6 @@ function Root() {
   );
 }
 
+export default Root;
+
 createRoot(document.getElementById("root")).render(<Root />);

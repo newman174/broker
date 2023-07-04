@@ -23,7 +23,6 @@ import {
   IconSettings,
 } from "@tabler/icons-react";
 import Integration from "../models/Integration.js";
-import { useLocation } from "react-router-dom";
 
 const MyAppShell = ({ children, integrations }) => {
   const theme = useMantineTheme();
@@ -31,7 +30,6 @@ const MyAppShell = ({ children, integrations }) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const navigate = useNavigate();
-  const path = useLocation().pathname;
 
   return (
     <AppShell
@@ -95,11 +93,7 @@ const MyAppShell = ({ children, integrations }) => {
               <ActionIcon
                 variant="outline"
                 color={dark ? "yellow" : "blue"}
-                onClick={() =>
-                  path.match(/settings.*/i)
-                    ? navigate(-1)
-                    : navigate("/settings")
-                }
+                onClick={() => navigate("/settings")}
                 title="Settings"
                 style={{ marginRight: "2rem" }}
               >

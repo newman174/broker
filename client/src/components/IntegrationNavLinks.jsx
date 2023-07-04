@@ -8,7 +8,7 @@ const IntegrationNavLinks = ({ integrations }) => {
   const path = useLocation().pathname;
 
   useEffect(() => {
-    if (path === "/") {
+    if (!path.match(/.*integrations.*/i)) {
       setActive(-1);
     }
   }, [path]);
