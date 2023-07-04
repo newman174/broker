@@ -60,7 +60,7 @@ const comparisonStatusIndicator = (status) => {
  * @param {{comparison: Comparison}} props
  * @returns {React.ReactHTMLElement}
  */
-const ComparisonContainer = ({ comparison }) => {
+const ComparisonContainer = ({ comparison, onViewContracts }) => {
   const generateDetails = (participantType) => {
     const participantVersions =
       participantType === "Consumer"
@@ -112,7 +112,9 @@ const ComparisonContainer = ({ comparison }) => {
           </Grid.Col>
         ))}
         <Grid.Col md={6} lg={3}>
-          <Button variant="outline">View Contracts</Button>
+          <Button variant="outline" onClick={() => onViewContracts(comparison)}>
+            View Contracts
+          </Button>
         </Grid.Col>
       </Grid>
     </Card>
@@ -121,6 +123,7 @@ const ComparisonContainer = ({ comparison }) => {
 
 ComparisonContainer.propTypes = {
   comparison: PropTypes.instanceOf(Comparison).isRequired,
+  onViewContracts: PropTypes.func.isRequired,
 };
 
 export default ComparisonContainer;

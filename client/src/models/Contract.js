@@ -23,7 +23,7 @@ class Contract extends BaseModel {
     this.id = consumerContractId;
     this.consumerId = consumerId;
     this.integrationId = integrationId;
-    this.contract = contract;
+    this.contract = contract.contractText;
     this.format = contractFormat;
     this.hash = contractHash;
     this.consumer = new Participant(consumer);
