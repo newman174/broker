@@ -9,7 +9,6 @@ import ParticipantVersion from '../models/ParticipantVersion.js';
 import VersionContract from '../models/VersionContract.js';
 import VersionSpec from '../models/VersionSpec.js';
 import Integration from '../models/Integration.js';
-import WebhookSubscription from '../models/WebhookSubscription.js';
 import webhookSubscriptionRecord from './data/webhookSubscriptionRecord.json';
 
 describe('Test publishConsumerContract()', () => {

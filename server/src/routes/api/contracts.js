@@ -56,10 +56,10 @@ router.post("/", async (req, res) => {
     consumerVersion,
     consumerBranch
   );
-
-  res.status(201).json(contractRecord);
-
+  
   comp.compareWithProviderSpecs(contractRecord.consumerContractId);
+  
+  res.status(201).json(contractRecord);
 });
 
 /**

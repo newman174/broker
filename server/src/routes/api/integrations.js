@@ -9,7 +9,7 @@ const router = express.Router();
  */
 router.get("/", async (_req, res) => {
   const integrations = await db.getIntegrationData();
-  res.json(integrations);
+  res.status(200).json(integrations);
 });
 
 /**
@@ -21,7 +21,8 @@ router.get("/:id", async (req, res) => {
   const integrationId = Number(req.params.id);
   const integration = await db.getIntegrationById(integrationId);
 
-  res.json(integration);
+  console.log(integration);
+  res.status(200).json(integration);
 });
 
 /**

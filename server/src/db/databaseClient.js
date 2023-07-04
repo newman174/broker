@@ -216,6 +216,16 @@ class DatabaseClient {
       },
     );
   }
+
+  async getParticipantById(participantId) {
+    return await Participant.query().findById(participantId);
+  }
+
+  async getURLsForEvent(event) {
+    return await WebhookSubscription
+      .query()
+      .select()
+  }
 }
 
 export default new DatabaseClient();

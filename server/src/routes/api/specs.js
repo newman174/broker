@@ -1,5 +1,6 @@
 import express from "express";
 import db from "../../db/databaseClient.js";
+import webhook from "../../services/webhookService.js";
 import comp from "../../services/comparisonService.js";
 import { validateSchema } from "../../services/contractSchema.js";
 import YAML from "yaml";
@@ -36,9 +37,11 @@ router.post("/", async (req, res) => {
     providerBranch
   );
 
-  res.status(201).json(specRecord);
+  webhook.newSpecEvent(specRecord);
 
   comp.compareWithConsumerContracts(specRecord.providerSpecId);
+
+  res.status(201).json(specRecord);
 });
 
 export default router;
