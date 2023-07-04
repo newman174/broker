@@ -21,11 +21,11 @@ class WebhookService {
     }
   }
 
-  async sendWebhook(url, body) {
+  async sendWebhook(url, payload) {
     const options = {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body,
+      body: JSON.stringify(payload),
     };
 
     fetch(url, options); // don't await, fire and forget
