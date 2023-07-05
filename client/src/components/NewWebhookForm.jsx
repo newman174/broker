@@ -1,3 +1,5 @@
+import { useState } from "react";
+import PropTypes from "prop-types";
 import { isNotEmpty, useForm } from "@mantine/form";
 import {
   TextInput,
@@ -8,21 +10,20 @@ import {
   JsonInput,
   Button,
   Select,
+  Text,
 } from "@mantine/core";
-import PropTypes from "prop-types";
+
 import Integration from "../models/Integration.js";
 import { webhookService } from "../services/apiService.js";
 
 const NewWebhookForm = ({ integrations }) => {
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(null);
+
   const form = useForm({
     initialValues: {
       integrationId: undefined,
-      events: [],
-      // {
-      //   specPublish: false,
-      //   providerVerification: false,
-      //   comparison: false,
-      // },
+      events: ["comparison", "specPublish"],
       url: "",
       enabled: true,
       description: "",
@@ -32,6 +33,7 @@ const NewWebhookForm = ({ integrations }) => {
     validate: {
       integrationId: isNotEmpty("You must select an integration"),
       events: isNotEmpty("You must select at least one event"),
+      url: isNotEmpty("You must enter a URL"),
     },
     transformValues: (values) => {
       const result = { ...values };
@@ -43,110 +45,124 @@ const NewWebhookForm = ({ integrations }) => {
     },
   });
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
-  //   if (!form.validate()) return;
-  //   const webhook = form.values;
-  //   const response = await webhookService.postNewWebhook(webhook);
-  //   console.table(response);
-  // };
+  const handleSubmit = form.onSubmit(async (values) => {
+    setError(null);
+    try {
+      await webhookService.postNewWebhook(values);
+      setSubmitted(true);
+    } catch (error) {
+      setError(error);
+    }
+  });
 
-  const handleSubmit = form.onSubmit((values) =>
-    webhookService.postNewWebhook(values)
-  );
+  const eventCheckBoxProps = {
+    styles: () => ({
+      label: {
+        cursor: "pointer",
+      },
+      input: {
+        cursor: "pointer",
+      },
+      root: {
+        marginBottom: "0.5rem",
+      },
+    }),
+  };
 
-  return (
-    <Stack maw={600} mx="auto">
-      <form
-        // onSubmit={form.onSubmit((values) =>
-        //   webhookService.postNewWebhook(values)
-        // )}
-        onSubmit={handleSubmit}
-      >
-        <TextInput
-          {...form.getInputProps("description")}
-          label="Description"
-          placeholder="Description"
-        />
-
-        <TextInput
-          {...form.getInputProps("url")}
-          label="URL"
-          placeholder="http://example.com/api/webhooks"
-          required
-        />
-
-        <Select
-          {...form.getInputProps("integrationId")}
-          required
-          label="Integration"
-          data={integrations.map((integration) => {
-            return {
-              label: integration.name,
-              value: integration.id,
-            };
-          })}
-        />
-
-        <Checkbox.Group
-          label="Events"
-          required
-          {...form.getInputProps("events", { type: "checkbox" })}
-          // {...form.getInputProps("events")}
-          mt={10}
-        >
-          {/* <Group position="left" mt="md"> */}
-          <Checkbox
-            label="New provider verification"
-            value="providerVerification"
-            mb={"0.5rem"}
+  if (!submitted) {
+    return (
+      <form onSubmit={handleSubmit}>
+        <Stack mx="auto">
+          <TextInput
+            {...form.getInputProps("description")}
+            label="Description"
+            placeholder="Description"
           />
-          <Checkbox
-            label="New spec published"
-            mb={"0.5rem"}
-            value="specPublish"
-            styles={(theme) => ({
-              label: {
-                cursor: "pointer",
-              },
+
+          <TextInput
+            {...form.getInputProps("url")}
+            label="URL"
+            placeholder="http://example.com/api/webhooks"
+            required
+          />
+
+          <Select
+            {...form.getInputProps("integrationId")}
+            required
+            label="Integration"
+            data={integrations.map((integration) => {
+              return {
+                label: integration.name,
+                value: integration.id,
+              };
             })}
           />
-          <Checkbox
-            label="New comparison published"
-            // value="events.comparison"
-            value="comparison"
-            mb={"0.5rem"}
+
+          <Checkbox.Group
+            label="Events"
+            required
+            {...form.getInputProps("events", { type: "checkbox" })}
+            defaultValue={["comparison", "specPublish"]}
+          >
+            {/* <Checkbox
+              label="New provider verification"
+              value="providerVerification"
+              {...eventCheckBoxProps}
+            /> */}
+            <Checkbox
+              label="New spec published"
+              value="specPublish"
+              {...eventCheckBoxProps}
+            />
+            <Checkbox
+              label="New comparison published"
+              value="comparison"
+              {...eventCheckBoxProps}
+            />
+          </Checkbox.Group>
+
+          <Textarea
+            {...form.getInputProps("headers")}
+            label="Headers"
+            placeholder="Header-name: Value"
           />
-          {/* </Group> */}
-        </Checkbox.Group>
 
-        <Textarea
-          {...form.getInputProps("headers")}
-          label="Headers"
-          placeholder="Header-name: Value"
-        />
+          <JsonInput
+            {...form.getInputProps("payload")}
+            label="Payload (JSON)"
+            placeholder={'{\n  "key": "value"\n}'}
+            validationError="Invalid JSON"
+            formatOnBlur
+            autosize
+            minRows={4}
+          />
 
-        <JsonInput
-          {...form.getInputProps("payload")}
-          label="Payload (JSON)"
-          placeholder={'{\n  "key": "value"\n}'}
-          validationError="Invalid JSON"
-          formatOnBlur
-          autosize
-          minRows={4}
-        />
+          <Checkbox
+            {...form.getInputProps("enabled", { type: "checkbox" })}
+            label="Enabled"
+            disabled
+          />
 
-        <Checkbox
-          {...form.getInputProps("enabled", { type: "checkbox" })}
-          label="Enabled"
-        />
-
-        <Group position="center" mt="md">
-          <Button type="submit">Create</Button>
-        </Group>
+          <Group position="center" mt="md">
+            <Button type="submit">Create</Button>
+          </Group>
+          {error && (
+            <Group position="center" mt="md">
+              <Text color="red" fw={"bold"}>
+                Error: Failed to create webhook. {error.message}.
+              </Text>
+            </Group>
+          )}
+        </Stack>
       </form>
-    </Stack>
-  );
+    );
+  } else {
+    return (
+      <Text color="green" fw={"bold"}>
+        Webhook successfully created
+      </Text>
+    );
+  }
 };
 
 NewWebhookForm.propTypes = {

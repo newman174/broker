@@ -3,8 +3,12 @@ import db from "../db/databaseClient.js";
 class WebhookService {
   async newSpecEvent(specRecord) {
     const providerRecord = await db.getParticipantById(specRecord.providerId);
-    const integrationRecords = await db.getIntegrationsByProviderId(providerRecord.participantId);
-    const integrationIds = integrationRecords.map(record => record.integrationId);
+    const integrationRecords = await db.getIntegrationsByProviderId(
+      providerRecord.participantId
+    );
+    const integrationIds = integrationRecords.map(
+      (record) => record.integrationId
+    );
 
     const payload = {
       providerName: providerRecord.participantName,
@@ -20,12 +24,12 @@ class WebhookService {
       this.sendWebhook(url, payload);
     }
   }
-  
+
   sendWebhook(url, body) {
     const options = {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
     };
 
     fetch(url, options); // don't await, fire and forget
@@ -36,7 +40,7 @@ class WebhookService {
     const urls = await db.getURLsForEvent("comparisonEvents", [integrationId]);
 
     for (let url of urls) {
-      this.sendWebhook(url, comparison)
+      this.sendWebhook(url, comparison);
     }
   }
 }

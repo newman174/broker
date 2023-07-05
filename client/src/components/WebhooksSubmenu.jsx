@@ -1,6 +1,8 @@
-import { Modal, Group, Title, Button } from "@mantine/core";
+import { Modal, Title, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import NewWebhookForm from "./NewWebhookForm";
+import PropTypes from "prop-types";
+import Integration from "../models/Integration";
 
 const WebhooksSubmenu = ({ integrations }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -24,6 +26,10 @@ const WebhooksSubmenu = ({ integrations }) => {
       </Button>
     </>
   );
+};
+
+WebhooksSubmenu.propTypes = {
+  integrations: PropTypes.arrayOf(PropTypes.instanceOf(Integration)).isRequired,
 };
 
 export default WebhooksSubmenu;
