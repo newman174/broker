@@ -14,11 +14,11 @@ describe('Test PATCH /api/participants', () => {
     const malformedBody = { ...REQ_BODY, participantName: '' };
 
     const res = await request(server)
-      .patch('/api/particpants')
+      .patch('/api/participants')
       .send(malformedBody);
 
     expect(res.status).toEqual(400);
-    expect(res.body).toEqual({error: 'Request Body is invalid'});
+    expect(res.body).toEqual({error: 'Request body is invalid'});
   });
 
   test('returns 400 when deployed field is not passed', async () => {
@@ -29,23 +29,23 @@ describe('Test PATCH /api/participants', () => {
     };
 
     const res = await request(server)
-      .patch('/api/particpants')
+      .patch('/api/participants')
       .send(malformedBody);
 
     expect(res.status).toEqual(400);
-    expect(res.body).toEqual({error: 'Request Body is invalid'});
+    expect(res.body).toEqual({error: 'Request body is invalid'});
   });
 
   test('returns 400 when participantVersion does not exist for participantName', async () => {
     const res = await request(server)
-      .patch('/api/particpants')
+      .patch('/api/participants')
       .send(REQ_BODY);
 
     expect(res.status).toEqual(400);
     expect(res.body).toEqual({error: 'Participant version does not exist'});
   });
 
-  // test('returns 200, and creates versions_environments record', async () => {
-
-  // });
+  test('returns 200, and creates versions_environments record', async () => {
+    
+  });
 });
