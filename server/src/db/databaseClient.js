@@ -112,8 +112,6 @@ class DatabaseClient {
         }
       );
 
-      console.log("participantVersionId: ", participantVersionId);
-
       await findOrCreate(VersionSpec, {
         providerSpecId: specRecord.providerSpecId,
         providerVersionId: participantVersionId,

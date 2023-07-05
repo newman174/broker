@@ -2,7 +2,7 @@ import express from "express";
 import db from "../../db/databaseClient.js";
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { environmentName } = req.body;
 
   if (!environmentName || typeof environmentName !== "string") {
@@ -11,7 +11,7 @@ router.post('/', (req, res) => {
       .json({error: 'Request body must have an environmentName (string) property'});
   }
 
-  const environmentRecord = db.createEnvironment(environmentName);
+  const environmentRecord = await db.createEnvironment(environmentName);
 
   res.status(201).json(environmentRecord);
 });

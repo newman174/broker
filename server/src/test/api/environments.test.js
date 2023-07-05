@@ -30,7 +30,7 @@ describe('Test POST /api/environments', () => {
 
     const res = await request(server)
       .post('/api/environments')
-      .send(JSON.stringify(requestBody));
+      .send(requestBody);
 
     expect(res.status).toEqual(201);
     expect(res.body).toEqual(environmentRecord);
