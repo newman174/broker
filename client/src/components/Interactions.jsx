@@ -146,6 +146,14 @@ const Interactions = ({ comparison }) => {
                       <Text fw={700}>Path:</Text>
                       <Text>{request.path}</Text>
                     </Group>
+                    {request.body ? (
+                      <>
+                        <Text fw={700}>Body:</Text>
+                        <Prism language="json">
+                          {JSON.stringify(request.body)}
+                        </Prism>
+                      </>
+                    ) : null}
                   </Stack>
                 </Card>
 
