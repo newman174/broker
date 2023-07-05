@@ -5,6 +5,7 @@ import Participant from "../models/Participant.js";
 import ParticipantVersion from "../models/ParticipantVersion.js";
 import Integration from "../models/Integration.js";
 import VersionContract from "../models/VersionContract.js";
+import Environment from '../models/Environment.js';
 import objectHash from "object-hash";
 import {
   findOrCreate,
@@ -176,6 +177,13 @@ class DatabaseClient {
 
   async getConsumerContractsByIntegrationId(integrationId) {
     return await ConsumerContract.query().where({ integrationId });
+  }
+
+  async createEnvironment(environmentName) {
+    return await findOrCreate(
+      Environment,
+      { environmentName },
+    );
   }
 }
 
