@@ -252,14 +252,15 @@ class DatabaseClient {
     )
   }
 
-  async getParticipantVersionByParticipantId(participantId) {
-     return await ParticipantVersion.query().where({participantId})
+  async getParticipantVersion(participantId, participantVersion) {
+     return await ParticipantVersion.query()
+       .where({participantId})
+       .andWhere({participantVersion})
   }
 
-  async removeParticipantFromEnv(participantId) {
-    return await ParticipantVersion.query().deleteBy({ participantId })
+  async removeParticipantFromEnvironment(participantVersionId) {
+    return await VersionEnvironment.query().deleteBy({ participantVersionId })
   }
-
 }
 
 export default new DatabaseClient();
