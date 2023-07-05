@@ -253,11 +253,6 @@ class DatabaseClient {
   }
 
   async getParticipantVersionId(participantName, participantVersion) {
-
-    // SELECT participantVersionId from participantVersion 
-    // JOIN participants ON partipants.participantId = participantVersions.participantId
-    // WHERE participantName = $1 AND participantVersion = $2;
-    
      return (await ParticipantVersion
       .query()
       .select('participantVersionId')
@@ -267,7 +262,7 @@ class DatabaseClient {
         'participantVersions.participantId'
       )
       .where('participantName', participantName)
-      .where('participantVersion', participantVersion))[0];
+      .where('participantVersion', participantVersion))[0].participantVersionId;
   }
 
   async removeParticipantFromEnvironment(participantVersionId) {
