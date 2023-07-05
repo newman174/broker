@@ -1,6 +1,14 @@
 import Comparison from "../models/Comparison.js";
 import PropTypes from "prop-types";
-import { ThemeIcon, Card, Accordion, Stack, Text, Group } from "@mantine/core";
+import {
+  ThemeIcon,
+  Card,
+  Accordion,
+  Stack,
+  Text,
+  Group,
+  Title,
+} from "@mantine/core";
 import { CircleCheck, CircleX, AlertCircle } from "tabler-icons-react";
 import { Prism } from "@mantine/prism";
 
@@ -11,18 +19,14 @@ const Interactions = ({ comparison }) => {
       description,
       request,
       response,
-      errors: [],
-      warnings: [],
+      tests: [],
     })
   );
 
-  const getType = (errors, warnings) => {
-    if (errors.length > 0) {
-      return "error";
-    } else if (warnings.length > 0) {
-      return "warning";
-    }
-    return "success";
+  const getType = (tests) => {
+    if (tests.length === 0) return "success";
+    if (tests[0].type === "error") return "error";
+    return "warning";
   };
 
   const typeColor = {
@@ -41,9 +45,7 @@ const Interactions = ({ comparison }) => {
     const interactionIdx = test.mockDetails.location.match(
       /interactions\[(\d+)\]/
     )[1];
-    interactions[interactionIdx][
-      test.type === "error" ? "errors" : "warnings"
-    ].push(test);
+    interactions[interactionIdx].tests.push(test);
   }
   //console.log(interactions);
   return (
@@ -57,66 +59,121 @@ const Interactions = ({ comparison }) => {
           item: {},
         }}
       >
-        {interactions.map(
-          ({ description, request, response, errors, warnings }, idx) => {
-            const type = getType(errors, warnings);
-            return (
-              <Accordion.Item
-                key={idx}
-                value={`interation ${idx}`}
-                style={{ textAlign: "left" }}
-              >
-                <Accordion.Control>
-                  <Group spacing="xs">
-                    <ThemeIcon color={typeColor[type]} size={24} radius="xl">
-                      {typeIcon[type]}
-                    </ThemeIcon>
-                    <Text color={"blue"}>
-                      {description[0].toUpperCase() + description.slice(1)}
-                    </Text>
-                  </Group>
-                </Accordion.Control>
-                <Accordion.Panel>
-                  <h3>Request </h3>
-                  <Card shadow="sm" padding="lg" radius="md" withBorder>
-                    <Stack>
-                      <Group spacing="xs">
-                        <Text fw={700}>Method:</Text>
-                        <Text>{request.method}</Text>
-                      </Group>
-                      <Group spacing="xs">
-                        <Text fw={700}>Path:</Text>
-                        <Text>{request.path}</Text>
-                      </Group>
-                    </Stack>
-                  </Card>
+        {interactions.map(({ description, request, response, tests }, idx) => {
+          const type = getType(tests);
+          return (
+            <Accordion.Item
+              key={idx}
+              value={`interation ${idx}`}
+              style={{ textAlign: "left" }}
+            >
+              <Accordion.Control>
+                <Group spacing="xs">
+                  <ThemeIcon color={typeColor[type]} size={24} radius="xl">
+                    {typeIcon[type]}
+                  </ThemeIcon>
+                  <Text color={"blue"}>
+                    {description[0].toUpperCase() + description.slice(1)}
+                  </Text>
+                </Group>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <Accordion
+                  multiple={true}
+                  variant="separated"
+                  styles={{
+                    label: {},
+                    item: {
+                      width: "100%",
+                      "&[data-type='error']": {
+                        border: "solid red",
+                      },
+                      "&[data-type='warning']": {
+                        border: "solid orange",
+                      },
+                    },
+                  }}
+                >
+                  {tests.map(({ code, message, mockDetails, type }) => {
+                    let { location, value } = mockDetails;
+                    const equality = `${location} = ${JSON.stringify(value)}`;
 
-                  <h3>Expected Response</h3>
-                  <Card shadow="sm" padding="lg" radius="md" withBorder>
-                    <Stack>
-                      <Group spacing="xs">
-                        <Text fw={700}>Status:</Text>
-                        <Text>{response.status}</Text>
-                      </Group>
-                      <Text fw={700}>Headers:</Text>
-                      <Prism language="json">
-                        {JSON.stringify(response.headers)}
-                      </Prism>
-                      {response.body ? (
-                        <>
-                          <Text fw={700}>Body:</Text>
-                          <Prism language="json">
-                            {JSON.stringify(response.body)}
-                          </Prism>
-                        </>
-                      ) : null}
-                    </Stack>
-                  </Card>
-                </Accordion.Panel>
-              </Accordion.Item>
-            );
-          }
-        )}
+                    return (
+                      <Accordion.Item
+                        key={equality}
+                        value={equality}
+                        data-type={type}
+                      >
+                        <Accordion.Control data-type={type}>
+                          <Group spacing="xs">
+                            <ThemeIcon
+                              color={type === "error" ? "red" : "orange"}
+                              size={24}
+                              radius="xl"
+                            >
+                              {type === "error" ? (
+                                <CircleX size="1rem" />
+                              ) : (
+                                <AlertCircle size="1rem" />
+                              )}
+                            </ThemeIcon>
+                            <Title
+                              order={5}
+                              style={{
+                                color: type === "error" ? "red" : "orange",
+                              }}
+                            >
+                              {code}
+                            </Title>
+                          </Group>
+                        </Accordion.Control>
+                        <Accordion.Panel>
+                          <Text>{message}</Text>
+                          <Prism language="jsx">{equality}</Prism>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                    );
+                  })}
+                </Accordion>
+                <h3>Request </h3>
+                <Card shadow="sm" padding="lg" radius="md" withBorder>
+                  <Stack>
+                    <Group spacing="xs">
+                      <Text fw={700}>Method:</Text>
+                      <Text>{request.method}</Text>
+                    </Group>
+                    <Group spacing="xs">
+                      <Text fw={700}>Path:</Text>
+                      <Text>{request.path}</Text>
+                    </Group>
+                  </Stack>
+                </Card>
+
+                <h3>Expected Response</h3>
+                <Card shadow="sm" padding="lg" radius="md" withBorder>
+                  <Stack>
+                    <Group spacing="xs">
+                      <Text fw={700}>Status:</Text>
+                      <Text>{response.status}</Text>
+                    </Group>
+                    <Text fw={700}>Headers:</Text>
+                    <Prism language="json">
+                      {JSON.stringify(response.headers)}
+                    </Prism>
+                    {response.body ? (
+                      <>
+                        <Text fw={700}>Body:</Text>
+                        <Prism language="json">
+                          {JSON.stringify(response.body)}
+                        </Prism>
+                      </>
+                    ) : null}
+                  </Stack>
+                </Card>
+              </Accordion.Panel>
+            </Accordion.Item>
+          );
+        })}
       </Accordion>
     </>
   );
