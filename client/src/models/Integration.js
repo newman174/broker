@@ -28,6 +28,10 @@ class Integration extends BaseModel {
       (comparison) => new Comparison(comparison)
     );
   }
+
+  get name() {
+    return `${this.consumer.name} ⇄ ${this.provider.name}`;
+  }
 }
 
 export default Integration;

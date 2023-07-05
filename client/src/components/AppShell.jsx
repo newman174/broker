@@ -85,7 +85,7 @@ const MyAppShell = ({ children, integrations }) => {
               <Anchor component="span">
                 <Flex>
                   <IconTopologyStarRing2 style={{ marginRight: "0.4rem" }} />
-                  Signet Broker
+                  Signet
                 </Flex>
               </Anchor>
             </Link>
