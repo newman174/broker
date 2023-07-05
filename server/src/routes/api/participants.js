@@ -1,4 +1,5 @@
 import express from "express";
+import db from "../../db/databaseClient.js";
 // import Participant from "../../models/Participant.js";
 
 const router = express.Router();
@@ -15,6 +16,26 @@ Request Body:
 }
 */
 router.patch('/', async (req, res) => {
+  const { participantName, participantVersion, environmentName, deployed } = req.body 
+
+  if (!participantName || !participantVersion || !environmentName || deployed === undefined) {
+    res.status(400).json({ error: 'Error: Request body is invalid' });
+    return;
+  }
+
+  const participant = await db.getParticipant(participantName);
+
+  const environment = await db.createEnvironment(environmentName);
+
+  const participantVersionId = await db.getParticipantVersionByParticipantId(participant.participantId).participantVersionId
+
+
+  if (deployed) {
+    await db.addParticipantVersionToEnvironment(participantVersionId, environment.environmentId)
+  } else {
+    await db.removeParticipantFromEnv(participantVersionId)
+  }
+
   console.log(req.body);
   res.status(200).json(req.body);
 });

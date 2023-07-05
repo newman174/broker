@@ -8,6 +8,7 @@ import VersionContract from "../models/VersionContract.js";
 import WebhookSubscription from "../models/WebhookSubscription.js";
 import Comparison from "../models/Comparison.js";
 import Environment from '../models/Environment.js';
+import VersionEnvironment from '../models/VersionEnvironment.js'
 import objectHash from "object-hash";
 import {
   findOrCreate,
@@ -241,6 +242,24 @@ class DatabaseClient {
       { environmentName },
     );
   }
+
+  async addParticipantVersionToEnvironment(participantVersionId, environmentId) {
+    return await findOrCreate(
+      VersionEnvironment,
+      { participantVersionId,
+        environmentId
+      }
+    )
+  }
+
+  async getParticipantVersionByParticipantId(participantId) {
+     return await ParticipantVersion.query().where({participantId})
+  }
+
+  async removeParticipantFromEnv(participantId) {
+    return await ParticipantVersion.query().deleteBy({ participantId })
+  }
+
 }
 
 export default new DatabaseClient();
