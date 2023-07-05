@@ -1,5 +1,8 @@
+import Comparison from "../models/Comparison.js";
 import { useMemo } from "react";
+import { Box } from "@mantine/core";
 import { CircleCheck, XboxX } from "tabler-icons-react";
+import PropTypes from "prop-types";
 
 import { MantineReactTable, useMantineReactTable } from "mantine-react-table";
 const Matrix = ({ comparisons }) => {
@@ -97,6 +100,15 @@ const Matrix = ({ comparisons }) => {
     enableDensityToggle: false,
   });
 
-  return <MantineReactTable table={table} />;
+  return (
+    <Box style={{ textAlign: "left" }}>
+      <MantineReactTable table={table} />
+    </Box>
+  );
 };
+
+Matrix.propTypes = {
+  comparisons: PropTypes.arrayOf(PropTypes.instanceOf(Comparison)).isRequired,
+};
+
 export default Matrix;
