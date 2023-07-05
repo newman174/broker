@@ -7,6 +7,7 @@ import Integration from "../models/Integration.js";
 import VersionContract from "../models/VersionContract.js";
 import WebhookSubscription from "../models/WebhookSubscription.js";
 import Comparison from "../models/Comparison.js";
+import Environment from '../models/Environment.js';
 import objectHash from "object-hash";
 import {
   findOrCreate,
@@ -195,8 +196,6 @@ class DatabaseClient {
       payload,
     } = details;
 
-    console.log(details);
-
     const specPublishEvents          = events.specPublish          || false;
     const providerVerificationEvents = events.providerVerification || false;
     const comparisonEvents           = events.comparison           || false;
@@ -236,6 +235,13 @@ class DatabaseClient {
     .whereIn('webhookSubscriptions.integrationId', integrationIds);
 
     return records.map(record => record.url);
+  }
+  
+  async createEnvironment(environmentName) {
+    return await findOrCreate(
+      Environment,
+      { environmentName },
+    );
   }
 }
 

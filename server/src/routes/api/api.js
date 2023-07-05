@@ -6,6 +6,7 @@ import integrationsRouter from "./integrations.js";
 // import comparisonRouter from "./comparisons.js";
 import graphRouter from "./graph.js";
 import webhooksRouter from "./webhooks.js";
+import environmentsRouter from "./environments.js";
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/integrations", integrationsRouter);
 // router.use("/comparisons", comparisonRouter);
 router.use("/graph", graphRouter); // debugging
 router.use("/webhooks", webhooksRouter);
+router.use("/environments", environmentsRouter);
 
 export default router;
