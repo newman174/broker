@@ -3,13 +3,7 @@ import ComparisonParticipantDetails from "./ComparisonParticipantDetails.jsx";
 import { XboxX, CircleCheck } from "tabler-icons-react";
 import Comparison from "../models/Comparison.js";
 import PropTypes from "prop-types";
-
-const unique = function (array) {
-  return array.filter((elem, index) => {
-    const firstIndex = array.indexOf(elem);
-    return index === firstIndex;
-  });
-};
+import { generateDetails } from "../utils/participantHelper.js";
 
 const statusIndicator = {
   Success: {
@@ -60,35 +54,9 @@ const comparisonStatusIndicator = (status) => {
  * @param {{comparison: Comparison}} props
  * @returns {React.ReactHTMLElement}
  */
-const ComparisonContainer = ({ comparison }) => {
-  const generateDetails = (participantType) => {
-    const participantVersions =
-      participantType === "Consumer"
-        ? comparison.consumerContract.consumerVersions
-        : comparison.providerSpec.providerVersions;
-
-    const mostRecentVersionPublished = participantVersions.sort(
-      (a, b) => b.createdAt - a.createdAt
-    )[0].createdAt;
-
-    return {
-      participantType,
-      versions: participantVersions
-        .map((participantVersion) => participantVersion.version)
-        .sort()
-        .join(", "),
-      branches: unique(
-        participantVersions
-          .filter((participantVersion) => participantVersion.participantBranch)
-          .map((participantVersion) => participantVersion.participantBranch)
-      ).join(", "),
-      // environments: "dev, test, prod",
-      mostRecentVersionPublished,
-    };
-  };
-
-  const consumerDetails = generateDetails("Consumer");
-  const providerDetails = generateDetails("Provider");
+const ComparisonContainer = ({ comparison, onViewContracts }) => {
+  const consumerDetails = generateDetails(comparison, "Consumer");
+  const providerDetails = generateDetails(comparison, "Provider");
 
   return (
     <Card
@@ -112,7 +80,9 @@ const ComparisonContainer = ({ comparison }) => {
           </Grid.Col>
         ))}
         <Grid.Col md={6} lg={3}>
-          <Button variant="outline">View Contracts</Button>
+          <Button variant="outline" onClick={() => onViewContracts(comparison)}>
+            View Contracts
+          </Button>
         </Grid.Col>
       </Grid>
     </Card>
@@ -121,6 +91,7 @@ const ComparisonContainer = ({ comparison }) => {
 
 ComparisonContainer.propTypes = {
   comparison: PropTypes.instanceOf(Comparison).isRequired,
+  onViewContracts: PropTypes.func.isRequired,
 };
 
 export default ComparisonContainer;

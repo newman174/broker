@@ -31,6 +31,18 @@ dl.participant-details dd {
   text-align: left;
 }
 
+dl.comparison-details dt {
+  font-weight: bold;
+  opacity: 0.4;
+  text-align: left;
+}
+
+dl.comparison-details dd {
+  margin-inline-start: 0;
+  margin-bottom: 0.5em;
+  text-align: left;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

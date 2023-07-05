@@ -11,7 +11,7 @@ const latest = (array) => array.sort((a, b) => b.createdAt - a.createdAt)[0];
  * @param {Comparison[]} props.comparisons
  * @returns {React.ReactHTMLElement}
  */
-const IntegrationOverviewTab = ({ comparisons }) => {
+const IntegrationOverviewTab = ({ comparisons, onViewContracts }) => {
   return (
     <div>
       {comparisons
@@ -21,7 +21,11 @@ const IntegrationOverviewTab = ({ comparisons }) => {
             latest(a.providerSpec.providerVersions).createdAt
         )
         .map((comparison) => (
-          <ComparisonContainer key={comparison.id} comparison={comparison} />
+          <ComparisonContainer
+            key={comparison.id}
+            comparison={comparison}
+            onViewContracts={onViewContracts}
+          />
         ))}
     </div>
   );
@@ -29,6 +33,7 @@ const IntegrationOverviewTab = ({ comparisons }) => {
 
 IntegrationOverviewTab.propTypes = {
   comparisons: PropTypes.arrayOf(PropTypes.instanceOf(Comparison)).isRequired,
+  onViewContracts: PropTypes.func.isRequired,
 };
 
 export default IntegrationOverviewTab;
