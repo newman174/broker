@@ -23,6 +23,10 @@ const Integration = () => {
   const handleViewContracts = (comparison) => {
     setActiveTab("contracts");
     setComparison(comparison);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return integration ? (
@@ -58,9 +62,11 @@ const Integration = () => {
         <Tabs.Panel value="webhooks">
           <h4>Webhooks</h4>
         </Tabs.Panel>
-        <Tabs.Panel value="contracts">
-          {comparison ? <Contracts comparison={comparison} /> : null}
-        </Tabs.Panel>
+        {activeTab === "contracts" ? (
+          <Tabs.Panel value="contracts">
+            {comparison ? <Contracts comparison={comparison} /> : null}
+          </Tabs.Panel>
+        ) : null}
       </Tabs>
     </>
   ) : null;

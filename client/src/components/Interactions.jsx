@@ -15,8 +15,10 @@ import { Prism } from "@mantine/prism";
 const Interactions = ({ comparison }) => {
   const { result, consumerContract } = comparison;
   const interactions = consumerContract.contract.interactions.map(
-    ({ description, request, response }) => ({
-      description,
+    ({ description, request, response, providerStates }) => ({
+      description:
+        description +
+        (providerStates[0]?.name ? " given " + providerStates[0].name : ""),
       request,
       response,
       tests: [],
