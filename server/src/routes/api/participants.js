@@ -23,11 +23,10 @@ router.patch('/', async (req, res) => {
     return;
   }
 
-  const participant = await db.getParticipant(participantName);
-
   const environmentRecord = await db.createEnvironment(environmentName);
 
-  const participantVersionId = (await db.getParticipantVersion(participant.participantId, participantVersion)).participantVersionId
+  // 
+  const participantVersionId = await db.getParticipantVersionId(participantName, participantVersion)
 
   if (!participantVersionId) {
     res.status(400).json({error: 'Participant does not exist'})

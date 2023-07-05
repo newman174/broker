@@ -252,10 +252,22 @@ class DatabaseClient {
     )
   }
 
-  async getParticipantVersion(participantId, participantVersion) {
-     return (await ParticipantVersion.query()
-       .where({participantId})
-       .andWhere({participantVersion}))[0];
+  async getParticipantVersionId(participantName, participantVersion) {
+
+    // SELECT participantVersionId from participantVersion 
+    // JOIN participants ON partipants.participantId = participantVersions.participantId
+    // WHERE participantName = $1 AND participantVersion = $2;
+    
+     return (await ParticipantVersion
+      .query()
+      .select('participantVersionId')
+      .innerJoin(
+        'participants',
+        'participants.participantId',
+        'participantVersions.participantId'
+      )
+      .where('participantName', participantName)
+      .where('participantVersion', participantVersion))[0];
   }
 
   async removeParticipantFromEnvironment(participantVersionId) {
