@@ -24,20 +24,4 @@ router.post('/', async (req, res) => {
   res.status(201).json(environmentRecord);
 });
 
-/*
-Updates the deployment status of a participant version in an environment
-
-Request Body:
-{
-  environmentName: (string)
-  participantName: (string)
-  participantVersion: (string)
-  deployed: (bool)
-}
-*/
-router.patch('/', async (req, res) => {
-  console.log(req.body);
-  res.status(200).json(req.body);
-});
-
 export default router
