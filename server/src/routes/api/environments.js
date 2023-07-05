@@ -8,7 +8,7 @@ router.post('/', (req, res) => {
   if (!environmentName || typeof environmentName !== "string") {
     return res
       .status(400)
-      .json({error: "Request body must have an environmentName (string) property"});
+      .json({error: 'Request body must have an environmentName (string) property'});
   }
 
   const environmentRecord = db.createEnvironment(environmentName);
