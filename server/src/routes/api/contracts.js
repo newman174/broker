@@ -33,7 +33,6 @@ const router = express.Router();
  * @returns {object} The created contract
  */
 router.post("/", async (req, res) => {
-  console.log(req.body);
   const { contract, consumerName, consumerVersion, consumerBranch } = req.body;
 
   if (!(await validateSchema(contract, "consumer"))) {
@@ -56,10 +55,10 @@ router.post("/", async (req, res) => {
     consumerVersion,
     consumerBranch
   );
-
-  res.status(201).json(contractRecord);
-
+  
   comp.compareWithProviderSpecs(contractRecord.consumerContractId);
+  
+  res.status(201).json(contractRecord);
 });
 
 /**

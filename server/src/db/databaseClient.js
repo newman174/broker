@@ -5,6 +5,10 @@ import Participant from "../models/Participant.js";
 import ParticipantVersion from "../models/ParticipantVersion.js";
 import Integration from "../models/Integration.js";
 import VersionContract from "../models/VersionContract.js";
+import WebhookSubscription from "../models/WebhookSubscription.js";
+import Comparison from "../models/Comparison.js";
+import Environment from '../models/Environment.js';
+import VersionEnvironment from '../models/VersionEnvironment.js'
 import objectHash from "object-hash";
 import {
   findOrCreate,
@@ -109,8 +113,6 @@ class DatabaseClient {
         }
       );
 
-      console.log("participantVersionId: ", participantVersionId);
-
       await findOrCreate(VersionSpec, {
         providerSpecId: specRecord.providerSpecId,
         providerVersionId: participantVersionId,
@@ -176,6 +178,95 @@ class DatabaseClient {
 
   async getConsumerContractsByIntegrationId(integrationId) {
     return await ConsumerContract.query().where({ integrationId });
+  }
+
+  async integrationExists(integrationId) {
+    return !!(await Integration.query().findById(integrationId));
+  }
+
+  async createWebhookSubscription(details) {
+    const {
+      integrationId,
+      events,
+      url,
+      enabled,
+      description,
+      headers,
+      payload,
+    } = details;
+
+    const specPublishEvents          = events.specPublish          || false;
+    const providerVerificationEvents = events.providerVerification || false;
+    const comparisonEvents           = events.comparison           || false;
+
+    return await findAndUpdateOrCreate(
+      WebhookSubscription,
+      {integrationId, url},
+      {
+        integrationId,
+        specPublishEvents,
+        providerVerificationEvents,
+        comparisonEvents,
+        url,
+        enabled,
+        description,
+        headers,
+        payload,
+      },
+    );
+  }
+
+  async getParticipantById(participantId) {
+    return await Participant.query().findById(participantId);
+  }
+
+  async getURLsForEvent(event, integrationIds) {
+    const records = await WebhookSubscription
+    .query()
+    .select('url')
+    .innerJoin(
+      'integrations',
+      'webhookSubscriptions.integrationId',
+      'integrations.integrationId'
+    )
+    .where('enabled', true)
+    .where(event, true)
+    .whereIn('webhookSubscriptions.integrationId', integrationIds);
+
+    return records.map(record => record.url);
+  }
+  
+  async createEnvironment(environmentName) {
+    return await findOrCreate(
+      Environment,
+      { environmentName },
+    );
+  }
+
+  async addParticipantVersionToEnvironment(participantVersionId, environmentId) {
+    return await findOrCreate(
+      VersionEnvironment,
+      { participantVersionId,
+        environmentId
+      }
+    )
+  }
+
+  async getParticipantVersion(participantName, participantVersion) {
+     return (await ParticipantVersion
+      .query()
+      .select('participantVersionId')
+      .innerJoin(
+        'participants',
+        'participants.participantId',
+        'participantVersions.participantId'
+      )
+      .where('participantName', participantName)
+      .where('participantVersion', participantVersion))[0];
+  }
+
+  async removeParticipantFromEnvironment(participantVersionId) {
+    return await VersionEnvironment.query().deleteById(participantVersionId);
   }
 }
 

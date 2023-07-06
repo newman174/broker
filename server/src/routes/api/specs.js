@@ -1,5 +1,6 @@
 import express from "express";
 import db from "../../db/databaseClient.js";
+import webhook from "../../services/webhookService.js";
 import comp from "../../services/comparisonService.js";
 import { validateSchema } from "../../services/contractSchema.js";
 import YAML from "yaml";
@@ -23,7 +24,7 @@ router.post("/", async (req, res) => {
   }
 
   if (!(await validateSchema(spec, "provider"))) {
-    return res.status(400).json({ error: "Spec schema is invalid" });
+    return res.status(400).json({error: "Spec schema is invalid"});
   }
 
   const provider = await db.getParticipant(providerName);
@@ -36,9 +37,11 @@ router.post("/", async (req, res) => {
     providerBranch
   );
 
-  res.status(201).json(specRecord);
+  webhook.newSpecEvent(specRecord);
 
   comp.compareWithConsumerContracts(specRecord.providerSpecId);
+
+  res.status(201).json(specRecord);
 });
 
 export default router;

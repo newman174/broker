@@ -151,6 +151,61 @@ export function up(knex) {
         .index();
       table.timestamps(true, true);
       table.unique(["provider_version_id", "provider_spec_id"]);
+    })
+    .createTable("webhook_subscriptions", (table) => {
+      table.increments("webhook_subscription_id").primary();
+      table
+        .integer("integration_id")
+        .unsigned()
+        .notNullable()
+        .references("integration_id")
+        .inTable("integrations")
+        .onDelete("CASCADE")
+        .index();
+      table
+        .boolean("spec_publish_events")
+        .notNullable()
+        .defaultTo(false);
+      table
+        .boolean("provider_verification_events")
+        .notNullable()
+        .defaultTo(false);
+      table
+        .boolean("comparison_events")
+        .notNullable()
+        .defaultTo(false);
+      table.string("url").notNullable();
+      table.boolean("enabled").notNullable().defaultTo(true);
+      table.string("description");
+      table.text("headers");
+      table.text("payload");
+      table.timestamps(true, true);
+    })
+    .createTable("environments", (table) => {
+      table.increments("environment_id").primary();
+      table.string("environment_name").unique().notNullable();
+      table.timestamps(true, true);
+    })
+    .createTable("versions_environments", (table) => {
+      table.increments("version_environment_id").primary();
+      table
+        .integer("participant_version_id")
+        .unsigned()
+        .notNullable()
+        .references("participant_version_id")
+        .inTable("participant_versions")
+        .onDelete("CASCADE")
+        .index();
+      table
+        .integer("environment_id")
+        .unsigned()
+        .notNullable()
+        .references("environment_id")
+        .inTable("environments")
+        .onDelete("CASCADE")
+        .index();
+      table.timestamps(true, true);
+      table.unique(["participant_version_id", "environment_id"]);
     });
 }
 
