@@ -19,7 +19,9 @@ app.use("/api", apiRouter);
 const PORT = process.env.PORT;
 
 const server = app.listen(PORT, () => {
-  console.log(`Server running on port http://localhost:${PORT}`);
+  console.log(
+    `\x1b[92m➜\x1b[0m Server running on port\x1b[96m http://localhost:${PORT}\x1b[0m`
+  );
 });
 
 export default server;
