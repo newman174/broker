@@ -2,6 +2,7 @@ import BaseModel from "./BaseModel.js";
 import ConsumerContract from "./ConsumerContract.js";
 import ProviderSpec from "./ProviderSpec.js";
 import Participant from "./Participant.js";
+import Environment from "./Environment.js";
 
 class ParticipantVersion extends BaseModel {
   static get tableName() {
@@ -39,6 +40,18 @@ class ParticipantVersion extends BaseModel {
         join: {
           from: "participantVersions.participantId",
           to: "participants.participantId",
+        },
+      },
+      environments: {
+        relation: BaseModel.ManyToManyRelation,
+        modelClass: Environment,
+        join: {
+          from: "participantVersions.participantVersionId",
+          through: {
+            from: "versionsEnvironments.participantVersionId",
+            to: "versionsEnvironments.environmentId",
+          },
+          to: "environments.environmentId",
         },
       },
     };

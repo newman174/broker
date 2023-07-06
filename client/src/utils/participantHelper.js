@@ -25,7 +25,14 @@ export const generateDetails = (comparison, participantType) => {
         .filter((participantVersion) => participantVersion.participantBranch)
         .map((participantVersion) => participantVersion.participantBranch)
     ).join(", "),
-    // environments: "dev, test, prod",
+    environments:
+      participantVersions
+        .map((participantVersion) =>
+          participantVersion.environments.map(
+            (environment) => environment.environmentName
+          )
+        )
+        .join(", ") || "N/A",
     mostRecentVersionPublished,
   };
 };

@@ -10,7 +10,7 @@ const ComparisonParticipantDetails = ({ participantDetails }) => {
     participantType,
     versions,
     branches,
-    // environments,
+    environments,
     mostRecentVersionPublished,
   } = participantDetails;
 
@@ -20,8 +20,8 @@ const ComparisonParticipantDetails = ({ participantDetails }) => {
       <dd>{versions}</dd>
       <dt>Branches</dt>
       <dd>{branches || "(none)"}</dd>
-      {/* <dt>Environments</dt> */}
-      {/* <dd>{environments}</dd> */}
+      <dt>Environments</dt>
+      <dd>{environments}</dd>
       <dt>Last Published</dt>
       <dd>
         <ReactTimeAgo date={mostRecentVersionPublished} />
@@ -35,7 +35,7 @@ ComparisonParticipantDetails.propTypes = {
     participantType: PropTypes.string.isRequired,
     versions: PropTypes.string.isRequired,
     branches: PropTypes.string.isRequired,
-    // environments: PropTypes.string.isRequired,
+    environments: PropTypes.string.isRequired,
     mostRecentVersionPublished: PropTypes.number.isRequired,
   }).isRequired,
 };

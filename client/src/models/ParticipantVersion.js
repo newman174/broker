@@ -14,6 +14,7 @@ class ParticipantVersion extends BaseModel {
     participantVersion,
     participantId,
     participantBranch,
+    environments = [],
   }) {
     super({ createdAt, updatedAt });
     this.id = participantVersionId;
@@ -25,6 +26,7 @@ class ParticipantVersion extends BaseModel {
     this.version = participantVersion;
     this.participantId = participantId;
     this.participantBranch = participantBranch;
+    this.environments = environments;
   }
 }
 
