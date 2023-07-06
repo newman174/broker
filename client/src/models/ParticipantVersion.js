@@ -2,6 +2,8 @@ import BaseModel from "./BaseModel.js";
 import Contract from "./Contract.js";
 import Participant from "./Participant.js";
 import Spec from "./Spec.js";
+import Environment from "./Environment.js";
+import { unique } from "../utils/helpers.js";
 
 class ParticipantVersion extends BaseModel {
   constructor({
@@ -26,7 +28,15 @@ class ParticipantVersion extends BaseModel {
     this.version = participantVersion;
     this.participantId = participantId;
     this.participantBranch = participantBranch;
-    this.environments = environments;
+    this.environments = environments.map(
+      (environment) => new Environment(environment)
+    );
+  }
+
+  environmentNames() {
+    return unique(
+      this.environments.map((environment) => environment.name).sort()
+    );
   }
 }
 

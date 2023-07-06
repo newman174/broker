@@ -1,9 +1,5 @@
-const unique = function (array) {
-  return array.filter((elem, index) => {
-    const firstIndex = array.indexOf(elem);
-    return index === firstIndex;
-  });
-};
+import { unique } from "./helpers";
+
 export const generateDetails = (comparison, participantType) => {
   const participantVersions =
     participantType === "Consumer"
@@ -17,12 +13,8 @@ export const generateDetails = (comparison, participantType) => {
   const environments =
     unique(
       participantVersions
-        .map((participantVersion) =>
-          participantVersion.environments.map(
-            (environment) => environment.environmentName
-          )
-        )
-        .filter((env) => env)
+        .map((participantVersion) => participantVersion.environmentNames())
+        .flat()
     ).join(", ") || "N/A";
 
   return {
