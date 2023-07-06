@@ -49,7 +49,7 @@ const Interactions = ({ comparison }) => {
     )[1];
     interactions[interactionIdx].tests.push(test);
   }
-  //console.log(interactions);
+
   return (
     <>
       <h3 style={{ textAlign: "left" }}>Interactions</h3>

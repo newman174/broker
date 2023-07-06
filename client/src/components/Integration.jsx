@@ -38,7 +38,7 @@ const Integration = () => {
         <Tabs.List>
           <Tabs.Tab value="overview">Overview</Tabs.Tab>
           <Tabs.Tab value="matrix">Matrix</Tabs.Tab>
-          <Tabs.Tab value="webhooks">Webhooks</Tabs.Tab>
+          {/* <Tabs.Tab value="webhooks">Webhooks</Tabs.Tab> */}
           <Tabs.Tab
             value="contracts"
             style={activeTab === "contracts" ? {} : { display: "none" }}
@@ -59,9 +59,9 @@ const Integration = () => {
           <Matrix comparisons={integration.comparisons} />
         </Tabs.Panel>
 
-        <Tabs.Panel value="webhooks">
+        {/* <Tabs.Panel value="webhooks">
           <h4>Webhooks</h4>
-        </Tabs.Panel>
+        </Tabs.Panel> */}
         {activeTab === "contracts" ? (
           <Tabs.Panel value="contracts">
             {comparison ? <Contracts comparison={comparison} /> : null}

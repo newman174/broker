@@ -21,7 +21,6 @@ router.get("/:id", async (req, res) => {
   const integrationId = Number(req.params.id);
   const integration = await db.getIntegrationById(integrationId);
 
-  console.log(integration);
   res.status(200).json(integration);
 });
 

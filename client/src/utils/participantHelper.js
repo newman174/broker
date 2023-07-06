@@ -1,9 +1,5 @@
-const unique = function (array) {
-  return array.filter((elem, index) => {
-    const firstIndex = array.indexOf(elem);
-    return index === firstIndex;
-  });
-};
+import { unique } from "./helpers";
+
 export const generateDetails = (comparison, participantType) => {
   const participantVersions =
     participantType === "Consumer"
@@ -14,8 +10,16 @@ export const generateDetails = (comparison, participantType) => {
     (a, b) => b.createdAt - a.createdAt
   )[0].createdAt;
 
+  const environments =
+    unique(
+      participantVersions
+        .map((participantVersion) => participantVersion.environmentNames())
+        .flat()
+    ).join(", ") || "N/A";
+
   return {
     participantType,
+    environments,
     versions: participantVersions
       .map((participantVersion) => participantVersion.version)
       .sort()
@@ -25,7 +29,6 @@ export const generateDetails = (comparison, participantType) => {
         .filter((participantVersion) => participantVersion.participantBranch)
         .map((participantVersion) => participantVersion.participantBranch)
     ).join(", "),
-    // environments: "dev, test, prod",
     mostRecentVersionPublished,
   };
 };
