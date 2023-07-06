@@ -32,3 +32,11 @@ export const generateDetails = (comparison, participantType) => {
     mostRecentVersionPublished,
   };
 };
+
+export const formatDetail = (detail) => {
+  return detail === "" ? "N/A" : detail;
+};
+
+export const formatEnvs = (envs) => {
+  return envs.length === 0 ? "N/A" : envs.map((env) => env.name).join(", ");
+};
