@@ -14,8 +14,20 @@ export const generateDetails = (comparison, participantType) => {
     (a, b) => b.createdAt - a.createdAt
   )[0].createdAt;
 
+  const environments =
+    unique(
+      participantVersions
+        .map((participantVersion) =>
+          participantVersion.environments.map(
+            (environment) => environment.environmentName
+          )
+        )
+        .filter((env) => env)
+    ).join(", ") || "N/A";
+
   return {
     participantType,
+    environments,
     versions: participantVersions
       .map((participantVersion) => participantVersion.version)
       .sort()
@@ -25,14 +37,6 @@ export const generateDetails = (comparison, participantType) => {
         .filter((participantVersion) => participantVersion.participantBranch)
         .map((participantVersion) => participantVersion.participantBranch)
     ).join(", "),
-    environments:
-      participantVersions
-        .map((participantVersion) =>
-          participantVersion.environments.map(
-            (environment) => environment.environmentName
-          )
-        )
-        .join(", ") || "N/A",
     mostRecentVersionPublished,
   };
 };

@@ -19,7 +19,7 @@ const ComparisonParticipantDetails = ({ participantDetails }) => {
       <dt>{participantType} Versions</dt>
       <dd>{versions}</dd>
       <dt>Branches</dt>
-      <dd>{branches || "(none)"}</dd>
+      <dd>{branches || "N/A"}</dd>
       <dt>Environments</dt>
       <dd>{environments}</dd>
       <dt>Last Published</dt>
