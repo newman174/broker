@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
+  Anchor,
   AppShell,
   Navbar,
   Header,
@@ -19,13 +20,16 @@ import {
   IconSun,
   IconMoonStars,
   IconTopologyStarRing2,
+  IconSettings,
 } from "@tabler/icons-react";
+import Integration from "../models/Integration.js";
 
 const MyAppShell = ({ children, integrations }) => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+  const navigate = useNavigate();
 
   return (
     <AppShell
@@ -78,12 +82,23 @@ const MyAppShell = ({ children, integrations }) => {
             </MediaQuery>
 
             <Link to={"/"}>
-              <Flex>
-                <IconTopologyStarRing2 style={{ marginRight: "0.4rem" }} />
-                Signet Broker
-              </Flex>
+              <Anchor component="span">
+                <Flex>
+                  <IconTopologyStarRing2 style={{ marginRight: "0.4rem" }} />
+                  Signet
+                </Flex>
+              </Anchor>
             </Link>
-            <div style={{ marginLeft: "auto" }}>
+            <Flex style={{ marginLeft: "auto" }}>
+              <ActionIcon
+                variant="outline"
+                color={dark ? "yellow" : "blue"}
+                onClick={() => navigate("/settings")}
+                title="Settings"
+                style={{ marginRight: "2rem" }}
+              >
+                <IconSettings />
+              </ActionIcon>
               <ActionIcon
                 variant="outline"
                 color={dark ? "yellow" : "blue"}
@@ -96,32 +111,19 @@ const MyAppShell = ({ children, integrations }) => {
                   <IconMoonStars size="1.1rem" />
                 )}
               </ActionIcon>
-            </div>
+            </Flex>
           </div>
         </Header>
       }
     >
-      {/* <Text>Resize app to see responsive navbar in action</Text> */}
       {children}
     </AppShell>
   );
 };
 
-// MyAppShell.propTypes = {
-//   children: PropTypes.node.isRequired,
-//   integrations: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       integrationId: PropTypes.number.isRequired,
-//       consumer: PropTypes.shape({
-//         participantId: PropTypes.number.isRequired,
-//         participantName: PropTypes.string.isRequired,
-//       }).isRequired,
-//       provider: PropTypes.shape({
-//         participantId: PropTypes.number.isRequired,
-//         participantName: PropTypes.string.isRequired,
-//       }).isRequired,
-//     })
-//   ).isRequired,
-// };
+MyAppShell.propTypes = {
+  children: PropTypes.node.isRequired,
+  integrations: PropTypes.arrayOf(PropTypes.instanceOf(Integration)).isRequired,
+};
 
 export default MyAppShell;

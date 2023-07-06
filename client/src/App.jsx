@@ -4,6 +4,8 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { integrationService } from "./services/apiService.js";
 import AppShell from "./components/AppShell.jsx";
 import { Integration } from "./components/Integration.jsx";
+import SettingsMenu from "./components/SettingsMenu.jsx";
+import { Card, Title } from "@mantine/core";
 
 const fetchAndSet = async (service, setter) => {
   const data = await service.getAll();
@@ -22,7 +24,14 @@ const App = () => {
   return (
     <AppShell integrations={integrations}>
       <Routes>
-        <Route path="/" element={<h1>Signet Contract Broker</h1>} />
+        <Route
+          path="/"
+          element={
+            <Card>
+              <Title order={1}>Signet Contract Broker</Title>
+            </Card>
+          }
+        />
         <Route
           path="integrations/:integrationId"
           element={
@@ -30,6 +39,10 @@ const App = () => {
               <Integration />
             ) : null
           }
+        />
+        <Route
+          path="/settings/*"
+          element={<SettingsMenu integrations={integrations} />}
         />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
