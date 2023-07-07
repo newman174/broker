@@ -68,6 +68,7 @@ jobs:
       - run: npm test
         working-directory: server
         env:
+          POSTGRES_HOST: localhost
           TEST_DB_USER: postgres
           TEST_DB_PASSWORD: postgres
           TEST_DB_HOST: localhost
