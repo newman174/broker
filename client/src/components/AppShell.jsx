@@ -13,13 +13,14 @@ import {
   Burger,
   useMantineTheme,
   Flex,
+  Image,
 } from "@mantine/core";
 import IntegrationNavLinks from "./IntegrationNavLinks.jsx";
 import { ActionIcon, useMantineColorScheme } from "@mantine/core";
 import {
   IconSun,
   IconMoonStars,
-  IconTopologyStarRing2,
+  // IconTopologyStarRing2,
   IconSettings,
 } from "@tabler/icons-react";
 import Integration from "../models/Integration.js";
@@ -84,8 +85,11 @@ const MyAppShell = ({ children, integrations }) => {
             <Link to={"/"}>
               <Anchor component="span">
                 <Flex>
-                  <IconTopologyStarRing2 style={{ marginRight: "0.4rem" }} />
-                  Signet
+                  {/* <IconTopologyStarRing2 style={{ marginRight: "0.4rem" }} /> */}
+                  <Image
+                    src="/transparent-logo-horizontal-mn.svg"
+                    height={97}
+                  />
                 </Flex>
               </Anchor>
             </Link>

@@ -37,7 +37,7 @@ function Root() {
       toggleColorScheme={toggleColorScheme}
     >
       <MantineProvider
-        theme={{ colorScheme }}
+        theme={{ colorScheme, fontFamily: "Nunito" }}
         withGlobalStyles
         withNormalizeCSS
       >
