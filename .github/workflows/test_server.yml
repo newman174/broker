@@ -59,6 +59,8 @@ jobs:
           TEST_DB_HOST: localhost
           TEST_DB_PORT: 5432
           PGPASSWORD: postgres
+          PGUSER: postgres
+          PGHOST: localhost
 
       - run: npm test
         working-directory: server
@@ -70,3 +72,5 @@ jobs:
           PORT: 3001
           NODE_ENV: test
           PGPASSWORD: postgres
+          PGUSER: postgres
+          PGHOST: localhost
