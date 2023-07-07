@@ -6,9 +6,9 @@ export const generateDetails = (comparison, participantType) => {
       ? comparison.consumerContract.consumerVersions
       : comparison.providerSpec.providerVersions;
 
-  const mostRecentVersionPublished = participantVersions.sort(
-    (a, b) => b.createdAt - a.createdAt
-  )[0].createdAt;
+  const mostRecentVersionPublished =
+    participantVersions.sort((a, b) => b.createdAt - a.createdAt)[0]
+      ?.createdAt || comparison.createdAt;
 
   const environments =
     unique(
@@ -20,10 +20,7 @@ export const generateDetails = (comparison, participantType) => {
   return {
     participantType,
     environments,
-    versions: participantVersions
-      .map((participantVersion) => participantVersion.version)
-      .sort()
-      .join(", "),
+    versions: formatVersions(participantVersions),
     branches: unique(
       participantVersions
         .filter((participantVersion) => participantVersion.participantBranch)
@@ -39,4 +36,13 @@ export const formatDetail = (detail) => {
 
 export const formatEnvs = (envs) => {
   return envs.length === 0 ? "N/A" : envs.map((env) => env.name).join(", ");
+};
+
+export const formatVersions = (versions) => {
+  return versions.length === 0
+    ? "N/A"
+    : versions
+        .map((version) => version.version)
+        .sort()
+        .join(", ");
 };
