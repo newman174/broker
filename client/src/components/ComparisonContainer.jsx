@@ -66,19 +66,22 @@ const ComparisonContainer = ({ comparison, onViewContracts }) => {
         border:
           "2px solid " + (statusIndicator[comparison.status]?.color || "black"),
       }}
+      maw={1200}
+      ml="auto"
+      mr="auto"
     >
       <Grid align="center">
-        <Grid.Col md={6} lg={3}>
+        <Grid.Col span={3}>
           {comparisonStatusIndicator(comparison.status)}
         </Grid.Col>
         {[consumerDetails, providerDetails].map((participantDetails) => (
-          <Grid.Col md={6} lg={3} key={participantDetails.participantType}>
+          <Grid.Col span={3} key={participantDetails.participantType}>
             <ComparisonParticipantDetails
               participantDetails={participantDetails}
             />
           </Grid.Col>
         ))}
-        <Grid.Col md={6} lg={3}>
+        <Grid.Col span={1}>
           <Button variant="outline" onClick={() => onViewContracts(comparison)}>
             View Contracts
           </Button>

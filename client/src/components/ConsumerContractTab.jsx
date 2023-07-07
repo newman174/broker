@@ -31,4 +31,5 @@ const ConsumerContractTab = ({ comparison }) => {
 ConsumerContractTab.propTypes = {
   comparison: PropTypes.instanceOf(Comparison).isRequired,
 };
+
 export default ConsumerContractTab;

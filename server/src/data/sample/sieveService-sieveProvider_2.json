@@ -4,7 +4,7 @@
   },
   "interactions": [
     {
-      "description": "a request to get the sieve result",
+      "description": "A request to get the sieve result",
       "providerStates": [
         {
           "name": "a number n"
@@ -21,11 +21,7 @@
         "path": "/api/sieve"
       },
       "response": {
-        "body": [
-          "3",
-          "5",
-          "7"
-        ],
+        "body": "3",
         "headers": {
           "content-type": "application/json"
         },
@@ -46,49 +42,7 @@
       }
     },
     {
-      "description": "a request to get the sieve result",
-      "providerStates": [
-        {
-          "name": "a number ns"
-        }
-      ],
-      "request": {
-        "body": {
-          "n": 10
-        },
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "method": "POST",
-        "path": "/api/sieve"
-      },
-      "response": {
-        "body": [
-          "3",
-          "5",
-          "7"
-        ],
-        "headers": {
-          "content-type": "application/json"
-        },
-        "matchingRules": {
-          "body": {
-            "$": {
-              "combine": "AND",
-              "matchers": [
-                {
-                  "match": "type"
-                }
-              ]
-            }
-          },
-          "header": {}
-        },
-        "status": 200
-      }
-    },
-    {
-      "description": "a request to get the sieve result",
+      "description": "A request to get the sieve result",
       "providerStates": [
         {
           "name": "an invalid input, a negative number"
