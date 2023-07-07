@@ -10,7 +10,7 @@
     "nomon": "node src/app.js",
     "resetdb": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest",
     "resetdb:seed": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest && NODE_ENV=development knex seed:run",
-    "resetdb:test": "cd src/db/ && dropdb -h localhost test_broker --if-exists && createdb -h localhost test_broker && NODE_ENV=test knex migrate:latest && NODE_ENV=test knex seed:run"
+    "resetdb:test": "cd src/db/ && dropdb -h localhost test_broker -U postgres --if-exists && createdb -h localhost test_broker -U postgres && NODE_ENV=test knex migrate:latest && NODE_ENV=test knex seed:run"
   },
   "keywords": [],
   "author": "",
