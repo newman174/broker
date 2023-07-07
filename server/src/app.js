@@ -10,7 +10,13 @@ import { fileURLToPath } from "url";
 
 const app = express();
 
+export const srcDir = dirname(fileURLToPath(import.meta.url));
+
 app.use(morgan("tiny"));
+
+console.log(`srcDir = ${srcDir}`);
+app.use(express.static(srcDir + "/../../client/dist"));
+
 app.use(express.json());
 
 app.use("/", indexRouter);
@@ -25,5 +31,3 @@ const server = app.listen(PORT, () => {
 });
 
 export default server;
-
-export const srcDir = dirname(fileURLToPath(import.meta.url));
