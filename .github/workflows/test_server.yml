@@ -54,16 +54,11 @@ jobs:
         run: NODE_ENV=test npx knex migrate:latest && NODE_ENV=test npx knex seed:run
         working-directory: server/src/db
         env:
+          POSTGRES_HOST: localhost
           TEST_DB_USER: postgres
           TEST_DB_PASSWORD: postgres
           TEST_DB_HOST: localhost
           TEST_DB_PORT: 5432
-          
-      - name: Checkout source
-        uses: actions/checkout@v3
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
 
       - run: npm test
         working-directory: server
