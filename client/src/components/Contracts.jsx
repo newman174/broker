@@ -1,6 +1,6 @@
 import Comparison from "../models/Comparison.js";
 import PropTypes from "prop-types";
-import { Tabs, Box, Group, Divider, Card } from "@mantine/core";
+import { Tabs, Box, Group, Divider, Card, Title } from "@mantine/core";
 import ComparisonTab from "./ComparisonTab.jsx";
 import ConsumerContractTab from "./ConsumerContractTab.jsx";
 import ProviderSpecTab from "./ProviderSpecTab.jsx";
@@ -20,7 +20,9 @@ const Contracts = ({ comparison }) => {
         withBorder
         style={{ textAlign: "left" }}
       >
-        <h3 style={{ marginBottom: "-10px" }}>Consumer Details</h3>
+        <Title order={3} style={{ marginBottom: "-10px" }}>
+          Consumer Details
+        </Title>
         <Group spacing="10rem">
           <dl className="comparison-details">
             <dt>Versions</dt>
@@ -39,7 +41,9 @@ const Contracts = ({ comparison }) => {
           </dl>
         </Group>
         <Divider my="sm" />
-        <h3 style={{ marginBottom: "-10px" }}>Provider Details</h3>
+        <Title order={3} style={{ marginBottom: "-10px" }}>
+          Provider Details
+        </Title>
         <Group spacing="10rem">
           <dl className="comparison-details">
             <dt>Versions</dt>

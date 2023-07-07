@@ -1,7 +1,7 @@
 import Comparison from "../models/Comparison.js";
 import PropTypes from "prop-types";
 import ComparisonDetails from "./ComparisonDetails.jsx";
-import { Stack, Group } from "@mantine/core";
+import { Stack, Group, Title } from "@mantine/core";
 import ReactTimeAgo from "react-time-ago";
 
 const ComparisonTab = ({ comparison }) => {
@@ -19,7 +19,9 @@ const ComparisonTab = ({ comparison }) => {
 
   return (
     <>
-      <h3 style={{ textAlign: "left" }}>Contract Comparison Detail</h3>
+      <Title order={3} mt={"lg"} style={{ textAlign: "left" }}>
+        Contract Comparison Detail
+      </Title>
       <Group spacing="10rem">
         <dl className="comparison-details">
           <dt>Contract Comparison Status</dt>

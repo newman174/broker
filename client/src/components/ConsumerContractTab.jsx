@@ -1,13 +1,15 @@
 import Comparison from "../models/Comparison.js";
 import PropTypes from "prop-types";
-import { Group } from "@mantine/core";
+import { Group, Title } from "@mantine/core";
 import Interactions from "./Interactions.jsx";
 
 const ConsumerContractTab = ({ comparison }) => {
   const { result, consumerContract } = comparison;
   return (
     <>
-      <h3 style={{ textAlign: "left" }}>Consumer Contract</h3>
+      <Title mt={"lg"} order={3} style={{ textAlign: "left" }}>
+        Consumer Contract
+      </Title>
       <Group spacing="10rem">
         <dl className="comparison-details">
           <dt>Consumer Contract Status</dt>

@@ -37,7 +37,16 @@ function Root() {
       toggleColorScheme={toggleColorScheme}
     >
       <MantineProvider
-        theme={{ colorScheme }}
+        theme={{
+          colorScheme,
+          fontFamily: "Nunito",
+          colors: { signetPurple: ["#541594"], signetBlue: ["#0CBAFF"] },
+          defaultGradient: {
+            from: "#0CBAFF",
+            to: "#541594",
+            deg: 45,
+          },
+        }}
         withGlobalStyles
         withNormalizeCSS
       >

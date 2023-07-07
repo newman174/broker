@@ -5,7 +5,7 @@ import { integrationService } from "./services/apiService.js";
 import AppShell from "./components/AppShell.jsx";
 import { Integration } from "./components/Integration.jsx";
 import SettingsMenu from "./components/SettingsMenu.jsx";
-import { Card, Title } from "@mantine/core";
+import { Card, Title, Image } from "@mantine/core";
 
 const fetchAndSet = async (service, setter) => {
   const data = await service.getAll();
@@ -28,7 +28,14 @@ const App = () => {
           path="/"
           element={
             <Card>
-              <Title order={1}>Signet Contract Broker</Title>
+              {/* <Title order={1}>Signet Contract Broker</Title> */}
+              <Image
+                src="/transparent-logo-horizontal-mn.svg"
+                maw={1000}
+                mx="auto"
+                radius="md"
+                fit="contain"
+              />
             </Card>
           }
         />
@@ -44,7 +51,14 @@ const App = () => {
           path="/settings/*"
           element={<SettingsMenu integrations={integrations} />}
         />
-        <Route path="*" element={<h1>Not Found</h1>} />
+        <Route
+          path="*"
+          element={
+            <Title order={1} mt={"lg"}>
+              Not Found
+            </Title>
+          }
+        />
       </Routes>
     </AppShell>
   );
