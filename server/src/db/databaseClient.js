@@ -6,7 +6,6 @@ import ParticipantVersion from "../models/ParticipantVersion.js";
 import Integration from "../models/Integration.js";
 import VersionContract from "../models/VersionContract.js";
 import WebhookSubscription from "../models/WebhookSubscription.js";
-import Comparison from "../models/Comparison.js";
 import Environment from "../models/Environment.js";
 import VersionEnvironment from "../models/VersionEnvironment.js";
 import objectHash from "object-hash";
@@ -170,6 +169,17 @@ class DatabaseClient {
 
   async getProviderSpec(providerSpecId) {
     return await ProviderSpec.query().findById(providerSpecId);
+  }
+
+  async getAllProviderSpecs() {
+    return await ProviderSpec.query();
+  }
+
+  async getLatestProviderSpec(providerId) {
+    return await ProviderSpec.query()
+      .where({ providerId })
+      .orderBy("createdAt", "desc")
+      .first();
   }
 
   async getIntegrationsByProviderId(providerId) {
