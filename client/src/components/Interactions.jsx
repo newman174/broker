@@ -52,7 +52,9 @@ const Interactions = ({ comparison }) => {
 
   return (
     <>
-      <h3 style={{ textAlign: "left" }}>Interactions</h3>
+      <Title order={3} style={{ textAlign: "left" }}>
+        Interactions
+      </Title>
       <Accordion
         multiple={true}
         variant="separated"
@@ -137,7 +139,7 @@ const Interactions = ({ comparison }) => {
                     );
                   })}
                 </Accordion>
-                <h3>Request </h3>
+                <Title order={3}>Request </Title>
                 <Card shadow="sm" padding="lg" radius="md" withBorder>
                   <Stack>
                     <Group spacing="xs">
@@ -159,7 +161,7 @@ const Interactions = ({ comparison }) => {
                   </Stack>
                 </Card>
 
-                <h3>Expected Response</h3>
+                <Title order={3}>Expected Response</Title>
                 <Card shadow="sm" padding="lg" radius="md" withBorder>
                   <Stack>
                     <Group spacing="xs">

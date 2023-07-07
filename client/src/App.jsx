@@ -51,7 +51,14 @@ const App = () => {
           path="/settings/*"
           element={<SettingsMenu integrations={integrations} />}
         />
-        <Route path="*" element={<h1>Not Found</h1>} />
+        <Route
+          path="*"
+          element={
+            <Title order={1} mt={"lg"}>
+              Not Found
+            </Title>
+          }
+        />
       </Routes>
     </AppShell>
   );

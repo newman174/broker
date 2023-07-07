@@ -8,11 +8,11 @@ import { generateDetails } from "../utils/participantHelper.js";
 const statusIndicator = {
   Success: {
     color: "#4caf50",
-    icon: <CircleCheck size={48} />,
+    icon: <CircleCheck size={54} />,
   },
   Failed: {
     color: "#f44336",
-    icon: <XboxX size={48} />,
+    icon: <XboxX size={54} />,
   },
 };
 
@@ -40,7 +40,6 @@ const comparisonStatusIndicator = (status) => {
           ? { color: statusIndicator[status].color }
           : { color: "black" }
       }
-      size="xl"
     >
       {statusIndicator[status]?.icon}
       {status}

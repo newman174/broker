@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { integrationService } from "../services/apiService.js";
-import { Tabs } from "@mantine/core";
+import { Tabs, Title, Text } from "@mantine/core";
 import IntegrationOverviewTab from "./IntegrationOverviewTab.jsx";
 import Matrix from "./Matrix.jsx";
 import Contracts from "./Contracts.jsx";
@@ -31,9 +31,12 @@ const Integration = () => {
 
   return integration ? (
     <>
-      <h3>
-        {integration.consumer.name} ⇄ {integration.provider.name}
-      </h3>
+      <Title order={1} mt={"md"} mb={"md"}>
+        <Text display={"inline"} variant="gradient">
+          {integration.consumer.name} ⇄{integration.provider.name}{" "}
+        </Text>
+      </Title>
+
       <Tabs value={activeTab} onTabChange={setActiveTab}>
         <Tabs.List>
           <Tabs.Tab value="overview">Overview</Tabs.Tab>
@@ -48,7 +51,9 @@ const Integration = () => {
         </Tabs.List>
 
         <Tabs.Panel value="overview">
-          <h4>Comparisons</h4>
+          <Title order={2} mt={"md"} mb={"md"}>
+            Comparisons
+          </Title>
           <IntegrationOverviewTab
             comparisons={integration.comparisons}
             onViewContracts={handleViewContracts}
@@ -60,7 +65,7 @@ const Integration = () => {
         </Tabs.Panel>
 
         {/* <Tabs.Panel value="webhooks">
-          <h4>Webhooks</h4>
+          <Title order={2} mt={"md"} mb={"md"}>Webhooks</Title>
         </Tabs.Panel> */}
         {activeTab === "contracts" ? (
           <Tabs.Panel value="contracts">

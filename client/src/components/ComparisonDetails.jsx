@@ -23,7 +23,9 @@ const ComparisonDetails = ({ path, tests }) => {
           },
         }}
       >
-        <h3>{path}</h3>
+        <Title order={3} mb={"md"}>
+          {path}
+        </Title>
         {tests.map(({ code, message, mockDetails, type }) => {
           let { location, value } = mockDetails;
           const equality = `${location} = ${JSON.stringify(value)}`;
