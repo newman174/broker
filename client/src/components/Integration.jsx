@@ -33,7 +33,7 @@ const Integration = () => {
     <>
       <Title order={1} mt={"md"} mb={"md"}>
         <Text display={"inline"} variant="gradient">
-          {integration.consumer.name} ⇄{integration.provider.name}{" "}
+          {integration.consumer.name} ⇄ {integration.provider.name}{" "}
         </Text>
       </Title>
 
