@@ -162,18 +162,12 @@ export function up(knex) {
         .inTable("integrations")
         .onDelete("CASCADE")
         .index();
-      table
-        .boolean("spec_publish_events")
-        .notNullable()
-        .defaultTo(false);
+      table.boolean("spec_publish_events").notNullable().defaultTo(false);
       table
         .boolean("provider_verification_events")
         .notNullable()
         .defaultTo(false);
-      table
-        .boolean("comparison_events")
-        .notNullable()
-        .defaultTo(false);
+      table.boolean("comparison_events").notNullable().defaultTo(false);
       table.string("url").notNullable();
       table.boolean("enabled").notNullable().defaultTo(true);
       table.string("description");
@@ -212,7 +206,7 @@ export function up(knex) {
 export function down(knex) {
   return knex.schema
     .dropTableIfExists("comparisons")
-    .dropTableIfExists("integrations")
+    .dropTableIfExists("integrations", { cascade: true })
     .dropTableIfExists("versionsContracts")
     .dropTableIfExists("versionsSpecs")
     .dropTableIfExists("participant_versions")

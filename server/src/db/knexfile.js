@@ -10,7 +10,7 @@ export const development = {
     port: process.env.DEV_DB_PORT,
     user: process.env.DEV_DB_USER,
     password: process.env.DEV_DB_PASSWORD,
-    database: "broker",
+    database: process.env.DEV_DB_NAME || "broker",
   },
   seeds: {
     directory: "./dev_seeds",

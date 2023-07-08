@@ -10,9 +10,9 @@ if (environment === "development") {
   knex = Knex({
     client: "postgresql",
     connection: {
-      host:     process.env.DEV_DB_HOST,
-      port:     process.env.DEV_DB_PORT,
-      user:     process.env.DEV_DB_USER,
+      host: process.env.DEV_DB_HOST,
+      port: process.env.DEV_DB_PORT,
+      user: process.env.DEV_DB_USER,
       password: process.env.DEV_DB_PASSWORD,
       database: "broker",
     },
@@ -22,16 +22,18 @@ if (environment === "development") {
   knex = Knex({
     client: "postgresql",
     connection: {
-      host:     process.env.TEST_DB_HOST,
-      port:     process.env.TEST_DB_PORT,
-      user:     process.env.TEST_DB_USER,
+      host: process.env.TEST_DB_HOST,
+      port: process.env.TEST_DB_PORT,
+      user: process.env.TEST_DB_USER,
       password: process.env.TEST_DB_PASSWORD,
       database: "test_broker",
     },
     ...knexSnakeCaseMappers(),
   });
 } else {
-  throw(new Error('Server Error: unable to connect to database - invalid RUNTIME_ENV'));
+  throw new Error(
+    "Server Error: unable to connect to database - invalid RUNTIME_ENV"
+  );
 }
 
 Model.knex(knex);
