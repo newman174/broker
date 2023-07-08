@@ -12,7 +12,8 @@
     "resetdb:seed": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest && NODE_ENV=development knex seed:run",
     "resetdb:test": "cd src/db/ && dropdb test_broker --if-exists && createdb test_broker && NODE_ENV=test knex migrate:latest && NODE_ENV=test knex seed:run",
     "resetdev": "npm run resetdb && npm run dev",
-    "prestart": "node src/db/create_db.js"
+    "prestart": "node src/db/create_db.js",
+    "createdb": "node src/db/create_db.js"
   },
   "keywords": [],
   "author": "",

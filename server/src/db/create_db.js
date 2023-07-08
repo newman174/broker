@@ -69,7 +69,7 @@
 //   );
 // }
 
-import { knexSnakeCaseMappers } from "objection";
+// import { knexSnakeCaseMappers } from "objection";
 import Knex from "knex";
 import "dotenv/config";
 
@@ -86,7 +86,7 @@ const config = {
     user: process.env.DEV_DB_USER,
     password: process.env.DEV_DB_PASSWORD,
   },
-  ...knexSnakeCaseMappers(),
+  // ...knexSnakeCaseMappers(),
   migrations: {
     directory: dirName + "/migrations",
   },
@@ -148,6 +148,6 @@ async function runMigrations() {
 }
 
 (async () => {
-  await createDatabase();
+  // await createDatabase();
   await runMigrations();
 })();
