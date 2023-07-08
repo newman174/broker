@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  broker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: broker
+    restart: unless-stopped
+    depends_on:
+      - db
+    env_file: .env
+    environment:
+      # - MONGO_USERNAME=$MONGO_USERNAME
+      # - MONGO_PASSWORD=$MONGO_PASSWORD
+      # - MONGO_HOSTNAME=db
+      # - MONGO_PORT=$MONGO_PORT
+      # - MONGO_DB=$MONGO_DB
+      # - PORT=3001
+      - NODE_ENV=development
+      # - DEV_DB_USER=newms
+      - DEV_DB_PASSWORD=browni3s
+      - DEV_DB_HOST=db
+      # - DEV_DB_PORT=5432
+      # - TEST_DB_USER=newms
+      # - TEST_DB_PASSWORD=
+      # - TEST_DB_HOST=localhost
+      # - TEST_DB_PORT=5432
+    ports:
+      - "3003:3001"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - app-network
+    command: /home/node/app/node_modules/.bin/nodemon src/app.js
+    # command: ./wait-for.sh db:5432 -- /home/node/app/node_modules/.bin/nodemon src/app.js
+  db:
+    image: postgres
+    restart: always
+    container_name: db
+    env_file: .env
+    environment:
+      - POSTGRES_PASSWORD=browni3s
+      - POSTGRES_USER=$DEV_DB_USER
+      - POSTGRES_DB=broker
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  dbdata:
+  node_modules:
