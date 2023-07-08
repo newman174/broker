@@ -1,3 +1,4 @@
+import knex from "knex";
 import ConsumerContract from "../models/ConsumerContract.js";
 import ProviderSpec from "../models/ProviderSpec.js";
 import VersionSpec from "../models/VersionSpec.js";
@@ -85,7 +86,7 @@ class DatabaseClient {
   ) {
     const specHash = objectHash.MD5(spec);
 
-    const specRecord = await findOrCreate(
+    const specRecord = await findAndUpdateOrCreate(
       ProviderSpec,
       { specHash, providerId },
       {
@@ -95,6 +96,7 @@ class DatabaseClient {
         specFormat,
         specHash,
         providerId,
+        updatedAt: new Date().toISOString(),
       }
     );
 
@@ -178,7 +180,7 @@ class DatabaseClient {
   async getLatestProviderSpec(providerId) {
     return await ProviderSpec.query()
       .where({ providerId })
-      .orderBy("createdAt", "desc")
+      .orderBy("updatedAt", "desc")
       .first();
   }
 
