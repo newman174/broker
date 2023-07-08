@@ -2,9 +2,6 @@ version: '3'
 
 services:
   broker:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: newnewms/signet-broker
     container_name: signet-broker
     restart: unless-stopped

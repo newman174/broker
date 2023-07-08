@@ -69,4 +69,6 @@ password: capstone
 
 `ngrok http --domain=api.hamachi.dev 5173 --basic-auth=\"team3:capstone\"`
 
-`signet publish --path=sieveService-sieveProvider.json --type=consumer --version=1 --branch=main && signet publish --path=sieve-server-spec_v3.json --type=provider --version=A -n=sieveProvider --branch=main && signet publish --path=sieveService-sieveProvider_2.json --type=consumer --version=2 --branch=main && signet publish --path=sieve-server-spec_v3_2.json --type=provider --version=B -n=sieveProvider --branch=main`
+export PATH=$PATH:$(pwd)
+
+signet publish --path=sieveService-sieveProvider.json --type=consumer --version=1 --branch=main && signet publish --path=sieve-server-spec_v3.json --type=provider --version=A -n=sieveProvider --branch=main && signet publish --path=sieveService-sieveProvider_2.json --type=consumer --version=2 --branch=main && signet publish --path=sieve-server-spec_v3_2.json --type=provider --version=B -n=sieveProvider --branch=main

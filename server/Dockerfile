@@ -1,5 +1,5 @@
 # specify the node base image with your desired version node:<version>
-FROM node:18-alpine
+FROM node:18
 
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
