@@ -2,7 +2,7 @@ version: '3'
 
 services:
   broker:
-    image: newnewms/signet-broker
+    image: newnewms/signet-broker:linux-amd64
     container_name: signet-broker
     restart: unless-stopped
     depends_on:
@@ -15,12 +15,13 @@ services:
       - DEV_DB_HOST=db
       - DEV_DB_NAME=postgres
     ports:
-      - "3003:3001"
+      - "3001:3001"
     volumes:
-      - .:/home/node/app
+      # - .:/home/node/app
       - node_modules:/home/node/app/node_modules
     networks:
       - app-network
+    working_dir: /home/node/app
     command: npm start
     # command: /home/node/app/node_modules/.bin/nodemon src/app.js
   db:
