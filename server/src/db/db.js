@@ -10,11 +10,11 @@ if (environment === "development") {
   knex = Knex({
     client: "postgresql",
     connection: {
-      host: process.env.DEV_DB_HOST,
-      port: process.env.DEV_DB_PORT,
-      user: process.env.DEV_DB_USER,
-      password: process.env.DEV_DB_PASSWORD,
-      database: process.env.DEV_DB_NAME || "broker",
+      host: process.env.RDS_HOSTNAME,
+      port: process.env.RDS_PORT,
+      user: process.env.RDS_USERNAME,
+      password: process.env.RDS_PASSWORD,
+      database: process.env.RDS_DB_NAME || "broker",
     },
     ...knexSnakeCaseMappers(),
   });
@@ -26,7 +26,7 @@ if (environment === "development") {
       port: process.env.TEST_DB_PORT,
       user: process.env.TEST_DB_USER,
       password: process.env.TEST_DB_PASSWORD,
-      database: process.env.DEV_DB_NAME || "test_broker",
+      database: process.env.RDS_DB_NAME || "test_broker",
     },
     ...knexSnakeCaseMappers(),
   });
