@@ -1,32 +1,21 @@
-import PropTypes from "prop-types";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import {
-  Anchor,
   AppShell,
-  Navbar,
-  Header,
-  // Footer,
-  // Aside,
-  Text,
-  MediaQuery,
-  Burger,
   useMantineTheme,
-  Flex,
-  Image,
-  Group,
+  useMantineColorScheme,
 } from "@mantine/core";
-import IntegrationNavLinks from "./IntegrationNavLinks.jsx";
-import { ActionIcon, useMantineColorScheme } from "@mantine/core";
-import { IconSun, IconMoonStars, IconSettings } from "@tabler/icons-react";
+import AppShellHeader from "./AppShellHeader.jsx";
+import IntegrationsNavBar from "./IntegrationsNavBar.jsx";
+import PropTypes from "prop-types";
 import Integration from "../models/Integration.js";
 
 const MyAppShell = ({ children, integrations }) => {
+  const [navbarOpened, setNavbarOpened] = useState(false);
+
   const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+
   const dark = colorScheme === "dark";
-  const navigate = useNavigate();
 
   return (
     <AppShell
@@ -41,78 +30,19 @@ const MyAppShell = ({ children, integrations }) => {
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       navbar={
-        <Navbar
-          p="md"
-          hiddenBreakpoint="sm"
-          hidden={!opened}
-          width={{ sm: 200, lg: 300 }}
-        >
-          <Text style={{ opacity: "50%" }}>Integrations</Text>
-          <IntegrationNavLinks integrations={integrations} />
-        </Navbar>
+        <IntegrationsNavBar
+          integrations={integrations}
+          hidden={!navbarOpened}
+        />
       }
-      // aside={
-      //   <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-      //     <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-      //       <Text>Application sidebar</Text>
-      //     </Aside>
-      //   </MediaQuery>
-      // }
-      // footer={
-      //   <Footer height={60} p="md">
-      //     Application footer
-      //   </Footer>
-      // }
       header={
-        <Header height={{ base: 50, md: 70 }} p="md">
-          <div
-            style={{ display: "flex", alignItems: "center", height: "100%" }}
-          >
-            <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                color={theme.colors.gray[6]}
-                mr="xl"
-              />
-            </MediaQuery>
-
-            <Link to={"/"}>
-              <Anchor component="span">
-                <Group>
-                  <Image
-                    src="/transparent-logo-horizontal-mn.svg"
-                    height={97}
-                  />
-                </Group>
-              </Anchor>
-            </Link>
-            <Flex style={{ marginLeft: "auto" }}>
-              <ActionIcon
-                variant="outline"
-                color={dark ? "yellow" : "blue"}
-                onClick={() => navigate("/settings")}
-                title="Settings"
-                style={{ marginRight: "2rem" }}
-              >
-                <IconSettings />
-              </ActionIcon>
-              <ActionIcon
-                variant="outline"
-                color={dark ? "yellow" : "blue"}
-                onClick={() => toggleColorScheme()}
-                title="Toggle color scheme"
-              >
-                {dark ? (
-                  <IconSun size="1.1rem" />
-                ) : (
-                  <IconMoonStars size="1.1rem" />
-                )}
-              </ActionIcon>
-            </Flex>
-          </div>
-        </Header>
+        <AppShellHeader
+          navbarOpened={navbarOpened}
+          setNavbarOpened={setNavbarOpened}
+          theme={theme}
+          toggleColorScheme={toggleColorScheme}
+          dark={dark}
+        />
       }
     >
       {children}
