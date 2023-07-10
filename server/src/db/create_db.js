@@ -85,7 +85,9 @@ const config = {
     port: process.env.RDS_PORT || process.env.DEV_DB_PORT,
     user: process.env.RDS_USERNAME || process.env.DEV_DB_USER,
     password: process.env.RDS_PASSWORD || process.env.DEV_DB_PASSWORD,
-    ssl: true,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
   // ...knexSnakeCaseMappers(),
   migrations: {

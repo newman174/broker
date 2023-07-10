@@ -15,7 +15,9 @@ if (environment === "development") {
       user: process.env.RDS_USERNAME || process.env.DEV_DB_USER,
       password: process.env.RDS_PASSWORD || process.env.DEV_DB_PASSWORD,
       database: process.env.RDS_DB_NAME || process.env.DEV_DB_NAME || "broker",
-      ssl: true,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     ...knexSnakeCaseMappers(),
   });
