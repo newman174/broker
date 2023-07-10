@@ -2,7 +2,10 @@ version: '3'
 
 services:
   broker:
-    image: newnewms/signet-broker:linux-amd64
+    # build:
+      # context: .
+      # dockerfile: Dockerfile
+    image: newnewms/signet-broker:18-alpine-linux-amd64
     container_name: signet-broker
     restart: unless-stopped
     depends_on:
@@ -10,10 +13,12 @@ services:
     env_file: .env
     environment:
       - PORT=3001
-      - NODE_ENV=development
-      - DEV_DB_USER=postgres
-      - DEV_DB_HOST=db
-      - DEV_DB_NAME=postgres
+      - NODE_ENV=production
+      - RDS_USERNAME=postgres
+      - RDS_HOSTNAME=db
+      - RDS_DB_NAME=postgres
+      - RDS_PASSWORD=browni3s
+      - ENABLE_DB_SSL=true
     ports:
       - "3001:3001"
     volumes:
@@ -22,18 +27,19 @@ services:
     networks:
       - app-network
     working_dir: /home/node/app
-    command: npm start
+    command: ./wait-for.sh db:5432 -- npm start
+    # command: npm start
     # command: /home/node/app/node_modules/.bin/nodemon src/app.js
   db:
     image: postgres
     healthcheck:
       test: psql postgres --command "select 1" -U postgres
-    restart: always
+    # restart: always
     container_name: db
     env_file: .env
     environment:
-      - POSTGRES_PASSWORD=$DEV_DB_PASSWORD
-      - POSTGRES_DB=$DEV_DB_NAME
+      - POSTGRES_PASSWORD=browni3s
+      - POSTGRES_DB=postgres
     volumes:
       - dbdata:/data/db
     networks:

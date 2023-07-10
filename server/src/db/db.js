@@ -7,8 +7,6 @@ const config = {
   ...knexSnakeCaseMappers(),
 };
 
-let dbName;
-
 if (process.env.NODE_ENV === "production") {
   config.connection = {
     host: process.env.RDS_HOSTNAME,
@@ -16,9 +14,6 @@ if (process.env.NODE_ENV === "production") {
     user: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
     database: process.env.RDS_DB_NAME,
-    ssl: {
-      rejectUnauthorized: false,
-    },
   };
 } else if (process.env.NODE_ENV === "development") {
   config.connection = {
@@ -40,6 +35,12 @@ if (process.env.NODE_ENV === "production") {
   throw new Error(
     `Server Error: unable to connect to database - invalid RUNTIME_ENV: ${process.env.NODE_ENV}.`
   );
+}
+
+if (process.env.ENABLE_DB_SSL === "true") {
+  config.connection.ssl = {
+    rejectUnauthorized: false,
+  };
 }
 
 let knex = Knex(config);

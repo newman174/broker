@@ -23,9 +23,6 @@ if (process.env.NODE_ENV === "production") {
     port: process.env.RDS_PORT,
     user: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false,
-    },
   };
   dbName = process.env.RDS_DB_NAME;
 } else if (process.env.NODE_ENV === "development") {
@@ -50,29 +47,34 @@ if (process.env.NODE_ENV === "production") {
   );
 }
 
+if (process.env.ENABLE_DB_SSL === "true") {
+  config.connection.ssl = {
+    rejectUnauthorized: false,
+  };
+}
+
 const creationConnection = Knex(config);
 
 async function createDatabase() {
   try {
-    const dbAlreadyExists =
-      (
-        await creationConnection.raw(
-          `SELECT FROM pg_database WHERE datname = '${dbName}'`
-        )
-      ).rowCount > 0;
+    // const dbAlreadyExists =
+    //   (
+    //     await creationConnection.raw(
+    //       `SELECT FROM pg_database WHERE datname = '${dbName}'`
+    //     )
+    //   ).rowCount > 0;
 
-    if (!dbAlreadyExists) {
-      await creationConnection.raw(`CREATE DATABASE ${dbName}`);
-    }
+    // if (!dbAlreadyExists) {
+    // }
 
-    console.log(
-      `Database '${dbName}' ${
-        dbAlreadyExists ? "already exists" : "created successfully"
-      }.\n`
-    );
+    // console.log(
+    //   `Database '${dbName}' ${
+    //     dbAlreadyExists ? "already exists" : "created successfully"
+    //   }.\n`
+    // );
+    await creationConnection.raw(`CREATE DATABASE ${dbName}`);
   } catch (error) {
     console.error(`Error creating database: ${error.message}`);
-    process.exit(1);
   } finally {
     await creationConnection.destroy();
   }
@@ -88,14 +90,14 @@ const migrationConnection = Knex({
 
 async function runMigrations() {
   try {
-    const pendingMigrations = await migrationConnection.migrate.list()[1];
-    if (pendingMigrations) {
-      console.log(`Found ${pendingMigrations.length} unapplied migrations:`);
-      console.table(pendingMigrations);
-      console.log("Migrations ran successfully.");
-    } else {
-      console.log("No unapplied migrations found.");
-    }
+    // const pendingMigrations = await migrationConnection.migrate.list()[1];
+    // if (pendingMigrations) {
+    //   console.log(`Found ${pendingMigrations.length} unapplied migrations:`);
+    //   console.table(pendingMigrations);
+    //   console.log("Migrations ran successfully.");
+    // } else {
+    //   console.log("No unapplied migrations found.");
+    // }
     await migrationConnection.migrate.latest();
   } catch (error) {
     console.error(`Error running migrations: ${error.message}`);
@@ -108,3 +110,7 @@ async function runMigrations() {
   await createDatabase();
   await runMigrations();
 })();
+
+// createDatabase().then(() => {
+//   runMigrations();
+// });
