@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-// import { ArrowsLeftRight } from "tabler-icons-react";
 import { Link, useLocation } from "react-router-dom";
 import { NavLink } from "@mantine/core";
+import PropTypes from "prop-types";
+import Integration from "../models/Integration";
 
 const IntegrationNavLinks = ({ integrations }) => {
   const [active, setActive] = useState(0);
@@ -14,11 +15,9 @@ const IntegrationNavLinks = ({ integrations }) => {
   }, [path]);
 
   return integrations.map((integration, index) => {
-    const nameString = `${integration.consumer.name} ⇄
-    ${integration.provider.name}`;
+    const nameString = `${integration.consumer.name} ⇄ ${integration.provider.name}`;
 
     return (
-      // <ArrowsLeftRight size={24} />
       <NavLink
         to={`/integrations/${integration.id}`}
         label={nameString}
@@ -29,6 +28,10 @@ const IntegrationNavLinks = ({ integrations }) => {
       />
     );
   });
+};
+
+IntegrationNavLinks.propTypes = {
+  integrations: PropTypes.arrayOf(PropTypes.instanceOf(Integration)),
 };
 
 export default IntegrationNavLinks;
