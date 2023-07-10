@@ -1,17 +1,19 @@
 import { Anchor, Card, Timeline, Text } from "@mantine/core";
 import {
-  IconGitBranch,
-  IconGitPullRequest,
+  // IconGitBranch,
+  // IconGitPullRequest,
   IconGitCommit,
-  IconMessageDots,
+  // IconMessageDots,
   IconCertificate2,
   IconClipboardList,
 } from "@tabler/icons-react";
-import TimeAgo from "javascript-time-ago";
+// import TimeAgo from "javascript-time-ago";
 import ReactTimeAgo from "react-time-ago";
 import Spec from "../models/Spec.js";
 import Contract from "../models/Contract.js";
 import ParticipantVersion from "../models/ParticipantVersion.js";
+import PropTypes from "prop-types";
+import Integration from "../models/Integration";
 
 const uniqueBy = (arr, prop) => {
   return Object.values(
@@ -127,7 +129,6 @@ const IntegrationTimeline = ({ integration }) => {
         <Timeline.Item
           bullet={props.icon}
           title={props.title}
-          align="left"
           key={item.hash}
           bulletSize={36}
           color={props.color}
@@ -149,7 +150,6 @@ const IntegrationTimeline = ({ integration }) => {
         active={100}
         bulletSize={24}
         lineWidth={3}
-        align="left"
         ml={"5rem"}
         mt={"3rem"}
       >
@@ -214,6 +214,10 @@ const IntegrationTimeline = ({ integration }) => {
       </Timeline> */}
     </Card>
   );
+};
+
+IntegrationTimeline.propTypes = {
+  integration: PropTypes.instanceOf(Integration).isRequired,
 };
 
 export default IntegrationTimeline;

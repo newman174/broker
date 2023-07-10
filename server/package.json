@@ -1,19 +1,18 @@
 {
-  "name": "backend",
+  "name": "signet-broker-server",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "start": "node src/app.js",
-    "dev": "NODE_ENV=development nodemon --ignore ./src/data/temp src/app.js",
+    "dev": "npm run prestart && NODE_ENV=development nodemon --ignore ./src/data/temp src/app.js",
     "nomon": "node src/app.js",
     "resetdb": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest",
     "resetdb:seed": "cd src/db/ && dropdb broker --if-exists && createdb broker && NODE_ENV=development knex migrate:latest && NODE_ENV=development knex seed:run",
     "resetdb:test": "cd src/db/ && dropdb test_broker --if-exists && createdb test_broker && NODE_ENV=test knex migrate:latest && NODE_ENV=test knex seed:run",
     "resetdev": "npm run resetdb && npm run dev",
-    "prestart": "node src/db/create_db.js",
-    "createdb": "node src/db/create_db.js"
+    "prestart": "node src/db/create_db.js"
   },
   "keywords": [],
   "author": "",
