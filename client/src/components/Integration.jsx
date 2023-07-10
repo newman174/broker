@@ -5,11 +5,12 @@ import { Tabs, Title, Text } from "@mantine/core";
 import IntegrationOverviewTab from "./IntegrationOverviewTab.jsx";
 import Matrix from "./Matrix.jsx";
 import Contracts from "./Contracts.jsx";
+import IntegrationTimeline from "./IntegrationTimeline.jsx";
 
 const Integration = () => {
   const { integrationId } = useParams();
   const [integration, setIntegration] = useState(null);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("timeline");
   const [comparison, setComparison] = useState(null);
 
   useEffect(() => {
@@ -39,7 +40,8 @@ const Integration = () => {
 
       <Tabs value={activeTab} onTabChange={setActiveTab}>
         <Tabs.List>
-          <Tabs.Tab value="overview">Overview</Tabs.Tab>
+          <Tabs.Tab value="timeline">Timeline</Tabs.Tab>
+          <Tabs.Tab value="comparisons">Comparisons</Tabs.Tab>
           <Tabs.Tab value="matrix">Matrix</Tabs.Tab>
           {/* <Tabs.Tab value="webhooks">Webhooks</Tabs.Tab> */}
           <Tabs.Tab
@@ -50,7 +52,14 @@ const Integration = () => {
           </Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Panel value="overview">
+        <Tabs.Panel value="timeline">
+          <IntegrationTimeline
+            integration={integration}
+            onViewContracts={handleViewContracts}
+          />
+        </Tabs.Panel>
+
+        <Tabs.Panel value="comparisons">
           <Title order={2} mt={"md"} mb={"md"}>
             Comparisons
           </Title>
