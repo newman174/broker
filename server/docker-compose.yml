@@ -2,11 +2,14 @@ version: '3'
 
 services:
   broker:
-    # build:
-      # context: .
-      # dockerfile: Dockerfile
-    image: newnewms/signet-broker:18-alpine-linux-amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: newnewms/signet-broker:latest
     container_name: signet-broker
+    deploy:
+      restart_policy:
+        condition: on-failure
     restart: unless-stopped
     depends_on:
       - db
@@ -19,6 +22,7 @@ services:
       - RDS_DB_NAME=postgres
       - RDS_PASSWORD=browni3s
       - ENABLE_DB_SSL=true
+      - RDS_PORT=5432
     ports:
       - "3001:3001"
     volumes:
@@ -34,7 +38,10 @@ services:
     image: postgres
     healthcheck:
       test: psql postgres --command "select 1" -U postgres
-    # restart: always
+    restart: always
+    deploy:
+      restart_policy:
+        condition: on-failure
     container_name: db
     env_file: .env
     environment:

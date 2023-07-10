@@ -25,7 +25,7 @@ const PORT = process.env.PORT;
 
 const server = app.listen(PORT, () => {
   console.log(
-    `\x1b[92m➜\x1b[0m Server running on port\x1b[96m http://localhost:${PORT}\x1b[0m`
+    `\x1b[92m➜\x1b[0m Server running at\x1b[96m http://localhost:${PORT}\x1b[0m`
   );
 });
 
