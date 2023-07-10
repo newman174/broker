@@ -81,10 +81,10 @@ const dirName = dirname(fileURLToPath(import.meta.url));
 const config = {
   client: "postgresql",
   connection: {
-    host: process.env.RDS_HOSTNAME,
-    port: process.env.RDS_PORT,
-    user: process.env.RDS_USERNAME,
-    password: process.env.RDS_PASSWORD,
+    host: process.env.RDS_HOSTNAME || process.env.DEV_DB_HOST,
+    port: process.env.RDS_PORT || process.env.DEV_DB_PORT,
+    user: process.env.RDS_USERNAME || process.env.DEV_DB_USER,
+    password: process.env.RDS_PASSWORD || process.env.DEV_DB_PASSWORD,
   },
   // ...knexSnakeCaseMappers(),
   migrations: {
@@ -99,10 +99,14 @@ console.log("dirName: ", dirName);
 async function createDatabase() {
   try {
     await creationConnection.raw(
-      `CREATE DATABASE ${process.env.RDS_DB_NAME || "broker"}`
+      `CREATE DATABASE ${
+        process.env.RDS_DB_NAME || process.env.DEV_DB_NAME || "broker"
+      }`
     );
     console.log(
-      `Database ${process.env.RDS_DB_NAME || "broker"} created successfully`
+      `Database ${
+        process.env.RDS_DB_NAME || process.env.DEV_DB_NAME || "broker"
+      } created successfully`
     );
   } catch (error) {
     console.error(`Error creating database: ${error.message}`);
@@ -115,7 +119,7 @@ const migrationConnection = Knex({
   ...config,
   connection: {
     ...config.connection,
-    database: process.env.RDS_DB_NAME || "broker",
+    database: process.env.RDS_DB_NAME || process.env.DEV_DB_NAME || "broker",
   },
 });
 // const migrationConnection = Knex({
