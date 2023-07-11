@@ -41,13 +41,14 @@ router.post("/", async (req, res) => {
 
   const consumer = await db.getParticipant(consumerName);
 
-  if (
+  /*if (
     await db.participantVersionExists(consumer.participantId, consumerVersion)
   ) {
     return res
       .status(409)
       .json({ error: "Participant version already exists" });
-  }
+  }*/
+
 
   const contractRecord = await db.publishConsumerContract(
     contract,
