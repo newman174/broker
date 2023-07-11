@@ -29,8 +29,6 @@ router.get("/", async (req, res) => {
       return res.status(400).send({ error: "Cannot find participant version" });
     }
 
-    console.log("hey");
-
     const errors = [
       ...(await deployService.checkWithConsumers(
         version.participantVersionId,
