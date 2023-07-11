@@ -253,23 +253,27 @@ class DatabaseClient {
   }
 
   async getProviderVersionsForEnv(environmentId) {
-    //console.log(environmentId, typeof environmentId); 
-    const providerVersions = await VersionSpec.query().innerJoin(
-      "participantVersions",
-      "participantVersions.participantVersionId",
-      "versionsSpecs.providerVersionId",
-    ).innerJoin(
-      "versionsEnvironments",
-      "versionsEnvironments.participantVersionId",
-      "participantVersions.participantVersionId", 
-    ).innerJoin(
-      "environments",
-      "environments.environmentId",
-      "versionsEnvironments.environmentId", 
-    ).where({"environments.environmentId": environmentId}).select("participantVersions.*");
-      
+    //console.log(environmentId, typeof environmentId);
+    const providerVersions = await VersionSpec.query()
+      .innerJoin(
+        "participantVersions",
+        "participantVersions.participantVersionId",
+        "versionsSpecs.providerVersionId"
+      )
+      .innerJoin(
+        "versionsEnvironments",
+        "versionsEnvironments.participantVersionId",
+        "participantVersions.participantVersionId"
+      )
+      .innerJoin(
+        "environments",
+        "environments.environmentId",
+        "versionsEnvironments.environmentId"
+      )
+      .where({ "environments.environmentId": environmentId })
+      .select("participantVersions.*");
 
-    return providerVersions;  
+    return providerVersions;
   }
 
   async addParticipantVersionToEnvironment(
@@ -303,152 +307,135 @@ class DatabaseClient {
   // Given participantId
   // Get all provider records for participant
   async getProviders(participantId) {
-    // participants
-    // JOIN with integrations    
-    // WHERE integrations.consumerId = participantId
-    return (
-       Participant.query().innerJoin(
+    return Participant.query()
+      .innerJoin(
         "integrations",
-        "integrations.providerId", 
-        "participants.participantId" 
+        "integrations.providerId",
+        "participants.participantId"
       )
-      .where("integrations.consumerId", participantId)
-    )
-    
+      .where("integrations.consumerId", participantId);
   }
 
-  // Given participantId 
+  // Given participantId
   // Get all consumer records for participant
   async getConsumers(participantId) {
-    // participants
-    // JOIN with integrations 
-    // WHERE integrations.providerId = participantId
-    return (
-      Participant.query().innerJoin(
-       "integrations",
-       "integrations.consumerId", 
-       "participants.participantId" 
-     )
-     .where("integrations.providerId", participantId)
-    )
+    return Participant.query()
+      .innerJoin(
+        "integrations",
+        "integrations.consumerId",
+        "participants.participantId"
+      )
+      .where("integrations.providerId", participantId);
   }
 
   // Given environmentId
   // Get all participant versions deployed on environment
   async getVersionsOnEnv(envId) {
-    // participantVersions 
-    // JOIN with versionsEnvs 
-    // JOIN with environments
-    // WHERE environments.environmentId = envId
-    return (
-      ParticipantVersion.query().innerJoin(
-       "versionsEnvironments",
-       "versionsEnvironments.participantVersionId", 
-       "participantVersions.participantVersionId" 
-     ).innerJoin(
-      "environments",
-      "environments.environmentId",
-      "versionsEnvironments.environmentId"
-     )
-     .where("environments.environmentId", envId))
+    return ParticipantVersion.query()
+      .innerJoin(
+        "versionsEnvironments",
+        "versionsEnvironments.participantVersionId",
+        "participantVersions.participantVersionId"
+      )
+      .innerJoin(
+        "environments",
+        "environments.environmentId",
+        "versionsEnvironments.environmentId"
+      )
+      .where("environments.environmentId", envId);
   }
 
   async getEnvironments() {
     return Environment.query();
   }
 
+  async getEnvironmentById(environmentId) {
+    return Environment.query().findOne({ environmentId });
+  }
+
   // Given participantVersionId
   // Get all compatible provider versions for participant
   async getCompatibleProviderVersions(participantVersionId) {
-    // participantVersions
-    // JOIN with versionsSpecs
-    // JOIN with providerSpecs 
-    // JOIN with comparisons 
-    // JOIN with consumerContracts 
-    // JOIN with versionsContracts 
-    // WHERE comparisons.status = "success"
-    // WHERE versionsContracts.versionId = participantVersionId
-    return (
-      ParticipantVersion.query().innerJoin(
+    return ParticipantVersion.query()
+      .innerJoin(
         "versionsSpecs",
         "versionsSpecs.providerVersionId",
         "participantVersions.participantVersionId"
-      ).innerJoin(
+      )
+      .innerJoin(
         "providerSpecs",
         "providerSpecs.providerSpecId",
         "versionsSpecs.providerSpecId"
-      ).innerJoin(
-        "comparisons", 
-        "comparisons.providerSpecId", 
+      )
+      .innerJoin(
+        "comparisons",
+        "comparisons.providerSpecId",
         "providerSpecs.providerSpecId"
-      ).innerJoin(
+      )
+      .innerJoin(
         "consumerContracts",
         "consumerContracts.consumerContractId",
         "comparisons.consumerContractId"
-      ).innerJoin(
-        "versionsContracts", 
-        "versionsContracts.consumerContractId", 
+      )
+      .innerJoin(
+        "versionsContracts",
+        "versionsContracts.consumerContractId",
         "consumerContracts.consumerContractId"
-      ).where("versionsContracts.consumerVersionId", participantVersionId).where("comparisons.comparisonStatus", "Success")
-    )
-    
+      )
+      .where("versionsContracts.consumerVersionId", participantVersionId)
+      .where("comparisons.comparisonStatus", "Success");
   }
   // Given participantVersionId
   // Get all copmatible consumer versions for participant
   async getCompatibleConsumerVersions(participantVersionId) {
-    // participantVersions
-    // JOIN with versionsContracts
-    // JOIN with consumerContracts
-    // JOIN with comparisons 
-    // JOIN with providerSpecs
-    // JOIN with versionsSpecs
-    // WHERE comparisons.status = "success"
-    // WHERE versionsSpecs.versionId = participantVersionId
-
-      return (
-      ParticipantVersion.query().innerJoin(
+    return ParticipantVersion.query()
+      .innerJoin(
         "versionsContracts",
         "versionsContracts.consumerVersionId",
         "participantVersions.participantVersionId"
-      ).innerJoin(
+      )
+      .innerJoin(
         "consumerContracts",
         "consumerContracts.consumerContractId",
         "versionsContracts.consumerContractId"
-      ).innerJoin(
-        "comparisons", 
-        "comparisons.consumerContractId", 
+      )
+      .innerJoin(
+        "comparisons",
+        "comparisons.consumerContractId",
         "consumerContracts.consumerContractId"
-      ).innerJoin(
+      )
+      .innerJoin(
         "providerSpecs",
         "providerSpecs.providerSpecId",
         "comparisons.providerSpecId"
-      ).innerJoin(
-        "versionsSpecs", 
-        "versionsSpecs.providerSpecId", 
+      )
+      .innerJoin(
+        "versionsSpecs",
+        "versionsSpecs.providerSpecId",
         "providerSpecs.providerSpecId"
-      ).where("versionsSpecs.providerVersionId", participantVersionId).where("comparisons.comparisonStatus", "Success")
-    )
-
+      )
+      .where("versionsSpecs.providerVersionId", participantVersionId)
+      .where("comparisons.comparisonStatus", "Success");
   }
 
-    async getComparisons() {
-    return Comparison.query(); 
+  async getComparisons() {
+    return Comparison.query();
   }
 
   async getParticipantVersionById(participantVersionId) {
-    return ParticipantVersion.query().findOne({participantVersionId}); 
+    return ParticipantVersion.query().findOne({ participantVersionId });
   }
 
   async getVersions() {
-    return ParticipantVersion.query(); 
+    return ParticipantVersion.query();
   }
 
   async getParticipants() {
-    return Participant.query(); 
+    return Participant.query();
   }
 
   async getVersionsContracts() {
-    return VersionContract.query(); 
+    return VersionContract.query();
   }
 }
 
