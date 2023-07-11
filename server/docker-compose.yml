@@ -32,7 +32,6 @@ services:
       - app-network
     working_dir: /home/node/app
     command: ./wait-for.sh db:5432 -t 500 -- npm start
-    # command: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/v2.2.3/wait-for | sh -s -- db:5432 -- npm start
     # command: /home/node/app/node_modules/.bin/nodemon src/app.js
   db:
     image: newnewms/signet-db:latest
@@ -45,7 +44,7 @@ services:
     container_name: db
     # env_file: .env
     # environment:
-      # - POSTGRES_PASSWORD=browni3s
+      # - POSTGRES_PASSWORD=
       # - POSTGRES_DB=postgres
     volumes:
       - dbdata:/data/db
@@ -57,4 +56,3 @@ networks:
     driver: bridge
 volumes:
   dbdata:
-  # node_modules:
