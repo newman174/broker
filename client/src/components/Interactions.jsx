@@ -52,7 +52,7 @@ const Interactions = ({ comparison }) => {
 
   return (
     <>
-      <Title order={3} style={{ textAlign: "left" }}>
+      <Title order={3} mb={"1rem"} style={{ textAlign: "left" }}>
         Interactions
       </Title>
       <Accordion
@@ -139,7 +139,9 @@ const Interactions = ({ comparison }) => {
                     );
                   })}
                 </Accordion>
-                <Title order={3}>Request </Title>
+                <Title mt={"2rem"} order={3}>
+                  Request{" "}
+                </Title>
                 <Card shadow="sm" padding="lg" radius="md" withBorder>
                   <Stack>
                     <Group spacing="xs">
@@ -161,7 +163,9 @@ const Interactions = ({ comparison }) => {
                   </Stack>
                 </Card>
 
-                <Title order={3}>Expected Response</Title>
+                <Title mt={"2rem"} order={3}>
+                  Expected Response
+                </Title>
                 <Card shadow="sm" padding="lg" radius="md" withBorder>
                   <Stack>
                     <Group spacing="xs">
