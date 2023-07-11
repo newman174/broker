@@ -28,8 +28,8 @@ const uniqueByHash = (arr) => uniqueBy(arr, "hash");
 const uniqueById = (arr) => uniqueBy(arr, "id");
 
 const IntegrationTimeline = ({ integration }) => {
-  console.log("integration:");
-  console.log(integration);
+  // console.log("integration:");
+  // console.log(integration);
 
   const { comparisons } = integration;
 
@@ -69,16 +69,16 @@ const IntegrationTimeline = ({ integration }) => {
     version.participantType = "provider";
   });
 
-  console.log("consumerVersions:");
-  console.log(consumerVersions);
-  console.log("providerVersions:");
-  console.log(providerVersions);
+  // console.log("consumerVersions:");
+  // console.log(consumerVersions);
+  // console.log("providerVersions:");
+  // console.log(providerVersions);
 
-  console.log("consumerContracts:");
-  console.log(consumerContracts);
+  // console.log("consumerContracts:");
+  // console.log(consumerContracts);
 
-  console.log("providerSpecs:");
-  console.log(providerSpecs);
+  // console.log("providerSpecs:");
+  // console.log(providerSpecs);
 
   let timeLineItems = [
     ...consumerVersions,
@@ -96,7 +96,6 @@ const IntegrationTimeline = ({ integration }) => {
         props.message = `${props.participantName} added a new provider spec: ${item.spec.info.version}`;
         props.color = "blue";
         props.icon = <IconCertificate2 size={24} />;
-        // props.title = `${props.participantName} Spec ${item.spec.info.version}`;
         props.title = `${props.participantName} Spec ${item.spec.info.version}`;
       } else if (item instanceof Contract) {
         props.docType = "Consumer Contract";

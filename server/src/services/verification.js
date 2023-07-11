@@ -63,7 +63,7 @@ export default class Verifier {
 
       return result;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 
@@ -85,7 +85,7 @@ export default class Verifier {
   cleanUpFiles(pactPath, OASPath) {
     function onError(err) {
       if (err) {
-        console.log("Failed to cleanup a file. Error: ", err);
+        console.error("Failed to cleanup a file. Error: ", err);
       }
     }
 
@@ -98,9 +98,9 @@ export default class Verifier {
 /*new Verifier()
   .verify(samplePact, sampleOAS)
   .then((result) => console.log(result))
-  .catch((reason) => console.log(reason));*/
+  .catch((reason) => console.error(reason));*/
 
 //new Verifier()
 //.verify2(samplePact, sampleOAS)
 //.then((result) => console.log(result))
-//.catch((reason) => console.log(reason));
+//.catch((reason) => console.error(reason));

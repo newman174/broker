@@ -3,7 +3,6 @@ import "dotenv/config";
 import dbConfigs, { pwd } from "./knexfile.js";
 
 console.log("Running database setup script...");
-console.log("pwd: ", pwd, "\n");
 
 const config = dbConfigs[process.env.NODE_ENV];
 

@@ -32,12 +32,12 @@ class ComparisonService {
           comparisonStatus: comparisonStatus,
         }
       );
-      
+
       webhook.newComparisonEvent(comparison);
-      
+
       return comparison;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   }
 
