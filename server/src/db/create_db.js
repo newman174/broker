@@ -22,7 +22,7 @@ const creationConfig = {
 
 const { database } = config.connection;
 
-delete config.connection.database;
+delete creationConfig.connection.database;
 
 const creationConnection = Knex(creationConfig);
 

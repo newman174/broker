@@ -1,5 +1,6 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import "dotenv/config";
 
 export const pwd = dirname(fileURLToPath(import.meta.url));
 
