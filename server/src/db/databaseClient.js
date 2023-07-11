@@ -10,6 +10,7 @@ import WebhookSubscription from "../models/WebhookSubscription.js";
 import Environment from "../models/Environment.js";
 import VersionEnvironment from "../models/VersionEnvironment.js";
 import objectHash from "object-hash";
+import Comparison from "../models/Comparison.js";
 import {
   findOrCreate,
   findAndUpdateOrCreate,
@@ -251,6 +252,30 @@ class DatabaseClient {
     return await findOrCreate(Environment, { environmentName });
   }
 
+  async getProviderVersionsForEnv(environmentId) {
+    //console.log(environmentId, typeof environmentId);
+    const providerVersions = await VersionSpec.query()
+      .innerJoin(
+        "participantVersions",
+        "participantVersions.participantVersionId",
+        "versionsSpecs.providerVersionId"
+      )
+      .innerJoin(
+        "versionsEnvironments",
+        "versionsEnvironments.participantVersionId",
+        "participantVersions.participantVersionId"
+      )
+      .innerJoin(
+        "environments",
+        "environments.environmentId",
+        "versionsEnvironments.environmentId"
+      )
+      .where({ "environments.environmentId": environmentId })
+      .select("participantVersions.*");
+
+    return providerVersions;
+  }
+
   async addParticipantVersionToEnvironment(
     participantVersionId,
     environmentId
@@ -277,6 +302,140 @@ class DatabaseClient {
 
   async removeParticipantFromEnvironment(participantVersionId) {
     return await VersionEnvironment.query().deleteById(participantVersionId);
+  }
+
+  // Given participantId
+  // Get all provider records for participant
+  async getProviders(participantId) {
+    return Participant.query()
+      .innerJoin(
+        "integrations",
+        "integrations.providerId",
+        "participants.participantId"
+      )
+      .where("integrations.consumerId", participantId);
+  }
+
+  // Given participantId
+  // Get all consumer records for participant
+  async getConsumers(participantId) {
+    return Participant.query()
+      .innerJoin(
+        "integrations",
+        "integrations.consumerId",
+        "participants.participantId"
+      )
+      .where("integrations.providerId", participantId);
+  }
+
+  // Given environmentId
+  // Get all participant versions deployed on environment
+  async getVersionsOnEnv(envId) {
+    return ParticipantVersion.query()
+      .innerJoin(
+        "versionsEnvironments",
+        "versionsEnvironments.participantVersionId",
+        "participantVersions.participantVersionId"
+      )
+      .innerJoin(
+        "environments",
+        "environments.environmentId",
+        "versionsEnvironments.environmentId"
+      )
+      .where("environments.environmentId", envId);
+  }
+
+  async getEnvironments() {
+    return Environment.query();
+  }
+
+  async getEnvironmentById(environmentId) {
+    return Environment.query().findOne({ environmentId });
+  }
+
+  // Given participantVersionId
+  // Get all compatible provider versions for participant
+  async getCompatibleProviderVersions(participantVersionId) {
+    return ParticipantVersion.query()
+      .innerJoin(
+        "versionsSpecs",
+        "versionsSpecs.providerVersionId",
+        "participantVersions.participantVersionId"
+      )
+      .innerJoin(
+        "providerSpecs",
+        "providerSpecs.providerSpecId",
+        "versionsSpecs.providerSpecId"
+      )
+      .innerJoin(
+        "comparisons",
+        "comparisons.providerSpecId",
+        "providerSpecs.providerSpecId"
+      )
+      .innerJoin(
+        "consumerContracts",
+        "consumerContracts.consumerContractId",
+        "comparisons.consumerContractId"
+      )
+      .innerJoin(
+        "versionsContracts",
+        "versionsContracts.consumerContractId",
+        "consumerContracts.consumerContractId"
+      )
+      .where("versionsContracts.consumerVersionId", participantVersionId)
+      .where("comparisons.comparisonStatus", "Success");
+  }
+  // Given participantVersionId
+  // Get all copmatible consumer versions for participant
+  async getCompatibleConsumerVersions(participantVersionId) {
+    return ParticipantVersion.query()
+      .innerJoin(
+        "versionsContracts",
+        "versionsContracts.consumerVersionId",
+        "participantVersions.participantVersionId"
+      )
+      .innerJoin(
+        "consumerContracts",
+        "consumerContracts.consumerContractId",
+        "versionsContracts.consumerContractId"
+      )
+      .innerJoin(
+        "comparisons",
+        "comparisons.consumerContractId",
+        "consumerContracts.consumerContractId"
+      )
+      .innerJoin(
+        "providerSpecs",
+        "providerSpecs.providerSpecId",
+        "comparisons.providerSpecId"
+      )
+      .innerJoin(
+        "versionsSpecs",
+        "versionsSpecs.providerSpecId",
+        "providerSpecs.providerSpecId"
+      )
+      .where("versionsSpecs.providerVersionId", participantVersionId)
+      .where("comparisons.comparisonStatus", "Success");
+  }
+
+  async getComparisons() {
+    return Comparison.query();
+  }
+
+  async getParticipantVersionById(participantVersionId) {
+    return ParticipantVersion.query().findOne({ participantVersionId });
+  }
+
+  async getVersions() {
+    return ParticipantVersion.query();
+  }
+
+  async getParticipants() {
+    return Participant.query();
+  }
+
+  async getVersionsContracts() {
+    return VersionContract.query();
   }
 }
 
