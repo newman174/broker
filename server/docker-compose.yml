@@ -2,9 +2,9 @@ version: '3'
 
 services:
   broker:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+      # context: .
+      # dockerfile: Dockerfile
     image: newnewms/signet-broker:latest
     container_name: signet-broker
     deploy:
@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     depends_on:
       - db
-    env_file: .env
+    # env_file: .env
     environment:
       - PORT=3001
       - NODE_ENV=production
@@ -21,21 +21,21 @@ services:
       - RDS_HOSTNAME=db
       - RDS_DB_NAME=postgres
       - RDS_PASSWORD=browni3s
-      - ENABLE_DB_SSL=true
-      - RDS_PORT=5432
+      # - RDS_PORT=5432
+      # - ENABLE_DB_SSL=true
     ports:
       - "3001:3001"
-    volumes:
+    # volumes:
       # - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
+      # - node_modules:/home/node/app/node_modules
     networks:
       - app-network
     working_dir: /home/node/app
-    command: ./wait-for.sh db:5432 -- npm start
-    # command: npm start
+    command: ./wait-for.sh db:5432 -t 500 -- npm start
+    # command: wget -qO- https://raw.githubusercontent.com/eficode/wait-for/v2.2.3/wait-for | sh -s -- db:5432 -- npm start
     # command: /home/node/app/node_modules/.bin/nodemon src/app.js
   db:
-    image: postgres
+    image: newnewms/signet-db:latest
     healthcheck:
       test: psql postgres --command "select 1" -U postgres
     restart: always
@@ -43,12 +43,13 @@ services:
       restart_policy:
         condition: on-failure
     container_name: db
-    env_file: .env
-    environment:
-      - POSTGRES_PASSWORD=browni3s
-      - POSTGRES_DB=postgres
+    # env_file: .env
+    # environment:
+      # - POSTGRES_PASSWORD=browni3s
+      # - POSTGRES_DB=postgres
     volumes:
       - dbdata:/data/db
+      # - ./src/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - app-network
 networks:
@@ -56,4 +57,4 @@ networks:
     driver: bridge
 volumes:
   dbdata:
-  node_modules:
+  # node_modules:

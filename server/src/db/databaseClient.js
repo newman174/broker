@@ -1,4 +1,3 @@
-import knex from "knex";
 import ConsumerContract from "../models/ConsumerContract.js";
 import ProviderSpec from "../models/ProviderSpec.js";
 import VersionSpec from "../models/VersionSpec.js";

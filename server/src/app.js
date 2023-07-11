@@ -21,6 +21,7 @@ app.use(express.json());
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
 
+console.log("process.env.PORT", process.env.PORT);
 const PORT = process.env.PORT;
 
 const server = app.listen(PORT, () => {
