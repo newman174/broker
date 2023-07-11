@@ -5,7 +5,7 @@ services:
     # build:
       # context: .
       # dockerfile: Dockerfile
-    image: newnewms/signet-broker:latest
+    image: signetframework/signet-broker:latest
     container_name: signet-broker
     deploy:
       restart_policy:
@@ -34,7 +34,7 @@ services:
     command: ./wait-for.sh db:5432 -t 500 -- npm start
     # command: /home/node/app/node_modules/.bin/nodemon src/app.js
   db:
-    image: newnewms/signet-db:latest
+    image: signetframework/signet-db:latest
     healthcheck:
       test: psql postgres --command "select 1" -U postgres
     restart: always
