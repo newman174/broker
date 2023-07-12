@@ -53,6 +53,11 @@ jobs:
           cache: 'npm'
           cache-dependency-path: server/package-lock.json
 
+      # Enable tmate debugging of manually-triggered workflows if the input option was provided
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
+
       - run: npm ci
         working-directory: server
 
